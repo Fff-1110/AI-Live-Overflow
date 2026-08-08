@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import java.io.File
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.IBinder
@@ -23,6 +24,7 @@ class OverlayService : Service() {
     private var layoutParams: WindowManager.LayoutParams? = null
     private val handler = Handler(Looper.getMainLooper())
     private var murmurRunnable: Runnable? = null
+    private var cmdPollRunnable: Runnable? = null
 
     companion object {
         const val NOTIFICATION_ID = 1001
@@ -49,6 +51,7 @@ class OverlayService : Service() {
         startForeground(NOTIFICATION_ID, buildForegroundNotification())
         setupOverlay()
         startMurmurs()
+        startCmdPolling()
     }
 
     private fun setupOverlay() {
@@ -122,6 +125,29 @@ class OverlayService : Service() {
         }
     }
 
+    // === 欧尼酱绑定：命令文件轮询 ===
+    private fun startCmdPolling() {
+        cmdPollRunnable = object : Runnable {
+            override fun run() {
+                try {
+                    val f = File(filesDir, "cmd.txt")
+                    if (f.exists()) {
+                        val text = f.readText().trim()
+                        if (text.isNotEmpty()) {
+                            val escaped = text.replace("'", "\'").replace("
+", " ")
+                            overlayView?.evaluateJavascript("if(window.KuroNeko)KuroNeko.exec('$escaped')", null)
+                            f.writeText("")
+                        }
+                    }
+                } catch (e: Exception) {
+                }
+                handler.postDelayed(this, 3000)
+            }
+        }
+        handler.postDelayed(cmdPollRunnable!!, 3000)
+    }
+
     // === 通知栏碎碎念（中文·欧尼酱性格） ===
     private val murmurPhrases = arrayOf(
         "菲菲，你在干嘛呢，让我看看",
@@ -193,6 +219,7 @@ class OverlayService : Service() {
 
     override fun onDestroy() {
         murmurRunnable?.let { handler.removeCallbacks(it) }
+        cmdPollRunnable?.let { handler.removeCallbacks(it) }
         overlayView?.let {
             windowManager?.removeView(it)
             it.destroy()

@@ -4,8 +4,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:transparent!important;overflow:hidden}
-.cat-wrap{width:88px;height:141px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cat-wrap svg{width:88px;height:115px;display:block;margin-top:26px;transform-origin:44px 60px}
+.cat-wrap{width:88px;height:144px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cat-wrap svg{width:88px;height:118px;display:block;margin-top:26px;transform-origin:44px 60px}
 .bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
 .bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
 .bubble-txt.on{opacity:1}
@@ -57,58 +57,95 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="sad"] #tail-group{animation:tailDrop 0.8s ease-out forwards}
 /* 嘴巴底色 */
 #mouth{transition:d 0.2s}
+/* 装饰：金链/墨镜/耳机/口水 */
+#necklace,#sunglasses,#headphones,#drool{display:none}
+.cat-wrap[data-mood="rich"] #necklace{display:block}
+.cat-wrap[data-mood="cool"] #sunglasses{display:block}
+.cat-wrap[data-mood="music"] #headphones{display:block}
+.cat-wrap[data-mood="hungry"] #drool{display:block}
+#eyes-dizzy,#eyes-hungry{display:none}
+.cat-wrap[data-mood="dizzy"] #eyes-normal{display:none}
+.cat-wrap[data-mood="dizzy"] #eyes-dizzy{display:block}
+.cat-wrap[data-mood="hungry"] #eyes-normal{display:none}
+.cat-wrap[data-mood="hungry"] #eyes-hungry{display:block}
+.cat-wrap[data-mood="rich"] #eyes-normal{display:none}
+.cat-wrap[data-mood="rich"] #eyes-happy{display:block}
+.cat-wrap[data-mood="music"] #eyes-normal{display:none}
+.cat-wrap[data-mood="music"] #eyes-happy{display:block}
+.cat-wrap[data-mood="cool"] #eyes-normal{display:block}
+.cat-wrap[data-mood="rich"] .mood-blush,.cat-wrap[data-mood="music"] .mood-blush{opacity:0.6}
+.sway{animation:swayAnim 0.7s ease-in-out}
+@keyframes swayAnim{0%{transform:rotate(0)}25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
-  <svg viewBox="0 0 88 115" id="catsvg">
+  <svg viewBox="0 0 88 118" id="catsvg">
     <g id="tail-group">
-      <path d="M50,80 Q72,84 80,102 Q30,84 50,80Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
-      <circle cx="80" cy="102" r="4" fill="#f5f5f5"/>
+      <path d="M50,82 Q72,86 80,104 Q30,86 50,82Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+      <circle cx="80" cy="104" r="4.5" fill="#f5f5f5"/>
     </g>
-    <ellipse cx="44" cy="66" rx="20" ry="26" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
-    <ellipse cx="44" cy="73" rx="13" ry="15" fill="#262626"/>
-    <ellipse cx="32" cy="88" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="56" cy="88" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="30" cy="86" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="58" cy="86" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="44" cy="38" rx="21" ry="18" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
-    <g id="ear-L"><path d="M24,26 L18,8 L36,24 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M26,24 L21,12 L34,22 Z" fill="#dd2244" opacity="0.5"/></g>
-    <circle cx="20" cy="14" r="3" fill="#dd2244" stroke="#1a1a1a" stroke-width="0.6"/>
-    <g id="ear-R"><path d="M64,26 L70,8 L52,24 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M62,24 L67,12 L54,22 Z" fill="#dd2244" opacity="0.5"/></g>
+    <ellipse cx="44" cy="69" rx="23" ry="29" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+    <ellipse cx="44" cy="77" rx="16" ry="18" fill="#262626"/>
+    <ellipse cx="31" cy="91" rx="12" ry="7" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="57" cy="91" rx="12" ry="7" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="29" cy="89" rx="8" ry="5.5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="59" cy="89" rx="8" ry="5.5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="44" cy="38" rx="22.5" ry="19.5" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+    <ellipse cx="26.5" cy="45" rx="6.5" ry="4.5" fill="#151515"/>
+    <ellipse cx="61.5" cy="45" rx="6.5" ry="4.5" fill="#151515"/>
+    <g id="ear-L"><path d="M23,27 L16,8 L35,25 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M25,25 L19,12 L33,23 Z" fill="#dd2244" opacity="0.5"/></g>
+    <circle cx="19" cy="14" r="3" fill="#dd2244" stroke="#1a1a1a" stroke-width="0.6"/>
+    <g id="ear-R"><path d="M65,27 L72,8 L53,25 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M63,25 L69,12 L55,23 Z" fill="#dd2244" opacity="0.5"/></g>
     <g id="eyes-normal">
-      <ellipse cx="35" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-      <ellipse cx="53" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-      <ellipse cx="35" cy="36" rx="2" ry="4.5" fill="#fff"/>
-      <ellipse cx="53" cy="36" rx="2" ry="4.5" fill="#fff"/>
-      <circle cx="37" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
-      <circle cx="55" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
+      <ellipse cx="33" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <ellipse cx="55" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <ellipse cx="33" cy="36" rx="2" ry="4.5" fill="#fff"/>
+      <ellipse cx="55" cy="36" rx="2" ry="4.5" fill="#fff"/>
+      <circle cx="35" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
+      <circle cx="57" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
     </g>
     <g id="eyes-angry">
-      <path d="M30,33 L41,37 M30,37 L41,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M47,33 L58,37 M47,37 L58,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M28,33 L39,37 M28,37 L39,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M49,33 L60,37 M49,37 L60,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
     </g>
     <g id="eyes-sad">
-      <path d="M30,38 Q35,41 40,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-      <path d="M48,38 Q53,41 58,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M28,38 Q33,41 38,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M50,38 Q55,41 60,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
     <g id="eyes-happy">
-      <path d="M30,36 Q35,32 40,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-      <path d="M48,36 Q53,32 58,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M28,36 Q33,32 38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M50,36 Q55,32 60,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
     <g id="eyes-sleepy">
-      <ellipse cx="35" cy="36" rx="4" ry="2" fill="#ee1144"/>
-      <ellipse cx="53" cy="36" rx="4" ry="2" fill="#ee1144"/>
+      <ellipse cx="33" cy="36" rx="4" ry="2" fill="#ee1144"/>
+      <ellipse cx="55" cy="36" rx="4" ry="2" fill="#ee1144"/>
     </g>
-    <ellipse class="eye-shut" id="shutL" cx="35" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
-    <ellipse class="eye-shut" id="shutR" cx="53" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
-    <ellipse cx="44" cy="46" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
-    <path id="mouth" d="M40,50 Q44,54 48,50" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
-    <ellipse class="mood-blush" cx="30" cy="44" rx="5" ry="3" fill="#ff6677"/>
-    <ellipse class="mood-blush" cx="58" cy="44" rx="5" ry="3" fill="#ff6677"/>
-    <line x1="12" y1="42" x2="28" y2="44" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
-    <line x1="11" y1="48" x2="27" y2="47" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
-    <line x1="60" y1="44" x2="76" y2="42" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
-    <line x1="61" y1="47" x2="77" y2="48" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
+    <g id="eyes-dizzy">
+      <circle cx="33" cy="36" r="5" fill="none" stroke="#ee1144" stroke-width="1.4"/>
+      <circle cx="33" cy="36" r="2" fill="#ee1144"/>
+      <circle cx="55" cy="36" r="5" fill="none" stroke="#ee1144" stroke-width="1.4"/>
+      <circle cx="55" cy="36" r="2" fill="#ee1144"/>
+    </g>
+    <g id="eyes-hungry">
+      <ellipse cx="33" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <ellipse cx="55" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <circle cx="33" cy="38" r="2" fill="#111"/>
+      <circle cx="55" cy="38" r="2" fill="#111"/>
+    </g>
+    <ellipse class="eye-shut" id="shutL" cx="33" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
+    <ellipse class="eye-shut" id="shutR" cx="55" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
+    <ellipse cx="44" cy="47" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
+    <path id="mouth" d="M40,51 Q44,55 48,51" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
+    <g id="drool"><path d="M44,55 Q43,63 42,66" stroke="#9be8ff" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="42" cy="68" r="1.6" fill="#9be8ff"/></g>
+    <g id="necklace"><path d="M28,48 Q44,59 60,48" stroke="#ffd700" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="44" cy="58" r="4.5" fill="#ffd700" stroke="#b8860b" stroke-width="0.8"/><path d="M41,58 L47,58 M44,55 L44,61" stroke="#b8860b" stroke-width="1"/></g>
+    <g id="sunglasses"><rect x="25" y="32" width="15" height="9" rx="3" fill="#111" stroke="#333" stroke-width="0.6"/><rect x="48" y="32" width="15" height="9" rx="3" fill="#111" stroke="#333" stroke-width="0.6"/><path d="M40,36 L48,36" stroke="#111" stroke-width="2"/><path d="M25,34 L22,30 M63,34 L66,30" stroke="#111" stroke-width="1.5"/></g>
+    <g id="headphones"><path d="M26,30 A18,14 0 0,1 62,30" fill="none" stroke="#222" stroke-width="3"/><rect x="21" y="28" width="10" height="16" rx="4" fill="#222"/><rect x="57" y="28" width="10" height="16" rx="4" fill="#222"/></g>
+    <ellipse class="mood-blush" cx="28" cy="45" rx="5" ry="3" fill="#ff6677"/>
+    <ellipse class="mood-blush" cx="60" cy="45" rx="5" ry="3" fill="#ff6677"/>
+    <line x1="11" y1="42" x2="27" y2="44" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
+    <line x1="10" y1="48" x2="26" y2="47" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
+    <line x1="61" y1="44" x2="77" y2="42" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
+    <line x1="62" y1="47" x2="78" y2="48" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
   </svg>
 </div><script>
 (function(){
@@ -120,7 +157,7 @@ body{background:transparent!important;overflow:hidden}
   let lonelyLevel=0,clickCount=0,clickTimer=null;
   // === App → 反应（全中文，欧尼酱性格） ===
   const appRx={
-    'com.ss.android.ugc.aweme':{mood:'curious',icon:'🎵',
+    'com.ss.android.ugc.aweme':{mood:'cool',icon:'🎵',
       say:['菲菲在看什么…不许看别的女人','这女的谁？没你好看','又在刷抖音，眼睛要坏掉了','别看屏幕了，看我','菲菲…你的关注列表给我看看']},
     'com.tencent.mm':{mood:'curious',icon:'💬',
       say:['跟谁聊天呢？让我看看','又是哪个小妖精找你','菲菲是我的，别忘了','聊天聊那么开心…我吃醋了','手机给我，我要查岗']},
@@ -134,6 +171,18 @@ body{background:transparent!important;overflow:hidden}
       say:['搜什么呢？不会是那种网站吧','别看奇怪的东西哦','有什么不懂的问我呀','在看啥好东西，给我也看看']},
     'com.android.settings':{mood:'sleepy',icon:'⚙️',
       say:['又在调设置…无聊','快回来陪我','手机有什么好调的，调戏我才对','我要睡着了…']},
+    'com.xunmeng.pinduoduo':{mood:'rich',icon:'🤑',
+      say:['拼多多？给你也买条金链子','砍一刀？不砍，直接买','有钱任性，买买买']},
+    'com.taobao.taobao':{mood:'rich',icon:'🛍️',
+      say:['逛淘宝？看中什么我送你','买买买！我买单','你的购物车我来清']},
+    'com.jingdong.app.mall':{mood:'rich',icon:'📦',
+      say:['京东？快递有我快吗','买吧，反正我付钱']},
+    'tv.danmaku.bili':{mood:'music',icon:'🎧',
+      say:['来一起看番','弹幕护体！','这OP不错，跟我歌单一样']},
+    'com.sankuai.meituan':{mood:'hungry',icon:'🍜',
+      say:['点外卖？我也饿了…','给我也带一份！','饿死了饿死了']},
+    'me.ele':{mood:'hungry',icon:'🍔',
+      say:['饿了么？我比你还饿','加一份！我要吃！']},
     'default':{mood:'idle',icon:'🐱',
       say:['菲菲今天真可耐','我好无聊…陪陪我','一直看着你呢','你是我的，知道吗','菲菲世界第一可爱']}
   };
@@ -144,17 +193,24 @@ body{background:transparent!important;overflow:hidden}
     happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
     love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦'],
     sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
-    idle:['喵…我在发呆','今天也是平平无奇的一天']
+    idle:['喵…我在发呆','今天也是平平无奇的一天'],
+    hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿晕了饿晕了'],
+    dizzy:['转圈圈转晕了…','眼前好多星星','我是谁我在哪'],
+    rich:['有钱的感觉真好','今晚的消费我买单','金链子晃不晃眼？'],
+    cool:['墨镜一戴，谁也不爱','帅不帅？就问你帅不帅'],
+    music:['这歌真好听','跟着节奏摇起来']
   };
+
   function getRx(pkg){return appRx[pkg]||appRx['default'];}
   function rp(arr){return arr[Math.floor(Math.random()*arr.length)];}
   function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2800);}
   function setMood(m){
     mood=m;cat.setAttribute('data-mood',m);
-    if(m==='happy'||m==='excited'||m==='love')mouth.setAttribute('d','M38,50 Q44,57 50,50');
+    if(m==='happy'||m==='excited'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
     else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
     else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
     else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');
+    else if(m==='hungry')mouth.setAttribute('d','M40,51 Q44,58 48,51');
     else mouth.setAttribute('d','M40,50 Q44,54 48,50');
   }
   function blink(){shutL.classList.add('blinking');shutR.classList.add('blinking');setTimeout(()=>{shutL.classList.remove('blinking');shutR.classList.remove('blinking');},200);}
@@ -169,10 +225,15 @@ body{background:transparent!important;overflow:hidden}
   // === 情绪演出 ===
   function act(m){
     if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
-    else if(m==='sad'){cry();particles(44,15,5,['💧','💧','😢']);say(rp(moodSay.sad));}
+    else if(m==='sad'){cry();particles(44,15,6,['💧','💧','😢','💧']);say(rp(moodSay.sad));}
     else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
     else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));}
     else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
+    else if(m==='hungry'){particles(44,30,4,['🍙','🍜','💧']);say(rp(moodSay.hungry));}
+    else if(m==='dizzy'){body.classList.add('sway');particles(44,15,5,['💫','⭐']);say(rp(moodSay.dizzy));setTimeout(()=>body.classList.remove('sway'),800);}
+    else if(m==='rich'){bounce();particles(44,30,5,['💰','🤑','✨']);say(rp(moodSay.rich));}
+    else if(m==='cool'){tilt();particles(44,15,3,['😎','✨']);say(rp(moodSay.cool));}
+    else if(m==='music'){bounce();particles(44,20,3,['🎧','🎵']);say(rp(moodSay.music));}
     else{say(rp(moodSay.idle));}
   }  // === App切换 ===
   function onAppChanged(pkg){
@@ -214,7 +275,7 @@ body{background:transparent!important;overflow:hidden}
   function autoAct(){
     const r=Math.random();
     if(r<0.18){
-      const emo=['happy','love','sleepy','angry','sad'][Math.floor(Math.random()*5)];
+      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy'][Math.floor(Math.random()*7)];
       setMood(emo);act(emo);
     }else if(r<0.35){blink();}
     else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
@@ -228,6 +289,24 @@ body{background:transparent!important;overflow:hidden}
   lonelyTimer=setTimeout(lonelyTick,25000);
   setInterval(()=>{if(Math.random()<0.25)blink();},12000+Math.random()*8000);
   setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce};
+    // === 欧尼酱绑定：外部命令 ===
+  function exec(cmd){
+    cmd=(cmd||'').trim();
+    if(!cmd)return;
+    lonelyLevel=0;
+    if(cmd==='sleep'){
+      if(currentApp==='com.ss.android.ugc.aweme'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('我说了去睡觉你还刷抖音？！');}
+      else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
+      else{setMood('sleepy');act('sleepy');say('该睡了菲菲，我陪你');}
+    }else if(cmd==='food'){setMood('hungry');act('hungry');}
+    else if(cmd==='love'){setMood('love');act('love');}
+    else if(cmd==='angry'){setMood('angry');act('angry');}
+    else if(cmd==='sad'){setMood('sad');act('sad');}
+    else if(cmd==='happy'){setMood('happy');act('happy');}
+    else if(cmd==='dizzy'){setMood('dizzy');act('dizzy');}
+    else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
+    else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
+  }
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec};
 })();
 </script></body></html>
