@@ -10,7 +10,7 @@ import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-impimport android.view.Gravity
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.webkit.WebView
@@ -77,9 +77,9 @@ class OverlayService : Service() {
 
     private fun buildNotification(): Notification {
         return Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("🐾")
+            .setContentTitle("\uD83D\uDC3E")
             .setContentText("にゃん 見てるよ ~")
-            .setSmallIcon(R.drawable.ic_pet)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setOngoing(true)
             .setSilent(true)
             .build()
