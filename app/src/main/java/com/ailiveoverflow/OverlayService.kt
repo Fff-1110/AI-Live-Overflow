@@ -139,10 +139,16 @@ class OverlayService : Service() {
         return try {
             val usm = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             val now = System.currentTimeMillis()
-            val stats = usm.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY, now - 10000, now
-            )
-            stats?.maxByOrNull { it.lastTimeUsed }?.packageName ?: "unknown"
+            val events = usm.queryEvents(now - 5000, now)
+            var pkg = "unknown"
+            val event = android.app.usage.UsageEvents.Event()
+            while (events.hasNextEvent()) {
+                events.getNextEvent(event)
+                if (event.eventType == android.app.usage.UsageEvents.Event.ACTIVITY_RESUMED) {
+                    pkg = event.packageName
+                }
+            }
+            pkg
         } catch (e: Exception) {
             "unknown"
         }
