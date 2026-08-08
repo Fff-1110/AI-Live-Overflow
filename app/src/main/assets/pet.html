@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*:body{background:transparent!important;margin:0;overflow:hidden;font-family:sans-serif;color:#fff}
+.pet{width:180px;height:240px;position:relative;cursor:pointer}
+#tail{transform-origin:150px 190px;animation:tailSway 2s ease-in-out infinite alternate}
+#body{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
+#leftEar{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
+#rightEar{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
+#leftEarInner{fill:#ff3355;opacity:0.6}
+#rightEarInner{fill:#ff3355;opacity:0.6}
+#leftEye{rx="52";cy="75";stroke:#ff3355;stroke-width:2;fill:none}
+#rightEye{rx="99";cy="75";stroke:#ff3355;stroke-width:2;fill:none}
+#leftPupil{fill:#fff;rx="54";cy="75"}
+#rightPupil{fill:#fff;rx="97";cy="75"}
+#nose{fill:#ffc3d0;stroke:#333;stroke-width:1}
+#whiskers{stroke:#ccc;stroke-width:1.5;fill:none;stroke-linecap:round}
+#earNick{fill:#1a1a2e;stroke:#ff3355;stroke-width:1.5}
+#tailTip{fill:#fff;opacity:0.9}
+#heart{fill:#ff3355;opacity:0;animation:heartBeat 1.5s ease-in-out infinite}
+"bubble{fill:#fff;opacity:0;font-size:11px;font-weight:bold}
+#bubbleBg{fill:#333;opacity:0}
+.speech{position:absolute;top:0;left:0;background:rgba(33,33,33,0.92);color:#fff;padding:6px 12px;border-radius:16px;font-size:12px;max-width:160px;transform:translate(-100%, -100%);opacity:0;transition:opacity 0.3s}
+.speech.show{opacity:1}
+@keyframes tailSway{0%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}100%{transform:rotate(-3deg)}}
+@keyframes heartBeat{0%{opacity:0;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(0.8)}}
+.blink{opacity:0;animation:blink 0.2s ease-in-out;animation-fill-mode:forwards}
+@keyframes blink{0%{</style>
+<script>
+const SUPABASE_URL='https://ebmzkftreptofjmdsiam.supabase.co';
+const SUPABASE_KEY='sb_publishable_dSqyFMLb3Ih4Sf99atKG5Q_Z9_rWm85';
+window.petEngine={state:'idle',speakTimer:-1,onFace:function(st){this.setState(st)},setState:function(s){this.state=s;document.body.setAttribute('data-state',s)},onFavorite:function(){this.showHeart()},onSpeak:function(txt){this.showBubble(txt)},showHeart:function(){document.getElementById('heart').style.animation='none';setTimeout(()=>{document.getElementById('heart').style.animation='heartBeat 1.5s ease-in-out infinite'},0)},showBubble:function(t){const b=document.getElementById('bubble'),bg=document.getElementById('bubbleBg');b.textContent=t;b.style.opacity='1';bg.style.opacity='1';clearTimeout(this.speakTimer);this.speakTimer=setTimeout(()=>{b.style.opacity='0';bg.style.opacity='0'},3000)},onTap:function(){this.showBubble('\uD83C\uD8030');const eyes=document.querySelectorAll('.blink');eyes.forEach(e=>{e.style.opacity='0';e.style.animation='none';setTimeout(()=>{e.style.opacity='';e.style.animation='blink 0.2s ease-in-out'},100)})},pollState:function(){fetch(`${SUPABASE_URL}/rest/v1/pet_state?order=updated_at.desc&limit=1`,{headers:{'apikey':SUPABASE_KEY}}).then(r=>r.json()).then(d=>{if(d[0]){this.onFace(d[0].state_value)}}).catch(_=>{})}};
+setInterval(()=>{window.petEngine.pollState()},30000);
+</script></head>
+<body data-state="idle">
+<div class="pet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 240" width="180" height="240">
+<!-- Ears -->
+<g id="leftEar">
+<path d="M40,55 L25,40 L50,68 Z"/>
+<path id="leftEarInner" d="M40,56 L30,43 L47,67 Z"/>
+</g>
+<g id="rightEar">
+<path d="M110,55 L125,40 L100,68 Z"/>
+<path id="rightEarInner" d="M110,56 L120,43 L103,67 Z"/>
+</g>
+<!-- Ear Nick -->
+<circle id="earNick" cx="32" cy="48" r="3" fill="#1a1a2e" stroke="#ff3355" stroke-width="1.5"/>
+<!-- Body -->
+<ellipse id="body" cx="90" cy="140" rx="40" ry="55" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
+<!-- Chest fluff -->
+<ellipse cx="75" cy="105" rx="22" ry="28" fill="#2a2a3e" stroke="#333" stroke-width="1"/>
+<!-- Belly -->
+<ellipse cx="90" cy="155" rx="28" ry="32" fill="#25262c" stroke="none"/>
+<!-- Head -->
+<ellipse cx="75" cy="75" rx="35" ry="30" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
+<!-- Eyes -->
+<ellipse id="leftEye" cx="62" cy="75" rx="7" ry="8" fill="#ff3355" stroke="#333" stroke-width="1"/>
+<ellipse id="rightEye" cx="88" cy="75" rx="7" ry="8" fill="#ff3355" stroke="#333" stroke-width="1"/>
+<circle id="leftPupil" cx="64" cy="75" r="3" fill="#fff"/>
+<circle id="rightPupil" cx="86" cy="75" r="3" fill="#fff"/>
+<!-- Nose -->
+<ellipse id="nose" cx="75" cy="84" rx="4" ry="3" fill="#ffc3d0" stroke="#333" stroke-width="1"/>
+<!-- Whiskers -->
+<g id="whiskers">
+<line x1="20" y1="80" x2="52" y2="82"/>
+<line x1="20" y1="88" x2="52" y2="86"/>
+<line x1="98" y1="82" x2="130" y2="80"/>
+<line x1="98" y1="86" x2="130" y2="88"/>
+</g>
+<!-- Eye Blink Effect -->
+<ellipse class="blink" cx="62" cy="75" rx="7" ry="8" fill="#1a1a2e" stroke="none"/>
+<ellipse class="blink" cx="88" cy="75" rx="7" ry="8" fill="#1a1a2e" stroke="none"/>
+<!-- Mouth -->
+<path d="M65,92 Q75,100 85,92" fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+<!-- Paws -->
+<g transform="translate(0, 0)">
+<ellipse cx="60" cy="185" rx="12" ry="8" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
+<ellipse cx="120" cy="185" rx="12" ry="8" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
+</g>
+<!-- Tail -->
+<g id="tail">
+<path d="M90,185 Q150,200 160,230 Q45,190 90,185Z" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
+<circle id="tailTip" cx="160" cy="230" r="6" fill="#fff" opacity="0.9"/>
+</g>
+<!-- Heart -->
+<g id="heart" transform="translate(95, 120)">
+<path d="M0 5 Q-5-2 -10 5 Q-15 12 -10 18 Q0 25 0 25 Q0 25 10 18 Q15 12 10 5 Q1 1 0 5Z" fill="#ff3355" stroke="none" transform="scale(0.7)"/>
+</g>
+<!-- Bubble -->
+<text id="bubble" x="90" y="95" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold"></text>
+<rect id="bubbleBg" x="20" y="80" rx="10" ry="10" width="110" height="22" fill="#333"/>
+</svg>
+</div>
+</body></html>
