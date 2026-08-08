@@ -7,46 +7,50 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:transparent!important;overflow:hidden}
-.cat-wrap{width:88px;height:110px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cat-wrap svg{width:88px;height:110px;display:block}
-/* 气泡 */
-.bubble-box{position:absolute;top:-20px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:2}
-.bubble-txt{display:inline-block;background:rgba(20,20,20,0.9);color:#f0dede;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;white-space:nowrap;opacity:0;transition:opacity 0.2s}
+.cat-wrap{width:88px;height:115px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cat-wrap svg{width:88px;height:115px;display:block}
+.bubble-box{position:absolute;top:-22px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:2}
+.bubble-txt{display:inline-block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;white-space:nowrap;opacity:0;transition:opacity 0.2s;max-width:120px;overflow:hidden;text-overflow:ellipsis}
 .bubble-txt.on{opacity:1}
-/* 粒子 */
 .particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1s ease-out forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
-/* 动画 */
 @keyframes tailWag{0%{transform:rotate(-3deg)}50%{transform:rotate(4deg)}100%{transform:rotate(-3deg)}}
 .wiggle{animation:earWig 0.3s ease-out}
 @keyframes earWig{0%{transform:rotate(0)}30%{transform:rotate(-6deg)}60%{transform:rotate(4deg)}100%{transform:rotate(0)}}
 .bounce{animation:bounceAnim 0.35s ease-out}
 @keyframes bounceAnim{0%{transform:translateY(0)}40%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-/* 眨眼 */
+.dance{animation:danceAnim 0.6s ease-in-out}
+@keyframes danceAnim{0%{transform:rotate(0)}25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-4deg)}100%{transform:rotate(0)}}
+.tilt{animation:tiltAnim 0.3s ease-out}
+@keyframes tiltAnim{0%{transform:rotate(0)}40%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
 .eye-shut{opacity:0}
 .eye-shut.blinking{animation:blinkNow 0.2s ease-out}
 @keyframes blinkNow{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+/* 情绪颜色 */
+.cat-wrap[data-mood="happy"] .mood-blush{opacity:0.6}
+.cat-wrap[data-mood="angry"] .mood-blush{opacity:0}
+.mood-blush{opacity:0;transition:opacity 0.5s}
 </style>
 </head>
 <body>
-<div class="cat-wrap" id="cat">
+<div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">にゃ〜</span></div>
-  <svg viewBox="0 0 88 110">
+  <svg viewBox="0 0 88 115" id="catsvg">
     <!-- 尾巴 -->
-    <g id="tail-group" style="transform-origin:68px 78px;animation:tailWag 2.5s ease-in-out infinite alternate">
-      <path d="M50,78 Q72,82 80,100 Q30,82 50,78Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
-      <circle cx="80" cy="100" r="4" fill="#f5f5f5"/>
+    <g id="tail-group" style="transform-origin:68px 80px;animation:tailWag 2.5s ease-in-out infinite alternate">
+      <path d="M50,80 Q72,84 80,102 Q30,84 50,80Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+      <circle cx="80" cy="102" r="4" fill="#f5f5f5"/>
     </g>
     <!-- 身体 -->
-    <ellipse cx="44" cy="65" rx="20" ry="26" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+    <ellipse cx="44" cy="66" rx="20" ry="26" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
     <!-- 肚皮 -->
-    <ellipse cx="44" cy="72" rx="13" ry="15" fill="#262626"/>
+    <ellipse cx="44" cy="73" rx="13" ry="15" fill="#262626"/>
     <!-- 后腿 -->
-    <ellipse cx="32" cy="86" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="56" cy="86" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="32" cy="88" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="56" cy="88" rx="10" ry="6" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
     <!-- 前爪 -->
-    <ellipse cx="30" cy="84" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
-    <ellipse cx="58" cy="84" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="30" cy="86" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
+    <ellipse cx="58" cy="86" rx="7" ry="5" fill="#1a1a1a" stroke="#333" stroke-width="0.7"/>
     <!-- 头 -->
     <ellipse cx="44" cy="38" rx="21" ry="18" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
     <!-- 左耳 (有缺口) -->
@@ -75,8 +79,11 @@ body{background:transparent!important;overflow:hidden}
     <ellipse class="eye-shut" id="shutR" cx="53" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <!-- 鼻子 -->
     <ellipse cx="44" cy="46" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
-    <!-- 嘴巴 -->
-    <path d="M40,50 Q44,54 48,50" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- 嘴巴（可变形） -->
+    <path id="mouth" d="M40,50 Q44,54 48,50" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- 腮红 -->
+    <ellipse class="mood-blush" cx="30" cy="44" rx="5" ry="3" fill="#ff6677"/>
+    <ellipse class="mood-blush" cx="58" cy="44" rx="5" ry="3" fill="#ff6677"/>
     <!-- 胡须 -->
     <line x1="12" y1="42" x2="28" y2="44" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
     <line x1="11" y1="48" x2="27" y2="47" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
@@ -93,24 +100,62 @@ body{background:transparent!important;overflow:hidden}
   const shutR = document.getElementById('shutR');
   const earL = document.getElementById('ear-L');
   const earR = document.getElementById('ear-R');
-  const tail = document.getElementById('tail-group');
-  const body = cat.querySelector('svg');
+  const body = document.getElementById('catsvg');
+  const mouth = document.getElementById('mouth');
 
-  let state = 'idle', bubbleTimer, autoTimer;
+  let state = 'idle', mood = 'idle', bubbleTimer, autoTimer;
+  let currentApp = 'unknown', tapCount = 0, lastTapTime = 0;
 
-  const words = {
-    idle: ['にゃ〜','…','ごろごろ','なんか用？','ふぁ…'],
-    happy: ['にゃん♡','気持ちいい〜','ゴロゴロ','もっと〜','しあわせ♡'],
-    angry: ['フー！','やめろ〜','シャー！','…チッ'],
-    sleepy: ['ふぁ〜あ','ねむ…','おやすみ…','Zzz'],
-    playful: ['あそぼ！','にゃっ！','まて〜','くる〜']
+  // === 不同App的反应映射 ===
+  const appReactions = {
+    'com.ss.android.ugc.aweme': { // 抖音
+      mood: 'excited', icon: '🎵', phrases: ['いいね！', 'ダンスうまい！', 'この曲知ってる！', 'スクロール早っ', 'にゃ〜リズムに乗る'],
+      action: function(){ body.classList.add('dance'); setTimeout(()=>body.classList.remove('dance'),600); }
+    },
+    'com.tencent.mm': { // 微信
+      mood: 'curious', icon: '💬', phrases: ['だれと話してるの？', '楽しそう〜', '内緒話？', 'もう、私も混ぜて'],
+      action: function(){ tiltHead(); }
+    },
+    'com.tencent.mobileqq': { // QQ
+      mood: 'curious', icon: '🐧', phrases: ['QQか…懐かしい', '若いね〜', 'スタンプ押したい'],
+      action: function(){ tiltHead(); }
+    },
+    'com.netease.cloudmusic': { // 网易云
+      mood: 'happy', icon: '🎶', phrases: ['いい曲だね', 'にゃ〜♫', 'この歌好き', 'エモい…'],
+      action: function(){ body.classList.add('dance'); setTimeout(()=>body.classList.remove('dance'),600); }
+    },
+    'com.tencent.tmgp.sgame': { // 王者荣耀
+      mood: 'excited', icon: '⚔️', phrases: ['頑張れ！', '敵きた！', 'にゃー！やっつけろ！', 'GOGOGO!'],
+      action: function(){ bounceIt(); bounceIt(); }
+    },
+    'com.android.browser': { // 浏览器
+      mood: 'curious', icon: '🔍', phrases: ['なに調べてるの？', 'ふむふむ…', '面白そう'],
+      action: function(){ tiltHead(); }
+    },
+    'com.android.settings': { // 设置
+      mood: 'sleepy', icon: '⚙️', phrases: ['設定ばっか…', 'つまんない', 'ふぁ〜'],
+      action: function(){}
+    },
+    'default': {
+      mood: 'idle', icon: '🐱', phrases: ['にゃ〜', '…', 'ごろごろ', 'なんか用？'],
+      action: function(){}
+    }
   };
+
+  function getAppReaction(pkg){
+    return appReactions[pkg] || appReactions['default'];
+  }
+
+  function tiltHead(){
+    body.classList.add('tilt');
+    setTimeout(()=>body.classList.remove('tilt'), 300);
+  }
 
   function say(t){
     bub.textContent = t;
     bub.classList.add('on');
     clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(()=>bub.classList.remove('on'), 2200);
+    bubbleTimer = setTimeout(()=>bub.classList.remove('on'), 2500);
   }
 
   function rpick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
@@ -136,9 +181,18 @@ body{background:transparent!important;overflow:hidden}
     }
   }
 
-  function setState(s){
-    state = s;
-    cat.setAttribute('data-state', s);
+  function setMood(m){
+    mood = m;
+    cat.setAttribute('data-mood', m);
+    if(m==='happy'||m==='excited'){
+      mouth.setAttribute('d','M38,50 Q44,57 50,50');
+    }else if(m==='angry'){
+      mouth.setAttribute('d','M39,51 Q44,47 49,51');
+    }else if(m==='sleepy'){
+      mouth.setAttribute('d','M41,50 Q44,52 47,50');
+    }else{
+      mouth.setAttribute('d','M40,50 Q44,54 48,50');
+    }
   }
 
   function earWig(){
@@ -155,68 +209,120 @@ body{background:transparent!important;overflow:hidden}
     setTimeout(()=>body.classList.remove('bounce'), 350);
   }
 
-  // 点击区域判断
+  // === 点击 ===
   cat.addEventListener('click', function(e){
     const rect = cat.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    // 缩放换算 (88x110)
+
+    // 连击检测
+    const now = Date.now();
+    if(now - lastTapTime < 400){
+      tapCount++;
+      if(tapCount >= 3){
+        // 三连击
+        setMood('excited');
+        say('にゃにゃにゃ！');
+        hearts(44, 30, 6);
+        bounceIt();
+        setTimeout(()=>setMood(mood), 3000);
+        tapCount = 0;
+        return;
+      }
+    }else{
+      tapCount = 1;
+    }
+    lastTapTime = now;
+
     if(y < 30 && x > 15 && x < 73){
-      // 摸头
-      setState('happy');
+      setMood('happy');
       say('にゃん♡');
       earWig();
       blinkNow();
-      hearts(44, 24, 3);
-      setTimeout(()=>setState('idle'), 4000);
-    }else if(y > 55 && y < 90 && x > 20 && x < 68){
-      // 摸肚子
-      setState('happy');
+      hearts(44, 22, 3);
+      setTimeout(()=>setMood(mood), 4000);
+    }else if(y > 55 && y < 92 && x > 20 && x < 68){
+      setMood('happy');
       say('ゴロゴロ〜');
-      hearts(44, 70, 4);
+      hearts(44, 72, 4);
       bounceIt();
-      setTimeout(()=>setState('idle'), 5000);
-    }else if(y > 75 && x > 65){
-      // 摸尾巴
-      setState('angry');
+      setTimeout(()=>setMood(mood), 5000);
+    }else if(y > 78 && x > 65){
+      setMood('angry');
       say('フー！しっぽダメ！');
-      setTimeout(()=>setState('idle'), 3000);
+      setTimeout(()=>setMood(mood), 3000);
     }else{
       blinkNow();
-      say(rpick(words.playful));
+      const rx = getAppReaction(currentApp);
+      say(rpick(rx.phrases));
       bounceIt();
     }
   });
 
-  // 双击睡觉
-  cat.addEventListener('dblclick', function(){
-    if(state === 'sleepy'){
-      setState('idle');
+  // === 双击 ===
+  cat.addEventListener('dblclick', function(e){
+    if(mood === 'sleepy'){
+      setMood('idle');
       say('…おはよ');
       bounceIt();
     }else{
-      setState('sleepy');
+      setMood('sleepy');
       say('ふぁ〜…おやすみ');
     }
+    e.preventDefault();
+    e.stopPropagation();
   });
 
-  // 自主行为
-  function autoAct(){
-    const r = Math.random();
-    if(r < 0.3) blinkNow();
-    else if(r < 0.45){ earWig(); say(rpick(words[state])); }
-    else if(r < 0.55) bounceIt();
-    autoTimer = setTimeout(autoAct, state==='sleepy' ? 8000+Math.random()*8000 : 4000+Math.random()*5000);
+  // === 长按 (由Kotlin触发) ===
+  function onLongPress(){
+    setMood('happy');
+    say('ゴロゴロゴロ〜♡');
+    hearts(44, 50, 5);
+    bounceIt();
+    setTimeout(()=>setMood(mood), 4000);
   }
 
-  setState('idle');
-  autoTimer = setTimeout(autoAct, 3000);
+  // === App切换 (由Kotlin触发) ===
+  function onAppChanged(pkg){
+    if(pkg === currentApp) return;
+    currentApp = pkg;
+    const rx = getAppReaction(pkg);
+    setTimeout(()=>{
+      setMood(rx.mood);
+      say(rx.icon + ' ' + rpick(rx.phrases));
+      if(rx.action) rx.action();
+    }, 300);
+  }
 
-  // 随机眨眼
+  // === 自主行为 (结合当前app) ===
+  function autoAct(){
+    const r = Math.random();
+    const rx = getAppReaction(currentApp);
+    if(r < 0.3) blinkNow();
+    else if(r < 0.45){ earWig(); say(rpick(rx.phrases)); }
+    else if(r < 0.55) bounceIt();
+    else if(r < 0.6 && currentApp !== 'unknown' && rx.action) rx.action();
+    autoTimer = setTimeout(autoAct, mood==='sleepy' ? 8000+Math.random()*8000 : 4000+Math.random()*5000);
+  }
+
+  setMood('idle');
+  autoTimer = setTimeout(autoAct, 3000);
   setInterval(()=>{ if(Math.random()<0.35) blinkNow(); }, 7000+Math.random()*6000);
 
   // 初次打招呼
-  setTimeout(()=>{ say('にゃ〜'); bounceIt(); }, 600);
+  setTimeout(()=>{ say('にゃ〜 見てるよ'); bounceIt(); }, 600);
+
+  // === 暴露给 Kotlin ===
+  window.KuroNeko = {
+    onAppChanged: onAppChanged,
+    onLongPress: onLongPress,
+    setMood: setMood,
+    say: say,
+    blink: blinkNow,
+    bounce: bounceIt,
+    getMood: function(){ return mood; },
+    getCurrentApp: function(){ return currentApp; }
+  };
 
 })();
 </script>
