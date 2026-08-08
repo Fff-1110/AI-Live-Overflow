@@ -1,97 +1,419 @@
+<![CDATA[
 <!DOCTYPE html>
 <html lang="ja">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <style>
-*:body{background:transparent!important;margin:0;overflow:hidden;font-family:sans-serif;color:#fff}
-.pet{width:180px;height:240px;position:relative;cursor:pointer}
-#tail{transform-origin:150px 190px;animation:tailSway 2s ease-in-out infinite alternate}
-#body{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
-#leftEar{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
-#rightEar{fill:#1a1a2e;stroke:#333;stroke-width:1.5}
-#leftEarInner{fill:#ff3355;opacity:0.6}
-#rightEarInner{fill:#ff3355;opacity:0.6}
-#leftEye{rx="52";cy="75";stroke:#ff3355;stroke-width:2;fill:none}
-#rightEye{rx="99";cy="75";stroke:#ff3355;stroke-width:2;fill:none}
-#leftPupil{fill:#fff;rx="54";cy="75"}
-#rightPupil{fill:#fff;rx="97";cy="75"}
-#nose{fill:#ffc3d0;stroke:#333;stroke-width:1}
-#whiskers{stroke:#ccc;stroke-width:1.5;fill:none;stroke-linecap:round}
-#earNick{fill:#1a1a2e;stroke:#ff3355;stroke-width:1.5}
-#tailTip{fill:#fff;opacity:0.9}
-#heart{fill:#ff3355;opacity:0;animation:heartBeat 1.5s ease-in-out infinite}
-"bubble{fill:#fff;opacity:0;font-size:11px;font-weight:bold}
-#bubbleBg{fill:#333;opacity:0}
-.speech{position:absolute;top:0;left:0;background:rgba(33,33,33,0.92);color:#fff;padding:6px 12px;border-radius:16px;font-size:12px;max-width:160px;transform:translate(-100%, -100%);opacity:0;transition:opacity 0.3s}
-.speech.show{opacity:1}
-@keyframes tailSway{0%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}100%{transform:rotate(-3deg)}}
-@keyframes heartBeat{0%{opacity:0;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(0.8)}}
-.blink{opacity:0;animation:blink 0.2s ease-in-out;animation-fill-mode:forwards}
-@keyframes blink{0%{</style>
-<script>
-const SUPABASE_URL='https://ebmzkftreptofjmdsiam.supabase.co';
-const SUPABASE_KEY='sb_publishable_dSqyFMLb3Ih4Sf99atKG5Q_Z9_rWm85';
-window.petEngine={state:'idle',speakTimer:-1,onFace:function(st){this.setState(st)},setState:function(s){this.state=s;document.body.setAttribute('data-state',s)},onFavorite:function(){this.showHeart()},onSpeak:function(txt){this.showBubble(txt)},showHeart:function(){document.getElementById('heart').style.animation='none';setTimeout(()=>{document.getElementById('heart').style.animation='heartBeat 1.5s ease-in-out infinite'},0)},showBubble:function(t){const b=document.getElementById('bubble'),bg=document.getElementById('bubbleBg');b.textContent=t;b.style.opacity='1';bg.style.opacity='1';clearTimeout(this.speakTimer);this.speakTimer=setTimeout(()=>{b.style.opacity='0';bg.style.opacity='0'},3000)},onTap:function(){this.showBubble('\uD83C\uD8030');const eyes=document.querySelectorAll('.blink');eyes.forEach(e=>{e.style.opacity='0';e.style.animation='none';setTimeout(()=>{e.style.opacity='';e.style.animation='blink 0.2s ease-in-out'},100)})},pollState:function(){fetch(`${SUPABASE_URL}/rest/v1/pet_state?order=updated_at.desc&limit=1`,{headers:{'apikey':SUPABASE_KEY}}).then(r=>r.json()).then(d=>{if(d[0]){this.onFace(d[0].state_value)}}).catch(_=>{})}};
-setInterval(()=>{window.petEngine.pollState()},30000);
-</script></head>
-<body data-state="idle">
-<div class="pet">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 240" width="180" height="240">
-<!-- Ears -->
-<g id="leftEar">
-<path d="M40,55 L25,40 L50,68 Z"/>
-<path id="leftEarInner" d="M40,56 L30,43 L47,67 Z"/>
-</g>
-<g id="rightEar">
-<path d="M110,55 L125,40 L100,68 Z"/>
-<path id="rightEarInner" d="M110,56 L120,43 L103,67 Z"/>
-</g>
-<!-- Ear Nick -->
-<circle id="earNick" cx="32" cy="48" r="3" fill="#1a1a2e" stroke="#ff3355" stroke-width="1.5"/>
-<!-- Body -->
-<ellipse id="body" cx="90" cy="140" rx="40" ry="55" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
-<!-- Chest fluff -->
-<ellipse cx="75" cy="105" rx="22" ry="28" fill="#2a2a3e" stroke="#333" stroke-width="1"/>
-<!-- Belly -->
-<ellipse cx="90" cy="155" rx="28" ry="32" fill="#25262c" stroke="none"/>
-<!-- Head -->
-<ellipse cx="75" cy="75" rx="35" ry="30" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
-<!-- Eyes -->
-<ellipse id="leftEye" cx="62" cy="75" rx="7" ry="8" fill="#ff3355" stroke="#333" stroke-width="1"/>
-<ellipse id="rightEye" cx="88" cy="75" rx="7" ry="8" fill="#ff3355" stroke="#333" stroke-width="1"/>
-<circle id="leftPupil" cx="64" cy="75" r="3" fill="#fff"/>
-<circle id="rightPupil" cx="86" cy="75" r="3" fill="#fff"/>
-<!-- Nose -->
-<ellipse id="nose" cx="75" cy="84" rx="4" ry="3" fill="#ffc3d0" stroke="#333" stroke-width="1"/>
-<!-- Whiskers -->
-<g id="whiskers">
-<line x1="20" y1="80" x2="52" y2="82"/>
-<line x1="20" y1="88" x2="52" y2="86"/>
-<line x1="98" y1="82" x2="130" y2="80"/>
-<line x1="98" y1="86" x2="130" y2="88"/>
-</g>
-<!-- Eye Blink Effect -->
-<ellipse class="blink" cx="62" cy="75" rx="7" ry="8" fill="#1a1a2e" stroke="none"/>
-<ellipse class="blink" cx="88" cy="75" rx="7" ry="8" fill="#1a1a2e" stroke="none"/>
-<!-- Mouth -->
-<path d="M65,92 Q75,100 85,92" fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
-<!-- Paws -->
-<g transform="translate(0, 0)">
-<ellipse cx="60" cy="185" rx="12" ry="8" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
-<ellipse cx="120" cy="185" rx="12" ry="8" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
-</g>
-<!-- Tail -->
-<g id="tail">
-<path d="M90,185 Q150,200 160,230 Q45,190 90,185Z" fill="#1a1a2e" stroke="#333" stroke-width="1.5"/>
-<circle id="tailTip" cx="160" cy="230" r="6" fill="#fff" opacity="0.9"/>
-</g>
-<!-- Heart -->
-<g id="heart" transform="translate(95, 120)">
-<path d="M0 5 Q-5-2 -10 5 Q-15 12 -10 18 Q0 25 0 25 Q0 25 10 18 Q15 12 10 5 Q1 1 0 5Z" fill="#ff3355" stroke="none" transform="scale(0.7)"/>
-</g>
-<!-- Bubble -->
-<text id="bubble" x="90" y="95" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold"></text>
-<rect id="bubbleBg" x="20" y="80" rx="10" ry="10" width="110" height="22" fill="#333"/>
-</svg>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:transparent!important;overflow:hidden;font-family:sans-serif;-webkit-user-select:none;user-select:none}
+.container{position:relative;width:200px;height:260px;cursor:pointer}
+/* === 猫咪 SVG === */
+.cat{width:200px;height:260px}
+#body-fill{fill:#1a1a1a}
+#body-stroke{stroke:#3a3a3a;stroke-width:1.5}
+#tail{transform-origin:150px 195px;animation:tailSway 2.5s ease-in-out infinite alternate}
+#left-eye-glow{fill:#ff2255;opacity:0.85}
+#right-eye-glow{fill:#ff2255;opacity:0.85}
+#left-pupil{fill:#fff}
+#right-pupil{fill:#fff}
+#nose{fill:#ff8899;stroke:#333;stroke-width:0.8}
+#whiskers{stroke:#555;stroke-width:1.2;fill:none;stroke-linecap:round}
+#ear-nick-left{fill:#ff3355;stroke:#1a1a1a;stroke-width:1}
+#tail-tip{fill:#f0f0f0;opacity:0.95}
+#mouth-line{stroke:#666;stroke-width:1.2;fill:none;stroke-linecap:round}
+/* 眨眼 */
+.blink-overlay{fill:#1a1a1a;opacity:0}
+.blink-overlay.active{animation:blinkAnim 0.25s ease-in-out}
+@keyframes blinkAnim{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+/* 动画 */
+@keyframes tailSway{0%{transform:rotate(-4deg)}40%{transform:rotate(5deg)}70%{transform:rotate(-2deg)}100%{transform:rotate(-4deg)}}
+.ear-wiggle{animation:earWiggle 0.3s ease-in-out}
+@keyframes earWiggle{0%{transform:rotate(0)}30%{transform:rotate(-8deg)}60%{transform:rotate(5deg)}100%{transform:rotate(0)}}
+.body-bounce{animation:bodyBounce 0.4s ease-in-out}
+@keyframes bodyBounce{0%{transform:translateY(0)}30%{transform:translateY(-8px)}60%{transform:translateY(3px)}100%{transform:translateY(0)}}
+/* 气泡 */
+.bubble-wrap{position:absolute;top:-8px;left:50%;transform:translateX(-50%);pointer-events:none}
+.bubble{background:rgba(30,30,30,0.92);color:#f0e0e0;padding:6px 14px;border-radius:16px;font-size:13px;font-weight:bold;white-space:nowrap;opacity:0;transition:opacity 0.25s;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.bubble.show{opacity:1}
+.bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid rgba(30,30,30,0.92)}
+/* 爱心 */
+.heart-particle{position:absolute;pointer-events:none;font-size:16px;animation:floatUp 1.2s ease-out forwards;opacity:1}
+@keyframes floatUp{0%{transform:translateY(0) scale(0.6);opacity:1}100%{transform:translateY(-60px) scale(1.4);opacity:0}}
+/* 爪子印 */
+.paw-print{position:absolute;pointer-events:none;font-size:12px;animation:pawFade 2s ease-out forwards;opacity:0.7}
+@keyframes pawFade{0%{opacity:0.7;transform:scale(0.5)}100%{opacity:0;transform:scale(1.5) translateY(-30px)}}
+/* 瞌睡 Z */
+.sleep-z{position:absolute;pointer-events:none;font-size:14px;color:#aaccff;font-weight:bold;animation:zFloat 2.5s ease-out forwards}
+@keyframes zFloat{0%{opacity:0;transform:translate(0,0) scale(0.5)}30%{opacity:1;transform:translate(10px,-15px) scale(1)}100%{opacity:0;transform:translate(25px,-50px) scale(1.5)}}
+</style>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="bubble-wrap"><span class="bubble" id="bubble">にゃ〜</span></div>
+  <svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260">
+    <!-- 尾巴 -->
+    <g id="tail">
+      <path d="M95,190 Q160,210 175,245 Q40,195 95,190Z" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+      <circle id="tail-tip" cx="175" cy="245" r="7" fill="#f0f0f0" opacity="0.95"/>
+    </g>
+    <!-- 身体 -->
+    <ellipse cx="95" cy="150" rx="45" ry="58" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+    <!-- 肚皮 -->
+    <ellipse cx="95" cy="162" rx="30" ry="34" fill="#252525"/>
+    <!-- 胸毛 -->
+    <ellipse cx="78" cy="112" rx="24" ry="30" fill="#2a2a2a" stroke="#3a3a3a" stroke-width="1"/>
+    <!-- 前爪（左） -->
+    <ellipse cx="58" cy="195" rx="13" ry="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+    <circle cx="50" cy="198" r="4" fill="#333"/>
+    <circle cx="58" cy="200" r="4" fill="#333"/>
+    <circle cx="66" cy="198" r="4" fill="#333"/>
+    <!-- 前爪（右） -->
+    <ellipse cx="132" cy="195" rx="13" ry="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+    <circle cx="124" cy="198" r="4" fill="#333"/>
+    <circle cx="132" cy="200" r="4" fill="#333"/>
+    <circle cx="140" cy="198" r="4" fill="#333"/>
+    <!-- 头 -->
+    <ellipse cx="95" cy="78" rx="40" ry="34" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+    <!-- 左耳 -->
+    <g id="left-ear">
+      <path d="M55,50 L40,22 L70,56 Z" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+      <path d="M56,50 L44,27 L66,55 Z" fill="#ff3355" opacity="0.55"/>
+    </g>
+    <!-- 左耳缺口 (Kuro Neko标志) -->
+    <circle id="ear-nick-left" cx="45" cy="30" r="4.5" fill="#ff3355" stroke="#1a1a1a" stroke-width="1"/>
+    <!-- 右耳 -->
+    <g id="right-ear">
+      <path d="M135,50 L150,22 L120,56 Z" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/>
+      <path d="M134,50 L146,27 L124,55 Z" fill="#ff3355" opacity="0.55"/>
+    </g>
+    <!-- 眼睛 (红宝石) -->
+    <ellipse id="left-eye-glow" cx="77" cy="76" rx="9" ry="10" fill="#ff2255" opacity="0.85"/>
+    <ellipse id="right-eye-glow" cx="113" cy="76" rx="9" ry="10" fill="#ff2255" opacity="0.85"/>
+    <ellipse cx="77" cy="76" rx="9" ry="10" fill="none" stroke="#111" stroke-width="1.5"/>
+    <ellipse cx="113" cy="76" rx="9" ry="10" fill="none" stroke="#111" stroke-width="1.5"/>
+    <!-- 瞳孔 (竖瞳-猫眼) -->
+    <ellipse id="left-pupil" cx="77" cy="76" rx="3.5" ry="7" fill="#fff" stroke="#111" stroke-width="0.5"/>
+    <ellipse id="right-pupil" cx="113" cy="76" rx="3.5" ry="7" fill="#fff" stroke="#111" stroke-width="0.5"/>
+    <!-- 高光 -->
+    <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+    <circle cx="116" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+    <!-- 眨眼遮罩 -->
+    <ellipse class="blink-overlay" id="blink-left" cx="77" cy="76" rx="9" ry="10"/>
+    <ellipse class="blink-overlay" id="blink-right" cx="113" cy="76" rx="9" ry="10"/>
+    <!-- 鼻子 -->
+    <ellipse id="nose" cx="95" cy="88" rx="4.5" ry="3.5" fill="#ff8899" stroke="#333" stroke-width="0.8"/>
+    <!-- 嘴巴 -->
+    <path id="mouth-line" d="M87,94 Q95,101 103,94" fill="none" stroke="#666" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- 胡须 -->
+    <g id="whiskers">
+      <line x1="25" y1="82" x2="62" y2="85"/>
+      <line x1="23" y1="92" x2="60" y2="90"/>
+      <line x1="128" y1="85" x2="165" y2="82"/>
+      <line x1="130" y1="90" x2="167" y2="92"/>
+    </g>
+    <!-- 后腿 (坐着时露出来) -->
+    <ellipse cx="70" cy="200" rx="18" ry="10" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.2"/>
+    <ellipse cx="120" cy="200" rx="18" ry="10" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.2"/>
+  </svg>
 </div>
-</body></html>
+
+<script>
+// === Kuro Neko 互动引擎 ===
+(function(){
+  const container = document.getElementById('container');
+  const bubble = document.getElementById('bubble');
+  const blinkL = document.getElementById('blink-left');
+  const blinkR = document.getElementById('blink-right');
+  const leftEar = document.getElementById('left-ear');
+  const rightEar = document.getElementById('right-ear');
+  const body = container.querySelector('.cat');
+  const mouth = document.getElementById('mouth-line');
+  
+  // 状态
+  let state = 'idle'; // idle | happy | sleepy | angry | playful
+  let isDragging = false;
+  let dragStartX = 0, dragStartY = 0;
+  let petX = 0, petY = 0;
+  let lastTap = 0;
+  let idleTimer = null;
+  let autoActionTimer = null;
+  
+  // 气泡
+  const phrases = {
+    idle: ['にゃ〜','…','ふぁ…','ごろごろ','なんか用？','ねむい…'],
+    happy: ['にゃん♡','気持ちいい〜','もっと撫でて！','ゴロゴロゴロ','しあわせ〜'],
+    sleepy: ['ふぁ〜あ','ねむ…','Zzz…','おやすみ…','zzZ…'],
+    angry: ['フーッ！','しっぽ触るな！','やめろ〜','シャーッ！','…チッ'],
+    playful: ['遊ぼう！','それなに？','待て〜','にゃっにゃっ！','くるくる〜']
+  };
+  
+  function showBubble(txt){
+    bubble.textContent = txt;
+    bubble.classList.add('show');
+    clearTimeout(bubble._timer);
+    bubble._timer = setTimeout(()=>bubble.classList.remove('show'), 2500);
+  }
+  
+  function randomPhrase(st){
+    const arr = phrases[st] || phrases.idle;
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+  
+  // 粒子效果
+  function spawnHearts(x,y,n){
+    for(let i=0;i<n;i++){
+      const el = document.createElement('span');
+      el.className = 'heart-particle';
+      el.textContent = ['❤️','💕','💖','✨','💗'][Math.floor(Math.random()*5)];
+      el.style.left = (x+Math.random()*40-20)+'px';
+      el.style.top = (y+Math.random()*20-10)+'px';
+      el.style.animationDuration = (0.8+Math.random()*1.2)+'s';
+      container.appendChild(el);
+      setTimeout(()=>el.remove(), 1500);
+    }
+  }
+  
+  function spawnPaw(x,y){
+    const el = document.createElement('span');
+    el.className = 'paw-print';
+    el.textContent = '🐾';
+    el.style.left = (x-6)+'px';
+    el.style.top = (y-6)+'px';
+    container.appendChild(el);
+    setTimeout(()=>el.remove(), 2100);
+  }
+  
+  function spawnZ(x,y){
+    const el = document.createElement('span');
+    el.className = 'sleep-z';
+    el.textContent = 'Z';
+    el.style.left = (x+20)+'px';
+    el.style.top = (y-10)+'px';
+    container.appendChild(el);
+    setTimeout(()=>el.remove(), 2600);
+  }
+  
+  // 眨眼
+  function blink(){
+    blinkL.classList.add('active');
+    blinkR.classList.add('active');
+    setTimeout(()=>{
+      blinkL.classList.remove('active');
+      blinkR.classList.remove('active');
+    }, 250);
+  }
+  
+  // 耳朵抖动
+  function earWiggle(){
+    leftEar.classList.add('ear-wiggle');
+    rightEar.classList.add('ear-wiggle');
+    setTimeout(()=>{
+      leftEar.classList.remove('ear-wiggle');
+      rightEar.classList.remove('ear-wiggle');
+    }, 300);
+  }
+  
+  // 身体弹跳
+  function bodyBounce(){
+    body.classList.add('body-bounce');
+    setTimeout(()=>body.classList.remove('body-bounce'), 400);
+  }
+  
+  // 设置状态
+  function setState(s){
+    state = s;
+    container.setAttribute('data-state', s);
+    // 调整表情
+    if(s==='happy'){
+      mouth.setAttribute('d','M85,94 Q95,106 105,94');
+    }else if(s==='angry'){
+      mouth.setAttribute('d','M87,96 Q95,92 103,96');
+    }else{
+      mouth.setAttribute('d','M87,94 Q95,101 103,94');
+    }
+  }
+  
+  // 自主行动循环
+  function randomAction(){
+    const r = Math.random();
+    if(r < 0.25){
+      blink();
+    }else if(r < 0.4){
+      earWiggle();
+      showBubble(randomPhrase(state));
+    }else if(r < 0.5){
+      bodyBounce();
+    }else if(r < 0.55 && state==='sleepy'){
+      spawnZ(120, 50);
+    }else if(r < 0.6 && state==='happy'){
+      spawnHearts(80, 60, 2);
+    }
+    scheduleAutoAction();
+  }
+  
+  function scheduleAutoAction(){
+    clearTimeout(autoActionTimer);
+    const delay = state==='sleepy' ? 6000+Math.random()*8000 : 3000+Math.random()*6000;
+    autoActionTimer = setTimeout(randomAction, delay);
+  }
+  
+  // === 触摸交互 ===
+  function getPos(e){
+    const touch = e.touches ? e.touches[0] : e;
+    const rect = container.getBoundingClientRect();
+    return {x: touch.clientX - rect.left, y: touch.clientY - rect.top};
+  }
+  
+  container.addEventListener('touchstart', function(e){
+    const pos = getPos(e);
+    dragStartX = pos.x;
+    dragStartY = pos.y;
+    isDragging = false;
+    // 延迟判断是点击还是拖拽
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(()=>{ isDragging = true; }, 200);
+  }, {passive: false});
+  
+  container.addEventListener('touchmove', function(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    const dx = pos.x - dragStartX;
+    const dy = pos.y - dragStartY;
+    // 通过 JS interface 移动悬浮窗？不行，只能记录
+    // 这里留接口给 Kotlin 层
+    if(window.AndroidBridge){
+      window.AndroidBridge.moveWindow(dx, dy);
+    }
+  }, {passive: false});
+  
+  container.addEventListener('touchend', function(e){
+    clearTimeout(idleTimer);
+    if(isDragging){
+      isDragging = false;
+      // 拖拽结束，通过bridge通知
+      if(window.AndroidBridge){
+        window.AndroidBridge.onDragEnd();
+      }
+      return;
+    }
+    // 这是点击
+    const pos = getPos(e);
+    handleTap(pos.x, pos.y);
+  });
+  
+  container.addEventListener('click', function(e){
+    // touch事件已经处理了，这里做fallback
+    if(e.pointerType === 'mouse'){
+      const rect = container.getBoundingClientRect();
+      handleTap(e.clientX - rect.left, e.clientY - rect.top);
+    }
+  });
+  
+  function handleTap(x, y){
+    // 判断点击区域
+    if(y < 60){
+      // 摸头
+      tapHead();
+    }else if(y < 100 && x > 50 && x < 140){
+      // 摸脸
+      tapFace();
+    }else if(y > 140 && y < 210){
+      // 摸肚子
+      tapBelly();
+    }else if(y > 180 && x > 155){
+      // 摸尾巴
+      tapTail();
+    }else{
+      // 默认
+      tapBody();
+    }
+    lastTap = Date.now();
+  }
+  
+  function tapHead(){
+    setState('happy');
+    showBubble('にゃん♡');
+    earWiggle();
+    blink();
+    spawnHearts(80, 45, 3);
+    setTimeout(()=>setState('idle'), 4000);
+  }
+  
+  function tapFace(){
+    blink();
+    showBubble(randomPhrase('happy'));
+    bodyBounce();
+  }
+  
+  function tapBelly(){
+    setState('happy');
+    showBubble('ゴロゴロゴロ〜');
+    spawnHearts(95, 140, 4);
+    bodyBounce();
+    setTimeout(()=>setState('idle'), 5000);
+  }
+  
+  function tapTail(){
+    setState('angry');
+    showBubble('フーッ！しっぽ触るな！');
+    spawnPaw(170, 230);
+    setTimeout(()=>setState('idle'), 3000);
+  }
+  
+  function tapBody(){
+    blink();
+    showBubble(randomPhrase('playful'));
+    bodyBounce();
+  }
+  
+  // 双击：切换睡眠/唤醒
+  container.addEventListener('dblclick', function(e){
+    if(state === 'sleepy'){
+      setState('idle');
+      showBubble('…おはよう');
+      bodyBounce();
+    }else{
+      setState('sleepy');
+      showBubble('ふぁ〜あ…おやすみ');
+      spawnZ(130, 45);
+      spawnZ(145, 35);
+      spawnZ(155, 25);
+    }
+    scheduleAutoAction();
+  });
+  
+  // === 外部调用接口 (给Kotlin/Operit) ===
+  window.KuroNeko = {
+    setState: setState,
+    speak: showBubble,
+    showHeart: function(){ spawnHearts(95, 100, 5); },
+    blink: blink,
+    bounce: bodyBounce,
+    wakeUp: function(){ setState('idle'); showBubble('にゃ！'); bodyBounce(); },
+    sleep: function(){ setState('sleepy'); showBubble('おやすみ…'); spawnZ(130,45); },
+    getState: function(){ return state; }
+  };
+  
+  // === 初始化 ===
+  setState('idle');
+  scheduleAutoAction();
+  
+  // 每8-15秒随机眨眼
+  setInterval(function(){
+    if(Math.random() < 0.4) blink();
+  }, 8000 + Math.random()*7000);
+  
+  // 初始打招呼
+  setTimeout(function(){
+    showBubble('にゃ〜');
+    bodyBounce();
+  }, 800);
+  
+  console.log('🐱 Kuro Neko ready! 红宝石眼·左耳缺口·白尾尖');
+})();
+</script>
+</body>
+</html>
+]]>
