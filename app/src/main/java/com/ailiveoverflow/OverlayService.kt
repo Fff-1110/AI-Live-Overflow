@@ -134,8 +134,7 @@ class OverlayService : Service() {
                     if (f.exists()) {
                         val text = f.readText().trim()
                         if (text.isNotEmpty()) {
-                            val escaped = text.replace("'", "\'").replace("
-", " ")
+                            val escaped = text.replace("'", "\\'").replace("\n", " ")
                             overlayView?.evaluateJavascript("if(window.KuroNeko)KuroNeko.exec('$escaped')", null)
                             f.writeText("")
                         }
