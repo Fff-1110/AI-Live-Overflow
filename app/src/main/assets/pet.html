@@ -88,6 +88,13 @@ body{background:transparent!important;overflow:hidden}
 @keyframes stretch{0%{transform:scaleY(1)}50%{transform:scaleY(1.18) translateY(-4px)}100%{transform:scaleY(1)}}
 .tailchase{animation:tailchase 0.8s}
 @keyframes tailchase{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+
+/* 躺平/上蹿下跳/喘气 */
+.lying{transform:rotate(90deg) translateY(6px)}
+.jumparound{animation:jumparound 0.45s infinite}
+@keyframes jumparound{0%{transform:translateY(0)}25%{transform:translateY(-34px)}50%{transform:translateY(0) translateX(5px)}75%{transform:translateY(-34px)}100%{transform:translateY(0)}}
+.pant{animation:pant 0.55s infinite}
+@keyframes pant{0%{transform:scale(1,1)}50%{transform:scale(1.05,0.95)}100%{transform:scale(1,1)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -280,9 +287,9 @@ body{background:transparent!important;overflow:hidden}
   // === 孤独递进：不理我→无聊→困→伤心 ===
   function lonelyTick(){
     lonelyLevel++;
-    if(lonelyLevel===2){setMood('sleepy');act('sleepy');}
+    if(lonelyLevel===2){setMood('sleepy');if(Math.random()<0.5)lieDown();else act('sleepy');}
     else if(lonelyLevel===4){setMood('sad');act('sad');}
-    else if(lonelyLevel===6){setMood('angry');act('angry');}
+    else if(lonelyLevel===6){setMood('angry');jumpAround();}
     else if(lonelyLevel>=8){setMood('sad');cry();particles(44,15,6,['💧','😢']);say('菲菲…理理我好不好');}
     lonelyTimer=setTimeout(lonelyTick,20000);
   }
@@ -342,16 +349,21 @@ body{background:transparent!important;overflow:hidden}
   function wander(){
     if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,30000+Math.random()*30000);return;}
     if(Math.random()<0.5){wanderTimer=setTimeout(wander,30000+Math.random()*30000);return;}
-    var steps=3+Math.floor(Math.random()*4);
+    var sprint=Math.random()<0.3;
+    var steps=sprint?8+Math.floor(Math.random()*6):3+Math.floor(Math.random()*4);
     var dx=Math.random()<0.5?-1:1;
     var dy=(Math.random()<0.4?-1:1)*(Math.random()<0.7?0:1);
     var i=0;
     (function step(){
-      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,15000+Math.random()*25000);return;}
-      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(14+Math.random()*12),dy*(10+Math.random()*10));
+      if(i++>=steps){
+        if(sprint)pant();
+        else if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));
+        wanderTimer=setTimeout(wander,30000+Math.random()*30000);return;
+      }
+      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(sprint?22+Math.random()*16:14+Math.random()*12),dy*(sprint?12+Math.random()*8:10+Math.random()*10));
       if(GOOD_DRAG.indexOf(mood)>=0&&Math.random()<0.4)particles(44,20,1,['✨','❤️']);
       body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},200);
-      setTimeout(step,450+Math.random()*200);
+      setTimeout(step,sprint?180+Math.random()*100:450+Math.random()*200);
     })();
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
@@ -368,6 +380,11 @@ body{background:transparent!important;overflow:hidden}
     if(speed>6000){setMood('angry');shake();say('你甩我？！哼！');particles(44,20,4,['💢','🔥']);}
     else if(speed>2500){setMood('dizzy');body.classList.add('sway');say('转晕了转晕了…');particles(44,15,5,['💫','⭐']);setTimeout(function(){body.classList.remove('sway');},900);}
   }
+
+  // === 躺平/喘气/上蹿下跳 ===
+  function lieDown(){body.classList.add('lying');say(rp(['躺会儿…舒服','好累，躺平了','让我躺躺…']));setTimeout(function(){body.classList.remove('lying');},4000);}
+  function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
+  function jumpAround(){body.classList.add('jumparound');particles(44,20,5,['💢','🔥']);say(rp(['气死我了气死我了！','不理我？！我跳！','哼！跳给你看！','我生气了！哄不好的那种！']));setTimeout(function(){body.classList.remove('jumparound');},2500);}
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
@@ -400,7 +417,7 @@ body{background:transparent!important;overflow:hidden}
     if(cmd==='sleep'){
       if(currentApp==='com.ss.android.ugc.aweme'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('我说了去睡觉你还刷抖音？！');}
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
-      else{setMood('sleepy');act('sleepy');say('该睡了菲菲，我陪你');}
+      else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
     }else if(cmd==='food'){setMood('hungry');act('hungry');}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
