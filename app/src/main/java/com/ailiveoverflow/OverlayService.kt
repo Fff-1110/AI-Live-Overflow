@@ -43,11 +43,17 @@ class OverlayService : Service() {
             }
         }
 
-        // 屏幕文字感知：无障碍服务读到屏幕文本（base64，避免引号转义问题）
-        fun onScreenText(b64: String) {
-            Log.d("KuroNeko", "onScreenText: ${b64.length} chars")
+        fun onDouyinAction(action: String) {
+            Log.d("KuroNeko", "onDouyinAction: $action")
             instance?.overlayView?.evaluateJavascript(
-                "if(window.KuroNeko)KuroNeko.onScreenText('$b64')", null
+                "if(window.KuroNeko)KuroNeko.onDouyinAction('$action')", null
+            )
+        }
+
+        fun onVideoSwitch() {
+            Log.d("KuroNeko", "onVideoSwitch")
+            instance?.overlayView?.evaluateJavascript(
+                "if(window.KuroNeko)KuroNeko.onVideoSwitch()", null
             )
         }
     }
