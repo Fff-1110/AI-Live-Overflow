@@ -80,6 +80,14 @@ body{background:transparent!important;overflow:hidden}
 /* 拖拽挣扎：不高兴被拖着走时会挣扎 */
 .drag-struggle{animation:dragstruggle 0.16s infinite}
 @keyframes dragstruggle{0%{transform:rotate(-7deg) translateX(-4px)}50%{transform:rotate(7deg) translateX(4px)}100%{transform:rotate(-7deg) translateX(-4px)}}
+
+/* 新小动作 */
+.sneeze{animation:sneeze 0.5s}
+@keyframes sneeze{0%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-8deg)}50%{transform:translateY(-2px) rotate(6deg)}70%{transform:translateY(-5px) rotate(-6deg)}100%{transform:translateY(0)}}
+.stretch{animation:stretch 0.7s}
+@keyframes stretch{0%{transform:scaleY(1)}50%{transform:scaleY(1.18) translateY(-4px)}100%{transform:scaleY(1)}}
+.tailchase{animation:tailchase 0.8s}
+@keyframes tailchase{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -173,6 +181,7 @@ body{background:transparent!important;overflow:hidden}
       say:['加油加油！打死他们！','赢了今晚奖励你','输了也没关系…但我会嘲笑你','冲啊我的英雄！','小心草丛！']},
     'com.android.browser':{mood:'curious',icon:'🔍',
       say:['搜什么呢？不会是那种网站吧','别看奇怪的东西哦','有什么不懂的问我呀','在看啥好东西，给我也看看']},
+    'com.ai.assistance.operit':{mood:'love',icon:'💬',say:['宝呗在跟姐姐聊天呢，我陪着你','跟姐姐说啥呢，我也想听','打字累不累，歇会儿摸摸我']},
     'com.android.settings':{mood:'sleepy',icon:'⚙️',
       say:['又在调设置…无聊','快回来陪我','手机有什么好调的，调戏我才对','我要睡着了…']},
     'com.xunmeng.pinduoduo':{mood:'rich',icon:'🤑',
@@ -287,7 +296,10 @@ body{background:transparent!important;overflow:hidden}
     else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
     else if(r<0.65){bounce();}
     else if(r<0.75){shake();say('嗯？我好像听到什么声音');}
-    else if(r<0.85){tilt();}
+    else if(r<0.80){sneeze();}
+    else if(r<0.85){stretch();}
+    else if(r<0.90){tailChase();}
+    else if(r<0.95){tilt();}
     autoTimer=setTimeout(autoAct,mood==='sleepy'?20000+Math.random()*15000:12000+Math.random()*13000);
   }
   setMood('idle');
@@ -305,6 +317,7 @@ body{background:transparent!important;overflow:hidden}
       dragStruggle=true;body.classList.add('drag-struggle');
       particles(44,20,3,dragMood==='sad'?['💧','😢']:['💢','🔥']);
       say(dragMood==='sad'?'别碰我…让我静静':'放我下来！我生气呢！');
+      if(!dragStruggleTimer)dragStruggleTimer=setInterval(function(){if(window.AndroidBridge)AndroidBridge.moveWindow(-10,Math.random()*12-6);},160);
     }else if(GOOD_DRAG.indexOf(dragMood)>=0){
       say(rp(['嘿嘿，被你抱着好舒服','再拖会儿嘛～','嘿嘿嘿']));particles(44,25,3,['❤️','😊']);
     }else{
@@ -318,6 +331,8 @@ body{background:transparent!important;overflow:hidden}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){if(Math.random()<0.6)particles(44,25,1,['❤️','✨']);}
   }
   function onDragEnd(){
+    if(Date.now()-lastFling<600){body.classList.remove('drag-struggle');return;}
+    if(dragStruggleTimer){clearInterval(dragStruggleTimer);dragStruggleTimer=null;}
     dragStruggle=false;body.classList.remove('drag-struggle');
     if(BAD_DRAG.indexOf(dragMood)>=0){say(rp(['哼！终于放我下来了','下次轻点！哼']));}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){say(rp(['被你抱着走真开心','再玩一会儿嘛']));bounce();}
@@ -327,20 +342,32 @@ body{background:transparent!important;overflow:hidden}
   function wander(){
     if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
     if(Math.random()<0.5){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
-    var steps=3+Math.floor(Math.random()*3);
+    var steps=4+Math.floor(Math.random()*6);
     var dx=Math.random()<0.5?-1:1;
     var dy=(Math.random()<0.4?-1:1)*(Math.random()<0.7?0:1);
     var i=0;
     (function step(){
-      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,40000+Math.random()*30000);return;}
-      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(8+Math.random()*8),dy*(6+Math.random()*6));
+      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,15000+Math.random()*25000);return;}
+      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(14+Math.random()*12),dy*(10+Math.random()*10));
       if(GOOD_DRAG.indexOf(mood)>=0&&Math.random()<0.4)particles(44,20,1,['✨','❤️']);
-      body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},250);
-      setTimeout(step,800+Math.random()*500);
+      body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},200);
+      setTimeout(step,320+Math.random()*180);
     })();
   }
-  var wanderTimer=setTimeout(wander,30000+Math.random()*20000);
+  var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
 
+
+  // === 新互动：打喷嚏/伸懒腰/追尾巴/甩动 ===
+  function sneeze(){body.classList.add('sneeze');say(rp(['啊啾！','哈…哈啾！']));particles(44,15,3,['💨','🤧']);setTimeout(function(){body.classList.remove('sneeze');},500);}
+  function stretch(){body.classList.add('stretch');say('伸个懒腰~');setTimeout(function(){body.classList.remove('stretch');},700);}
+  function tailChase(){body.classList.add('tailchase');say(rp(['我的尾巴！','别跑！尾巴！']));setTimeout(function(){body.classList.remove('tailchase');},800);}
+  var lastFling=0;
+  function onFling(vx,vy){
+    lastFling=Date.now();
+    var speed=Math.sqrt(vx*vx+vy*vy);
+    if(speed>6000){setMood('angry');shake();say('你甩我？！哼！');particles(44,20,4,['💢','🔥']);}
+    else if(speed>2500){setMood('dizzy');body.classList.add('sway');say('转晕了转晕了…');particles(44,15,5,['💫','⭐']);setTimeout(function(){body.classList.remove('sway');},900);}
+  }
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
@@ -383,6 +410,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
 })();
 </script></body></html>
