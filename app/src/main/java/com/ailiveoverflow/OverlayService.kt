@@ -1,5 +1,7 @@
 package com.ailiveoverflow
 
+import android.media.session.MediaSessionManager
+import android.media.session.PlaybackState
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -69,6 +71,7 @@ class OverlayService : Service() {
         setupOverlay()
         startMurmurs()
         startCmdPolling()
+        startMediaCheck()
     }
 
     private fun setupOverlay() {
@@ -181,7 +184,36 @@ class OverlayService : Service() {
         }
         handler.postDelayed(cmdPollRunnable!!, 3000)
     }
-
+    // === 音乐监听：全局有歌在放就让刁刁摇 ===
+    private var mediaCheckRunnable: Runnable? = null
+    private var lastMusicPlaying = false
+    private fun startMediaCheck() {
+        mediaCheckRunnable = object : Runnable {
+            override fun run() {
+                try {
+                    val msm = getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
+                    var playing = false
+                    val controllers = msm.getActiveSessions(null)
+                    for (c in controllers) {
+                        val ps = c.playbackState ?: continue
+                        if (ps.isActive && ps.state == PlaybackState.STATE_PLAYING) {
+                            playing = true
+                            break
+                        }
+                    }
+                    if (playing != lastMusicPlaying) {
+                        lastMusicPlaying = playing
+                        overlayView?.evaluateJavascript(
+                            "if(window.KuroNeko)KuroNeko.onMusicChange($playing,false)", null
+                        )
+                    }
+                } catch (e: Exception) {
+                }
+                handler.postDelayed(this, 3000)
+            }
+        }
+        handler.postDelayed(mediaCheckRunnable!!, 3000)
+    }
     // === 通知栏碎碎念（中文·欧尼酱性格） ===
     private val murmurPhrases = arrayOf(
         "菲菲，你在干嘛呢，让我看看",
@@ -269,6 +301,7 @@ class OverlayService : Service() {
     override fun onDestroy() {
         murmurRunnable?.let { handler.removeCallbacks(it) }
         cmdPollRunnable?.let { handler.removeCallbacks(it) }
+        mediaCheckRunnable?.let { handler.removeCallbacks(it) }
         overlayView?.let {
             windowManager?.removeView(it)
             it.destroy()
