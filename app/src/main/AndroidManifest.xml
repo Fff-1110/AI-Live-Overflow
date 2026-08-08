@@ -32,5 +32,12 @@
             android:name=".OverlayService"
             android:exported="true"
             android:foregroundServiceType="specialUse" />
+        <receiver
+            android:name=".FeedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.ailiveoverflow.FEED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
