@@ -254,7 +254,7 @@ class OverlayService : Service() {
                             lp.y = (lp.y + my).coerceIn(0, maxY.coerceAtLeast(0))
                             windowManager?.updateViewLayout(overlayView, lp)
                         }
-                    }, 120)
+                    }, 200)
                 }
             }
         }
