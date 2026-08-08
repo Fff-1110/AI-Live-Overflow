@@ -62,13 +62,13 @@ class OverlayService : Service() {
             settings.domStorageEnabled = true
             addJavascriptInterface(AndroidBridge(), "AndroidBridge")
             loadUrl("file:///android_asset/pet.html")
-            setupTouchHandler()
+            setupTouchHandler(this)
         }
 
         windowManager?.addView(overlayView, layoutParams)
     }
 
-    private fun WebView.setupTouchHandler() {
+    private fun setupTouchHandler(view: WebView) {
         var initialX = 0
         var initialY = 0
         var initialTouchX = 0f
@@ -77,21 +77,22 @@ class OverlayService : Service() {
         var downTime = 0L
         var longPressTriggered = false
 
-        setOnTouchListener { _, event ->
+        view.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    initialX = layoutParams?.x ?: 0
-                    initialY = layoutParams?.y ?: 0
+                    layoutParams?.let { lp ->
+                        initialX = lp.x
+                        initialY = lp.y
+                    }
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
                     dragging = false
                     longPressTriggered = false
                     downTime = System.currentTimeMillis()
-                    // 长按检测 600ms
                     handler.postDelayed({
                         if (!dragging) {
                             longPressTriggered = true
-                            evaluateJavascript("if(window.KuroNeko)KuroNeko.onLongPress()", null)
+                            view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onLongPress()", null)
                         }
                     }, 600)
                     false
@@ -104,16 +105,13 @@ class OverlayService : Service() {
                         layoutParams?.let { lp ->
                             lp.x = initialX + dx
                             lp.y = initialY + dy
-                            windowManager?.updateViewLayout(this, lp)
+                            windowManager?.updateViewLayout(view, lp)
                         }
                     }
                     dragging
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (!dragging && !longPressTriggered) {
-                        // 短点击交给HTML处理
-                    }
-                    false
+                    dragging
                 }
                 else -> false
             }
