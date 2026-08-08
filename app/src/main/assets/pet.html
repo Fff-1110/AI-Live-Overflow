@@ -7,6 +7,7 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap{width:88px;height:144px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;transform-origin:44px 100px}
 .cat-wrap svg{width:88px;height:118px;display:block;margin-top:26px;transform-origin:44px 60px}
 .bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
+#fx{position:absolute;top:26px;left:0;width:88px;height:118px;pointer-events:none;z-index:1}
 .bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
 .bubble-txt.on{opacity:1}
 .particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1.2s ease-out forwards}
@@ -234,6 +235,7 @@ body{background:transparent!important;overflow:hidden}
     <line x1="61" y1="44" x2="77" y2="42" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
     <line x1="62" y1="47" x2="78" y2="48" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
   </svg>
+<canvas id="fx" width="88" height="118"></canvas>
 </div><script>
 (function(){
   const cat=document.getElementById('cat'),bub=document.getElementById('bub');
@@ -300,6 +302,7 @@ body{background:transparent!important;overflow:hidden}
   function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2800);}
   function setMood(m){
     mood=m;cat.setAttribute('data-mood',m);
+    if(FX_MODES.indexOf(m)>=0)startFx(m);else stopFx();
     if(m==='happy'||m==='excited'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
     else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
     else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
@@ -526,6 +529,121 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
+  
+// === 粒子表情引擎：脸上的表情全部用粒子渲染 ===
+var fxCanvas=document.getElementById('fx'),fxCtx=fxCanvas.getContext('2d');
+var fxParticles=[],fxDrool=[],fxRunning=false,fxMood='idle',fxT0=0,fxRAF=null;
+var FX_MODES=['love','happy','excited','evil','shock','angry','sad','dizzy','hungry','derp','smug','chaos','dull','sleepy'];
+var FX_COLORS={love:'#ff3366',happy:'#ff6688',excited:'#ff6688',evil:'#cc2255',shock:'#ffffff',angry:'#ff2244',sad:'#66ccff',dizzy:'#ffcc33',hungry:'#ff99bb',derp:'#ff4466',smug:'#ffcc44',chaos:'#cc66ff',dull:'#8899aa',sleepy:'#aa88cc'};
+function fxShape(mood,i,n){
+  var s=i/n,lerp=function(a,b,t){return a+(b-a)*t;};
+  var L=33,R=55,Y=36;
+  var hx=function(u){return 16*Math.pow(Math.sin(u),3);};
+  var hy=function(u){return 13*Math.cos(u)-5*Math.cos(2*u)-2*Math.cos(3*u)-Math.cos(4*u);};
+  if(mood==='love'||mood==='happy'||mood==='excited'){
+    var side=Math.floor(s*2),u=s*2*Math.PI;
+    return {x:(side===0?L:R)+hx(u)*0.55,y:Y+hy(u)*0.55-2};
+  }
+  if(mood==='evil'){
+    if(s<0.3)return {x:lerp(26,40,s/0.3),y:lerp(33,37,s/0.3)};
+    if(s<0.6)return {x:lerp(48,62,(s-0.3)/0.3),y:lerp(33,37,(s-0.3)/0.3)};
+    if(s<0.8)return {x:lerp(30,36,(s-0.6)/0.2),y:lerp(27,30,(s-0.6)/0.2)};
+    return {x:lerp(52,58,(s-0.8)/0.2),y:lerp(27,30,(s-0.8)/0.2)};
+  }
+  if(mood==='shock'){
+    if(s<0.38){var a=s/0.38*Math.PI*2;return {x:L+Math.cos(a)*8.5,y:Y+Math.sin(a)*8.5};}
+    if(s<0.76){var b=(s-0.38)/0.38*Math.PI*2;return {x:R+Math.cos(b)*8.5,y:Y+Math.sin(b)*8.5};}
+    var c=(s-0.76)/0.24,side2=c<0.5?0:1,cc=(c%0.5)/0.5*Math.PI*2;
+    return {x:(side2===0?L:R)+Math.cos(cc)*2.6,y:Y+Math.sin(cc)*2.6};
+  }
+  if(mood==='angry'){
+    if(s<0.3)return {x:lerp(28,39,s/0.3),y:lerp(33,37,s/0.3)};
+    if(s<0.6)return {x:lerp(49,60,(s-0.3)/0.3),y:lerp(33,37,(s-0.3)/0.3)};
+    return {x:lerp(40,48,(s-0.6)/0.4),y:lerp(52,47,(s-0.6)/0.4)};
+  }
+  if(mood==='sad'){
+    if(s<0.35){var a=s/0.35*Math.PI;return {x:lerp(28,38,a/Math.PI),y:lerp(38,38,a/Math.PI)-Math.sin(a)*3.5};}
+    if(s<0.7){var b=(s-0.35)/0.35*Math.PI;return {x:lerp(50,60,b/Math.PI),y:lerp(38,38,b/Math.PI)-Math.sin(b)*3.5};}
+    return {x:lerp(40,48,(s-0.7)/0.3),y:lerp(52,52,(s-0.7)/0.3)+Math.sin((s-0.7)/0.3*Math.PI)*3.5};
+  }
+  if(mood==='sleepy'){
+    if(s<0.5)return {x:lerp(29,37,s/0.5),y:Y+Math.sin(s*20)*0.6};
+    return {x:lerp(51,59,(s-0.5)/0.5),y:Y+Math.sin(s*20)*0.6};
+  }
+  if(mood==='derp'){
+    if(s<0.5){var a=s/0.5*Math.PI*2;return {x:37+Math.cos(a)*3.2,y:38+Math.sin(a)*3.2};}
+    var b=(s-0.5)/0.5*Math.PI*2;return {x:51+Math.cos(b)*3.2,y:38+Math.sin(b)*3.2};
+  }
+  if(mood==='smug'){
+    if(s<0.3){var a=s/0.3*Math.PI;return {x:lerp(26,40,a/Math.PI),y:lerp(37,32,a/Math.PI)};}
+    if(s<0.6){var b=(s-0.3)/0.3*Math.PI;return {x:lerp(48,62,b/Math.PI),y:lerp(37,32,b/Math.PI)};}
+    if(s<0.8)return {x:lerp(30,36,(s-0.6)/0.2),y:lerp(28,31,(s-0.6)/0.2)};
+    return {x:lerp(52,58,(s-0.8)/0.2),y:lerp(28,31,(s-0.8)/0.2)};
+  }
+  if(mood==='chaos'){
+    if(s<0.4){var a=s/0.4*Math.PI*4,r=2+a*0.8;return {x:L+Math.cos(a)*r,y:Y+Math.sin(a)*r};}
+    if(s<0.8){var b=(s-0.4)/0.4*Math.PI*4,r2=2+b*0.8;return {x:R+Math.cos(b)*r2,y:Y+Math.sin(b)*r2};}
+    var seg2=Math.floor((s-0.8)/0.2*8);return {x:38+seg2*1.5,y:52+(seg2%2===0?-1:1)*3};
+  }
+  if(mood==='dull'){
+    if(s<0.4){var a=s/0.4*Math.PI;return {x:lerp(27,39,a/Math.PI),y:lerp(40,40,a/Math.PI)+Math.sin(a)*3.5};}
+    if(s<0.8){var b=(s-0.4)/0.4*Math.PI;return {x:lerp(49,61,b/Math.PI),y:lerp(40,40,b/Math.PI)+Math.sin(b)*3.5};}
+    return {x:lerp(40,48,(s-0.8)/0.2),y:54};
+  }
+  if(mood==='dizzy'){
+    if(s<0.45){var a=s/0.45*Math.PI*2;return {x:L+Math.cos(a)*5.5,y:Y+Math.sin(a)*5.5};}
+    if(s<0.9){var b=(s-0.45)/0.45*Math.PI*2;return {x:R+Math.cos(b)*5.5,y:Y+Math.sin(b)*5.5};}
+    return {x:44,y:47+(s-0.9)/0.1*4};
+  }
+  if(mood==='hungry'){
+    if(s<0.4){var a=s/0.4*Math.PI*2;return {x:L+Math.cos(a)*6,y:Y+Math.sin(a)*6};}
+    if(s<0.8){var b=(s-0.4)/0.4*Math.PI*2;return {x:R+Math.cos(b)*6,y:Y+Math.sin(b)*6};}
+    return {x:lerp(40,48,(s-0.8)/0.2),y:lerp(52,56,(s-0.8)/0.2)};
+  }
+  return {x:44,y:36};
+}
+function fxLoop(){
+  var now=Date.now();
+  fxCtx.clearRect(0,0,88,118);
+  var n=fxParticles.length;
+  for(var i=0;i<n;i++){
+    var p=fxParticles[i],sp=fxShape(fxMood,i,n);
+    var tx=sp.x+Math.sin(now/300+i*0.7)*0.9,ty=sp.y+Math.cos(now/400+i*0.7)*0.9;
+    p.vx=(tx-p.x)*0.09+p.vx*0.55;
+    p.vy=(ty-p.y)*0.09+p.vy*0.55;
+    p.x+=p.vx;p.y+=p.vy;
+    fxCtx.globalAlpha=p.a;
+    fxCtx.fillStyle=p.c;
+    fxCtx.beginPath();fxCtx.arc(p.x,p.y,p.r,0,Math.PI*2);fxCtx.fill();
+  }
+  if(fxMood==='love'||fxMood==='hungry'){
+    for(var j=0;j<fxDrool.length;j++){
+      var d=fxDrool[j];
+      d.vy+=0.045;d.y+=d.vy;d.life-=0.015;
+      if(d.life<=0){d.x=44+(Math.random()*8-4);d.y=56;d.vy=0.4+Math.random()*0.5;d.life=1;}
+      fxCtx.globalAlpha=Math.max(0,d.life)*0.85;
+      fxCtx.fillStyle='#9be8ff';
+      fxCtx.beginPath();fxCtx.arc(d.x,d.y,1.5,0,Math.PI*2);fxCtx.fill();
+    }
+  }
+  if(fxRunning&&Date.now()-fxT0<5200){fxRAF=requestAnimationFrame(fxLoop);}
+  else{stopFx();}
+}
+function startFx(mood){
+  if(FX_MODES.indexOf(mood)<0)return;
+  fxMood=mood;fxT0=Date.now();
+  var n=190;
+  fxParticles=[];
+  for(var i=0;i<n;i++){
+    fxParticles.push({x:44+Math.random()*40-20,y:36+Math.random()*40-20,vx:0,vy:0,r:1+Math.random()*1.3,a:0.92,c:FX_COLORS[mood]||'#ff3366'});
+  }
+  fxDrool=[];
+  if(mood==='love'||mood==='hungry'){
+    for(var j=0;j<16;j++)fxDrool.push({x:44+(Math.random()*8-4),y:56+Math.random()*12,vy:0.4+Math.random()*0.5,life:Math.random()});
+  }
+  if(!fxRunning){fxRunning=true;fxRAF=requestAnimationFrame(fxLoop);}
+}
+function stopFx(){fxRunning=false;if(fxRAF)cancelAnimationFrame(fxRAF);fxCtx.clearRect(0,0,88,118);fxParticles=[];fxDrool=[];}
+window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
 })();
 </script></body></html>
