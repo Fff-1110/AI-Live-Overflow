@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -68,6 +69,7 @@ class OverlayService : Service() {
 
         overlayView = WebView(this).apply {
             setBackgroundColor(0x00000000)
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null)
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             addJavascriptInterface(AndroidBridge(), "AndroidBridge")

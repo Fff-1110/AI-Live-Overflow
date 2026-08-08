@@ -53,7 +53,7 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="sad"] #ear-L{transform:rotate(22deg)}
 .cat-wrap[data-mood="sad"] #ear-R{transform:rotate(-22deg)}
 /* 尾巴：伤心垂下 */
-#tail-group{animation:tailWag 2.5s ease-in-out infinite alternate;transform-origin:68px 80px}
+#tail-group{animation:tailWag 6s ease-in-out infinite alternate;transform-origin:68px 80px}
 .cat-wrap[data-mood="sad"] #tail-group{animation:tailDrop 0.8s ease-out forwards}
 /* 嘴巴底色 */
 #mouth{transition:d 0.2s}
@@ -226,7 +226,7 @@ body{background:transparent!important;overflow:hidden}
   setMood('idle');
   autoTimer=setTimeout(autoAct,3000);
   lonelyTimer=setTimeout(lonelyTick,25000);
-  setInterval(()=>{if(Math.random()<0.35)blink();},7000+Math.random()*6000);
+  setInterval(()=>{if(Math.random()<0.25)blink();},12000+Math.random()*8000);
   setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
   window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce};
 })();
