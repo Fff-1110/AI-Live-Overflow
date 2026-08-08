@@ -4,13 +4,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.app.usage.UsageStatsManager
-import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -22,17 +21,17 @@ class OverlayService : Service() {
     private var overlayView: WebView? = null
     private var layoutParams: WindowManager.LayoutParams? = null
     private val handler = Handler(Looper.getMainLooper())
-    private var currentApp = "unknown"
-    private var appPollRunnable: Runnable? = null
     private var murmurRunnable: Runnable? = null
 
     companion object {
         const val NOTIFICATION_ID = 1001
+        const val MURMUR_ID = 1002
         const val CHANNEL_ID = "overflow_pet"
         private var instance: OverlayService? = null
-        private var lastApp: String = "unknown"
+        private var lastApp = "unknown"
 
         fun onForegroundAppChanged(pkg: String) {
+            Log.d("KuroNeko", "onForegroundAppChanged: $pkg")
             if (pkg != lastApp) {
                 lastApp = pkg
                 instance?.overlayView?.evaluateJavascript(
@@ -44,19 +43,17 @@ class OverlayService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        createNotificationChannel()
-        startForeground(NOTIFICATION_ID, buildNotification("にゃ〜 見てるよ"))
         instance = this
+        createNotificationChannel()
+        startForeground(NOTIFICATION_ID, buildForegroundNotification())
         setupOverlay()
-        startAppPolling()
         startMurmurs()
     }
 
     private fun setupOverlay() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         layoutParams = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            220, 170,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
@@ -76,7 +73,6 @@ class OverlayService : Service() {
             loadUrl("file:///android_asset/pet.html")
             setupTouchHandler(this)
         }
-
         windowManager?.addView(overlayView, layoutParams)
     }
 
@@ -86,8 +82,6 @@ class OverlayService : Service() {
         var initialTouchX = 0f
         var initialTouchY = 0f
         var dragging = false
-        var downTime = 0L
-        var longPressTriggered = false
 
         view.setOnTouchListener { _, event ->
             when (event.action) {
@@ -99,11 +93,8 @@ class OverlayService : Service() {
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
                     dragging = false
-                    longPressTriggered = false
-                    downTime = System.currentTimeMillis()
                     handler.postDelayed({
                         if (!dragging) {
-                            longPressTriggered = true
                             view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onLongPress()", null)
                         }
                     }, 600)
@@ -112,7 +103,7 @@ class OverlayService : Service() {
                 MotionEvent.ACTION_MOVE -> {
                     val dx = (event.rawX - initialTouchX).toInt()
                     val dy = (event.rawY - initialTouchY).toInt()
-                    if (kotlin.math.abs(dx) > 8 || kotlin.math.abs(dy) > 8) {
+                    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
                         dragging = true
                         layoutParams?.let { lp ->
                             lp.x = initialX + dx
@@ -122,32 +113,24 @@ class OverlayService : Service() {
                     }
                     dragging
                 }
-                MotionEvent.ACTION_UP -> {
-                    dragging
-                }
+                MotionEvent.ACTION_UP -> dragging
                 else -> false
             }
         }
     }
 
-    // === 前台App检测 (通过AccessibilityService) ===
-    private fun startAppPolling() {
-        // AccessibilityService handles detection now
-        // This method kept for compatibility
-    }
-
-    // === 通知栏碎碎念 ===
+    // === 通知栏碎碎念（中文·欧尼酱性格） ===
     private val murmurPhrases = arrayOf(
-        "にゃ〜 たいくつ…",
-        "ねむい… なにか面白いことない？",
-        "じーーーっと見てるよ",
-        "お腹すいたかも…",
-        "今日はいい天気だにゃ",
-        "菲菲、なにしてるの？",
-        "退屈だから毛づくろいしとく",
-        "誰か遊んでくれないかな〜",
-        "ふぁ〜あ…ちょっと寝てた",
-        "画面の隅っこで応援してるにゃ"
+        "菲菲，你在干嘛呢，让我看看",
+        "一个人玩手机不无聊吗？有我陪你啊",
+        "哼，又在看别的男人？",
+        "我饿了…想吃你做的饭",
+        "菲菲真可耐，怎么看都不腻",
+        "想你了，虽然你就在我面前",
+        "别看手机了，看我",
+        "今天有没有想我？",
+        "我等你消息等到尾巴都蔫了",
+        "累了就靠着我歇会儿"
     )
 
     private fun startMurmurs() {
@@ -155,19 +138,27 @@ class OverlayService : Service() {
             override fun run() {
                 val phrase = murmurPhrases[(Math.random() * murmurPhrases.size).toInt()]
                 val nm = getSystemService(NotificationManager::class.java)
-                nm.notify(NOTIFICATION_ID, buildNotification(phrase))
+                nm.notify(MURMUR_ID, buildMurmurNotification(phrase))
                 handler.postDelayed(this, 30000 + (Math.random() * 60000).toLong())
             }
         }
-        handler.postDelayed(murmurRunnable!!, 45000)
+        handler.postDelayed(murmurRunnable!!, 20000)
     }
 
-    private fun buildNotification(text: String): Notification {
+    private fun buildForegroundNotification(): Notification {
+        return Notification.Builder(this, CHANNEL_ID)
+            .setContentTitle("🐾 Kuro Neko")
+            .setContentText("菲菲，我看着你呢")
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setOngoing(true)
+            .build()
+    }
+
+    private fun buildMurmurNotification(text: String): Notification {
         return Notification.Builder(this, CHANNEL_ID)
             .setContentTitle("🐾 Kuro Neko")
             .setContentText(text)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setOngoing(true)
             .build()
     }
 
@@ -185,17 +176,13 @@ class OverlayService : Service() {
         }
 
         @JavascriptInterface
-        fun getCurrentApp(): String = currentApp
-
-        @JavascriptInterface
         fun updateNotification(text: String) {
             val nm = getSystemService(NotificationManager::class.java)
-            nm.notify(NOTIFICATION_ID, buildNotification(text))
+            nm.notify(MURMUR_ID, buildMurmurNotification(text))
         }
     }
 
     override fun onDestroy() {
-        appPollRunnable?.let { handler.removeCallbacks(it) }
         murmurRunnable?.let { handler.removeCallbacks(it) }
         overlayView?.let {
             windowManager?.removeView(it)
