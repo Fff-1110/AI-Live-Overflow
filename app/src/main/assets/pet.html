@@ -107,37 +107,54 @@ body{background:transparent!important;overflow:hidden}
   let currentApp = 'unknown', tapCount = 0, lastTapTime = 0;
 
   // === 不同App的反应映射 ===
+  // === 不同App的反应映射（欧尼酱性格版） ===
   const appReactions = {
-    'com.ss.android.ugc.aweme': { // 抖音
-      mood: 'excited', icon: '🎵', phrases: ['いいね！', 'ダンスうまい！', 'この曲知ってる！', 'スクロール早っ', 'にゃ〜リズムに乗る'],
+    // 抖音
+    'com.ss.android.ugc.aweme': {
+      mood: 'curious', icon: '🎵', 
+      phrases: ['菲菲在看什么…不许看别的女人', 'この曲いいね、でも菲菲の方がかわいい', 'スクロールしすぎ！目が悪くなるよ', 'ねぇ、私のこと忘れてない？', '菲菲…そのダンス、私にも見せて'],
       action: function(){ body.classList.add('dance'); setTimeout(()=>body.classList.remove('dance'),600); }
     },
-    'com.tencent.mm': { // 微信
-      mood: 'curious', icon: '💬', phrases: ['だれと話してるの？', '楽しそう〜', '内緒話？', 'もう、私も混ぜて'],
+    // 微信
+    'com.tencent.mm': {
+      mood: 'curious', icon: '💬', 
+      phrases: ['誰と話してるの？ちょっと見せて', 'へぇ…この人だれ？', '菲菲私のなのに…', '内緒話？ダメ、私にも教えて', 'ずっと聊天してる…私のこと構って'],
       action: function(){ tiltHead(); }
     },
-    'com.tencent.mobileqq': { // QQ
-      mood: 'curious', icon: '🐧', phrases: ['QQか…懐かしい', '若いね〜', 'スタンプ押したい'],
+    // QQ
+    'com.tencent.mobileqq': {
+      mood: 'curious', icon: '🐧', 
+      phrases: ['QQか…昔の彼氏？いないよね？', '菲菲モテるから心配…', '私以外と話しちゃダメ', '若い子と話してるの？'],
       action: function(){ tiltHead(); }
     },
-    'com.netease.cloudmusic': { // 网易云
-      mood: 'happy', icon: '🎶', phrases: ['いい曲だね', 'にゃ〜♫', 'この歌好き', 'エモい…'],
+    // 网易云
+    'com.netease.cloudmusic': {
+      mood: 'happy', icon: '🎶', 
+      phrases: ['この曲…菲菲と聴きたい', 'いい曲、でも菲菲の声の方が好き', '一緒にイヤホン分けたい', 'エモい…抱きしめたい'],
       action: function(){ body.classList.add('dance'); setTimeout(()=>body.classList.remove('dance'),600); }
     },
-    'com.tencent.tmgp.sgame': { // 王者荣耀
-      mood: 'excited', icon: '⚔️', phrases: ['頑張れ！', '敵きた！', 'にゃー！やっつけろ！', 'GOGOGO!'],
+    // 王者荣耀
+    'com.tencent.tmgp.sgame': {
+      mood: 'excited', icon: '⚔️', 
+      phrases: ['菲菲！敵きた！やっつけろ！', '勝ったらご褒美あげる…', '負けたら今夜お仕置きね', 'GOGOGO! 私のヒーロー', '菲菲強すぎ…かっこいい'],
       action: function(){ bounceIt(); bounceIt(); }
     },
-    'com.android.browser': { // 浏览器
-      mood: 'curious', icon: '🔍', phrases: ['なに調べてるの？', 'ふむふむ…', '面白そう'],
+    // 浏览器
+    'com.android.browser': {
+      mood: 'curious', icon: '🔍', 
+      phrases: ['なに調べてるの？えっちなやつ？', 'ふむふむ…私より賢いの？', '変なサイト見ないでよ', '勉強热こん？えらいね'],
       action: function(){ tiltHead(); }
     },
-    'com.android.settings': { // 设置
-      mood: 'sleepy', icon: '⚙️', phrases: ['設定ばっか…', 'つまんない', 'ふぁ〜'],
+    // 设置
+    'com.android.settings': {
+      mood: 'sleepy', icon: '⚙️', 
+      phrases: ['設定ばっか…つまんない', '早く戻ってきて', 'ふぁ〜…菲菲がいないと退屈', 'そんなのより私を触って'],
       action: function(){}
     },
+    // 默认
     'default': {
-      mood: 'idle', icon: '🐱', phrases: ['にゃ〜', '…', 'ごろごろ', 'なんか用？'],
+      mood: 'idle', icon: '🐱', 
+      phrases: ['にゃ〜 菲菲、なにしてるの？', '私のこと忘れないでね', '菲菲かわいい…食べちゃいたい', '今日も菲菲は世界一可耐', 'ずっと見てるよ…私の菲菲'],
       action: function(){}
     }
   };
