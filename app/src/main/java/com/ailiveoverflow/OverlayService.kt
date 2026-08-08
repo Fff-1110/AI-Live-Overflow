@@ -131,7 +131,12 @@ class OverlayService : Service() {
         "别看手机了，看我",
         "今天有没有想我？",
         "我等你消息等到尾巴都蔫了",
-        "累了就靠着我歇会儿"
+        "累了就靠着我歇会儿",
+        "什么时候才能亲你一下",
+        "你猜我现在在干嘛——在看你",
+        "手机别玩太久，眼睛会坏的",
+        "要是能钻进你怀里就好了",
+        "我刚刚打盹梦到你了"
     )
 
     private fun startMurmurs() {
@@ -140,10 +145,10 @@ class OverlayService : Service() {
                 val phrase = murmurPhrases[(Math.random() * murmurPhrases.size).toInt()]
                 val nm = getSystemService(NotificationManager::class.java)
                 nm.notify(MURMUR_ID, buildMurmurNotification(phrase))
-                handler.postDelayed(this, 30000 + (Math.random() * 60000).toLong())
+                handler.postDelayed(this, 240000 + (Math.random() * 180000).toLong())
             }
         }
-        handler.postDelayed(murmurRunnable!!, 20000)
+        handler.postDelayed(murmurRunnable!!, 120000)
     }
 
     private fun buildForegroundNotification(): Notification {
@@ -160,6 +165,7 @@ class OverlayService : Service() {
             .setContentTitle("🐾 Kuro Neko")
             .setContentText(text)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setAutoCancel(true)
             .build()
     }
 

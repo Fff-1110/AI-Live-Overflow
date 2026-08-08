@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<head><meta charset="UTF-8">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:transparent!important;overflow:hidden}
 .cat-wrap{width:88px;height:141px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cat-wrap svg{width:88px;height:115px;display:block;margin-top:26px}
+.cat-wrap svg{width:88px;height:115px;display:block;margin-top:26px;transform-origin:44px 60px}
 .bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
 .bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
 .bubble-txt.on{opacity:1}
-.particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1s ease-out forwards}
-@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
+.particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1.2s ease-out forwards}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-42px) scale(1.3)}}
 @keyframes tailWag{0%{transform:rotate(-3deg)}50%{transform:rotate(4deg)}100%{transform:rotate(-3deg)}}
+@keyframes tailDrop{0%{transform:rotate(0)}100%{transform:rotate(14deg)}}
 .wiggle{animation:earWig 0.3s ease-out}
 @keyframes earWig{0%{transform:rotate(0)}30%{transform:rotate(-6deg)}60%{transform:rotate(4deg)}100%{transform:rotate(0)}}
 .bounce{animation:bounceAnim 0.35s ease-out}
@@ -20,17 +21,47 @@ body{background:transparent!important;overflow:hidden}
 @keyframes danceAnim{0%{transform:rotate(0)}25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-4deg)}100%{transform:rotate(0)}}
 .tilt{animation:tiltAnim 0.3s ease-out}
 @keyframes tiltAnim{0%{transform:rotate(0)}40%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+.shake{animation:shakeAnim 0.5s ease-in-out}
+@keyframes shakeAnim{0%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}100%{transform:translateX(0)}}
+.cry{animation:cryAnim 0.8s ease-in-out}
+@keyframes cryAnim{0%{transform:translateY(0)}30%{transform:translateY(-3px)}60%{transform:translateY(2px)}100%{transform:translateY(0)}}
+.sulk{animation:sulkAnim 0.6s ease-in-out}
+@keyframes sulkAnim{0%{transform:rotate(0) translateX(0)}30%{transform:rotate(3deg) translateX(3px)}60%{transform:rotate(-3deg) translateX(-3px)}100%{transform:rotate(0) translateX(0)}}
 .eye-shut{opacity:0}
 .eye-shut.blinking{animation:blinkNow 0.2s ease-out}
 @keyframes blinkNow{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
 .mood-blush{opacity:0;transition:opacity 0.5s}
-.cat-wrap[data-mood="happy"] .mood-blush,.cat-wrap[data-mood="excited"] .mood-blush{opacity:0.6}
-</style></head>
-<body>
+.cat-wrap[data-mood="happy"] .mood-blush,.cat-wrap[data-mood="excited"] .mood-blush,.cat-wrap[data-mood="love"] .mood-blush{opacity:0.6}
+/* 眼睛表情组 */
+#eyes-angry,#eyes-sad,#eyes-happy,#eyes-sleepy{display:none}
+.cat-wrap[data-mood="angry"] #eyes-normal{display:none}
+.cat-wrap[data-mood="angry"] #eyes-angry{display:block}
+.cat-wrap[data-mood="sad"] #eyes-normal{display:none}
+.cat-wrap[data-mood="sad"] #eyes-sad{display:block}
+.cat-wrap[data-mood="happy"] #eyes-normal{display:none}
+.cat-wrap[data-mood="happy"] #eyes-happy{display:block}
+.cat-wrap[data-mood="excited"] #eyes-normal{display:none}
+.cat-wrap[data-mood="excited"] #eyes-happy{display:block}
+.cat-wrap[data-mood="love"] #eyes-normal{display:none}
+.cat-wrap[data-mood="love"] #eyes-happy{display:block}
+.cat-wrap[data-mood="sleepy"] #eyes-normal{display:none}
+.cat-wrap[data-mood="sleepy"] #eyes-sleepy{display:block}
+/* 耳朵：生气竖起、伤心耷拉 */
+#ear-L,#ear-R{transform-origin:center bottom}
+.cat-wrap[data-mood="angry"] #ear-L{transform:rotate(-14deg)}
+.cat-wrap[data-mood="angry"] #ear-R{transform:rotate(14deg)}
+.cat-wrap[data-mood="sad"] #ear-L{transform:rotate(22deg)}
+.cat-wrap[data-mood="sad"] #ear-R{transform:rotate(-22deg)}
+/* 尾巴：伤心垂下 */
+#tail-group{animation:tailWag 2.5s ease-in-out infinite alternate;transform-origin:68px 80px}
+.cat-wrap[data-mood="sad"] #tail-group{animation:tailDrop 0.8s ease-out forwards}
+/* 嘴巴底色 */
+#mouth{transition:d 0.2s}
+</style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
   <svg viewBox="0 0 88 115" id="catsvg">
-    <g id="tail-group" style="transform-origin:68px 80px;animation:tailWag 2.5s ease-in-out infinite alternate">
+    <g id="tail-group">
       <path d="M50,80 Q72,84 80,102 Q30,84 50,80Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
       <circle cx="80" cy="102" r="4" fill="#f5f5f5"/>
     </g>
@@ -44,12 +75,30 @@ body{background:transparent!important;overflow:hidden}
     <g id="ear-L"><path d="M24,26 L18,8 L36,24 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M26,24 L21,12 L34,22 Z" fill="#dd2244" opacity="0.5"/></g>
     <circle cx="20" cy="14" r="3" fill="#dd2244" stroke="#1a1a1a" stroke-width="0.6"/>
     <g id="ear-R"><path d="M64,26 L70,8 L52,24 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/><path d="M62,24 L67,12 L54,22 Z" fill="#dd2244" opacity="0.5"/></g>
-    <ellipse cx="35" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-    <ellipse cx="53" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-    <ellipse cx="35" cy="36" rx="2" ry="4.5" fill="#fff"/>
-    <ellipse cx="53" cy="36" rx="2" ry="4.5" fill="#fff"/>
-    <circle cx="37" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
-    <circle cx="55" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
+    <g id="eyes-normal">
+      <ellipse cx="35" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <ellipse cx="53" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+      <ellipse cx="35" cy="36" rx="2" ry="4.5" fill="#fff"/>
+      <ellipse cx="53" cy="36" rx="2" ry="4.5" fill="#fff"/>
+      <circle cx="37" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
+      <circle cx="55" cy="33" r="1.5" fill="#fff" opacity="0.9"/>
+    </g>
+    <g id="eyes-angry">
+      <path d="M30,33 L41,37 M30,37 L41,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M47,33 L58,37 M47,37 L58,33" stroke="#ee1144" stroke-width="1.7" stroke-linecap="round"/>
+    </g>
+    <g id="eyes-sad">
+      <path d="M30,38 Q35,41 40,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M48,38 Q53,41 58,38" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    </g>
+    <g id="eyes-happy">
+      <path d="M30,36 Q35,32 40,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M48,36 Q53,32 58,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    </g>
+    <g id="eyes-sleepy">
+      <ellipse cx="35" cy="36" rx="4" ry="2" fill="#ee1144"/>
+      <ellipse cx="53" cy="36" rx="4" ry="2" fill="#ee1144"/>
+    </g>
     <ellipse class="eye-shut" id="shutL" cx="35" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <ellipse class="eye-shut" id="shutR" cx="53" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <ellipse cx="44" cy="46" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
@@ -61,14 +110,14 @@ body{background:transparent!important;overflow:hidden}
     <line x1="60" y1="44" x2="76" y2="42" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
     <line x1="61" y1="47" x2="77" y2="48" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
   </svg>
-</div>
-<script>
+</div><script>
 (function(){
   const cat=document.getElementById('cat'),bub=document.getElementById('bub');
   const shutL=document.getElementById('shutL'),shutR=document.getElementById('shutR');
   const earL=document.getElementById('ear-L'),earR=document.getElementById('ear-R');
   const body=document.getElementById('catsvg'),mouth=document.getElementById('mouth');
-  let mood='idle',currentApp='unknown',bubbleTimer,autoTimer;
+  let mood='idle',currentApp='unknown',bubbleTimer,autoTimer,lonelyTimer;
+  let lonelyLevel=0,clickCount=0,clickTimer=null;
   // === App → 反应（全中文，欧尼酱性格） ===
   const appRx={
     'com.ss.android.ugc.aweme':{mood:'curious',icon:'🎵',
@@ -77,7 +126,7 @@ body{background:transparent!important;overflow:hidden}
       say:['跟谁聊天呢？让我看看','又是哪个小妖精找你','菲菲是我的，别忘了','聊天聊那么开心…我吃醋了','手机给我，我要查岗']},
     'com.tencent.mobileqq':{mood:'curious',icon:'🐧',
       say:['QQ？现在谁还用QQ','是不是有前任在上面','菲菲受欢迎我压力好大','不许跟别人暧昧']},
-    'com.netease.cloudmusic':{mood:'happy',icon:'🎶',
+    'com.netease.cloudmusic':{mood:'love',icon:'🎶',
       say:['这首歌我也想跟菲菲一起听','你的歌单品味不错嘛','好听的歌，但没你的声音好听','听完这首陪我聊会儿']},
     'com.tencent.tmgp.sgame':{mood:'excited',icon:'⚔️',
       say:['加油加油！打死他们！','赢了今晚奖励你','输了也没关系…但我会嘲笑你','冲啊我的英雄！','小心草丛！']},
@@ -88,48 +137,97 @@ body{background:transparent!important;overflow:hidden}
     'default':{mood:'idle',icon:'🐱',
       say:['菲菲今天真可耐','我好无聊…陪陪我','一直看着你呢','你是我的，知道吗','菲菲世界第一可爱']}
   };
+  // === 情绪台词 ===
+  const moodSay={
+    angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','气死我了气死我了'],
+    sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…'],
+    happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
+    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦'],
+    sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
+    idle:['喵…我在发呆','今天也是平平无奇的一天']
+  };
   function getRx(pkg){return appRx[pkg]||appRx['default'];}
   function rp(arr){return arr[Math.floor(Math.random()*arr.length)];}
-  function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2500);}
-  function setMood(m){mood=m;cat.setAttribute('data-mood',m);if(m==='happy'||m==='excited')mouth.setAttribute('d','M38,50 Q44,57 50,50');else if(m==='angry')mouth.setAttribute('d','M39,51 Q44,47 49,51');else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');else mouth.setAttribute('d','M40,50 Q44,54 48,50');}
+  function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2800);}
+  function setMood(m){
+    mood=m;cat.setAttribute('data-mood',m);
+    if(m==='happy'||m==='excited'||m==='love')mouth.setAttribute('d','M38,50 Q44,57 50,50');
+    else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
+    else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
+    else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');
+    else mouth.setAttribute('d','M40,50 Q44,54 48,50');
+  }
   function blink(){shutL.classList.add('blinking');shutR.classList.add('blinking');setTimeout(()=>{shutL.classList.remove('blinking');shutR.classList.remove('blinking');},200);}
-  function hearts(x,y,n){for(let i=0;i<n;i++){const p=document.createElement('span');p.className='particle';p.textContent=['❤️','💕','💖','✨'][Math.floor(Math.random()*4)];p.style.left=(x+Math.random()*20-10)+'px';p.style.top=(y+Math.random()*12-6)+'px';cat.appendChild(p);setTimeout(()=>p.remove(),1100);}}
+  function particles(x,y,n,chars){for(let i=0;i<n;i++){const p=document.createElement('span');p.className='particle';p.textContent=chars[Math.floor(Math.random()*chars.length)];p.style.left=(x+Math.random()*16-8)+'px';p.style.top=(y+Math.random()*10-5)+'px';cat.appendChild(p);setTimeout(()=>p.remove(),1300);}}
   function earWig(){earL.classList.add('wiggle');earR.classList.add('wiggle');setTimeout(()=>{earL.classList.remove('wiggle');earR.classList.remove('wiggle');},300);}
   function bounce(){body.classList.add('bounce');setTimeout(()=>body.classList.remove('bounce'),350);}
   function tilt(){body.classList.add('tilt');setTimeout(()=>body.classList.remove('tilt'),300);}
   function dance(){body.classList.add('dance');setTimeout(()=>body.classList.remove('dance'),600);}
-  // === App切换 ===
+  function shake(){body.classList.add('shake');setTimeout(()=>body.classList.remove('shake'),500);}
+  function cry(){body.classList.add('cry');setTimeout(()=>body.classList.remove('cry'),800);}
+  function sulk(){body.classList.add('sulk');setTimeout(()=>body.classList.remove('sulk'),600);}
+  // === 情绪演出 ===
+  function act(m){
+    if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
+    else if(m==='sad'){cry();particles(44,15,5,['💧','💧','😢']);say(rp(moodSay.sad));}
+    else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
+    else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));}
+    else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
+    else{say(rp(moodSay.idle));}
+  }  // === App切换 ===
   function onAppChanged(pkg){
     if(pkg===currentApp||!pkg||pkg==='unknown')return;
     currentApp=pkg;
     const rx=getRx(pkg);
+    lonelyLevel=0;
     setTimeout(()=>{
       setMood(rx.mood);
       say(rx.icon+' '+rp(rx.say));
       if(rx.mood==='excited'){bounce();dance();}
       else if(rx.mood==='curious')tilt();
-      else if(rx.mood==='happy'){earWig();hearts(44,25,3);}
+      else if(rx.mood==='happy'){earWig();particles(44,25,3,['❤️','✨']);}
+      else if(rx.mood==='love'){earWig();particles(44,25,4,['❤️','💕']);}
+      else if(rx.mood==='sleepy'){particles(44,10,2,['💤']);}
     },400);
   }
-
-  // === 长按 ===
-  function onLongPress(){setMood('happy');say('摸我可是要负责的哦');hearts(44,50,5);bounce();setTimeout(()=>setMood(mood),4000);}
-  // 单击 - 简单反应
-  cat.addEventListener('click',function(){blink();say(rp(getRx(currentApp).say));bounce();});
-  // 双击睡觉
-  cat.addEventListener('dblclick',function(e){if(mood==='sleepy'){setMood('idle');say('睡醒了…菲菲还在吗');bounce();}else{setMood('sleepy');say('好困…菲菲陪我睡');}e.preventDefault();});
-  // 自主行为
+  // === 点击/连击 ===
+  function onTap(){
+    lonelyLevel=0;
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer=setTimeout(()=>{clickCount=0;},800);
+    if(clickCount>=5){setMood('angry');act('angry');clickCount=0;return;}
+    if(clickCount>=3){setMood('happy');act('happy');clickCount=0;return;}
+    blink();say(rp(getRx(currentApp).say));bounce();
+  }
+  cat.addEventListener('click',function(e){e.preventDefault();onTap();});
+  // === 孤独递进：不理我→无聊→困→伤心 ===
+  function lonelyTick(){
+    lonelyLevel++;
+    if(lonelyLevel===2){setMood('sleepy');act('sleepy');}
+    else if(lonelyLevel===4){setMood('sad');act('sad');}
+    else if(lonelyLevel===6){setMood('angry');act('angry');}
+    else if(lonelyLevel>=8){setMood('sad');cry();particles(44,15,6,['💧','😢']);say('菲菲…理理我好不好');}
+    lonelyTimer=setTimeout(lonelyTick,20000);
+  }
+  // === 自主行为：随机情绪+小动作 ===
   function autoAct(){
     const r=Math.random();
-    if(r<0.3)blink();
-    else if(r<0.45){earWig();say(rp(getRx(currentApp).say));}
-    else if(r<0.55)bounce();
-    autoTimer=setTimeout(autoAct,mood==='sleepy'?8000+Math.random()*8000:4000+Math.random()*5000);
+    if(r<0.15){
+      const emo=['happy','love','sleepy','angry','sad'][Math.floor(Math.random()*5)];
+      setMood(emo);act(emo);
+    }else if(r<0.35){blink();}
+    else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
+    else if(r<0.65){bounce();}
+    else if(r<0.75){shake();say('嗯？我好像听到什么声音');}
+    else if(r<0.85){tilt();}
+    autoTimer=setTimeout(autoAct,mood==='sleepy'?9000+Math.random()*9000:5000+Math.random()*6000);
   }
   setMood('idle');
   autoTimer=setTimeout(autoAct,3000);
+  lonelyTimer=setTimeout(lonelyTick,25000);
   setInterval(()=>{if(Math.random()<0.35)blink();},7000+Math.random()*6000);
   setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
-  window.KuroNeko={onAppChanged,onLongPress,setMood,say,blink,bounce};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce};
 })();
 </script></body></html>
