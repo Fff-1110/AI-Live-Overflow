@@ -41,11 +41,22 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="happy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="happy"] #eyes-happy{display:block}
 .cat-wrap[data-mood="excited"] #eyes-normal{display:none}
-.cat-wrap[data-mood="excited"] #eyes-happy{display:block}
+.cat-wrap[data-mood="excited"] #eyes-happy{display:none}
+.cat-wrap[data-mood="excited"] #eyes-star{display:block}
+.cat-wrap[data-mood="curious"] #eyes-normal{display:none}
+.cat-wrap[data-mood="curious"] #eyes-ww{display:block}
+.cat-wrap[data-mood="curious"] #mouth{display:none}
+.cat-wrap[data-mood="smirk"] #eyes-normal{display:none}
+.cat-wrap[data-mood="smirk"] #eyes-smirk{display:block}
+.cat-wrap[data-mood="smirk"] #ear-L{transform:rotate(-10deg)}
+.cat-wrap[data-mood="smirk"] #ear-R{transform:rotate(10deg)}
+.mlem #tongue{display:block}
 .cat-wrap[data-mood="love"] #eyes-normal{display:none}
-.cat-wrap[data-mood="love"] #eyes-happy{display:none}
-.cat-wrap[data-mood="love"] #eyes-love{display:block}
-.cat-wrap[data-mood="love"] #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
+.cat-wrap[data-mood="love"] #eyes-happy{display:block}
+.cat-wrap.heart-eyes #eyes-normal{display:none}
+.cat-wrap.heart-eyes #eyes-happy{display:none}
+.cat-wrap.heart-eyes #eyes-love{display:block}
+.cat-wrap.heart-eyes #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
 @keyframes droolAnim{0%{transform:translateY(0);opacity:0.95}70%{transform:translateY(4px);opacity:0.75}100%{transform:translateY(8px);opacity:0}}
 .cat-wrap[data-mood="sleepy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="sleepy"] #eyes-sleepy{display:block}
@@ -66,7 +77,7 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="cool"] #sunglasses{display:block}
 .cat-wrap[data-mood="music"] #headphones{display:block}
 .cat-wrap[data-mood="hungry"] #drool{display:block}
-#eyes-dizzy,#eyes-hungry{display:none}
+#eyes-dizzy,#eyes-hungry,#eyes-star,#eyes-ww,#eyes-smirk{display:none}
 .cat-wrap[data-mood="dizzy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="dizzy"] #eyes-dizzy{display:block}
 .cat-wrap[data-mood="hungry"] #eyes-normal{display:none}
@@ -98,6 +109,19 @@ body{background:transparent!important;overflow:hidden}
 @keyframes jumparound{0%{transform:translateY(0) rotate(0)}15%{transform:translateY(-58px) rotate(-7deg)}35%{transform:translateY(0) rotate(5deg) translateX(7px)}50%{transform:translateY(-58px) rotate(-5deg) translateX(-4px)}70%{transform:translateY(0) rotate(6deg) translateX(3px)}85%{transform:translateY(-58px) rotate(-7deg) translateX(-6px)}100%{transform:translateY(0) rotate(0)}}
 .pant{animation:pant 0.55s infinite}
 @keyframes pant{0%{transform:scale(1,1)}50%{transform:scale(1.05,0.95)}100%{transform:scale(1,1)}}
+.roll{animation:roll 0.8s}
+@keyframes roll{0%{transform:translateX(0) rotate(0)}50%{transform:translateX(10px) rotate(180deg)}100%{transform:translateX(0) rotate(360deg)}}
+.spin{animation:spin 0.7s}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.mlem{animation:mlem 0.8s}
+@keyframes mlem{0%{transform:scaleY(1)}30%{transform:scaleY(0.92) translateY(4px)}100%{transform:scaleY(1)}}
+.startle{animation:startle 0.6s}
+@keyframes startle{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.12)}60%{transform:translateY(2px)}100%{transform:translateY(0)}}
+.yawn{animation:yawn 1.2s}
+@keyframes yawn{0%{transform:scaleY(1)}40%{transform:scaleY(1.18)}100%{transform:scaleY(1)}}
+.catpunch{animation:catpunch 0.5s}
+@keyframes catpunch{0%{transform:translateX(0)}25%{transform:translateX(-9px) rotate(-8deg)}50%{transform:translateX(6px) rotate(6deg)}75%{transform:translateX(-6px)}100%{transform:translateX(0)}}
+
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -138,7 +162,20 @@ body{background:transparent!important;overflow:hidden}
       <path d="M28,36 Q33,32 38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
       <path d="M50,36 Q55,32 60,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
-    <g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
+    <g id="eyes-star" fill="#ffdd00" stroke="#cc9900" stroke-width="0.5">
+<path d="M33,29 L34.8,33.8 L40,35.5 L34.8,37.2 L33,42 L31.2,37.2 L26,35.5 L31.2,33.8 Z"/>
+<path d="M55,29 L56.8,33.8 L62,35.5 L56.8,37.2 L55,42 L53.2,37.2 L48,35.5 L53.2,33.8 Z"/>
+</g>
+<g id="eyes-ww" stroke="#ee1144" stroke-width="1.8" fill="none" stroke-linecap="round">
+<path d="M28,31 L37,37 M28,37 L37,31"/>
+<path d="M51,31 L60,37 M51,37 L60,31"/>
+</g>
+<g id="eyes-smirk">
+<path d="M28,35 L38,37 M28,39 L38,37" stroke="#ee1144" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M50,37 L60,35 M50,37 L60,39" stroke="#ee1144" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M57,30 L60,27 M58,33 L61,30" stroke="#ee1144" stroke-width="1.4" stroke-linecap="round"/>
+</g>
+<g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
 <path d="M33,31 C30,28.6 26.6,29.8 26.6,32.9 C26.6,36 33,40 33,40 C33,40 39.4,36 39.4,32.9 C39.4,29.8 36,28.6 33,31Z"/>
 <path d="M55,31 C52,28.6 48.6,29.8 48.6,32.9 C48.6,36 55,40 55,40 C55,40 61.4,36 61.4,32.9 C61.4,29.8 58,28.6 55,31Z"/>
 </g>
@@ -162,7 +199,8 @@ body{background:transparent!important;overflow:hidden}
     <ellipse class="eye-shut" id="shutR" cx="55" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <ellipse cx="44" cy="47" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
     <path id="mouth" d="M40,51 Q44,55 48,51" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
-    <g id="drool"><path d="M44,55 Q43,63 42,66" stroke="#9be8ff" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="42" cy="68" r="1.6" fill="#9be8ff"/></g>
+    <g id="tongue"><path d="M42,52 Q41,59 42,63 Q44,66 46,63 Q47,59 46,52" fill="#ff6688" stroke="#dd4466" stroke-width="0.5"/></g>
+<g id="drool"><path d="M44,55 Q43,63 42,66" stroke="#9be8ff" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="42" cy="68" r="1.6" fill="#9be8ff"/></g>
     <g id="necklace"><path d="M28,48 Q44,59 60,48" stroke="#ffd700" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="44" cy="58" r="4.5" fill="#ffd700" stroke="#b8860b" stroke-width="0.8"/><path d="M41,58 L47,58 M44,55 L44,61" stroke="#b8860b" stroke-width="1"/></g>
     <g id="sunglasses"><rect x="25" y="32" width="15" height="9" rx="3" fill="#111" stroke="#333" stroke-width="0.6"/><rect x="48" y="32" width="15" height="9" rx="3" fill="#111" stroke="#333" stroke-width="0.6"/><path d="M40,36 L48,36" stroke="#111" stroke-width="2"/><path d="M25,34 L22,30 M63,34 L66,30" stroke="#111" stroke-width="1.5"/></g>
     <g id="headphones"><path d="M26,30 A18,14 0 0,1 62,30" fill="none" stroke="#222" stroke-width="3"/><rect x="21" y="28" width="10" height="16" rx="4" fill="#222"/><rect x="57" y="28" width="10" height="16" rx="4" fill="#222"/></g>
@@ -215,13 +253,13 @@ body{background:transparent!important;overflow:hidden}
   };
   // === 情绪台词 ===
   const moodSay={
-    angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','气死我了气死我了'],
-    sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…'],
-    happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
-    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','哈…宝贝好可耐，口水都下来了'],
-    sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
-    idle:['喵…我在发呆','今天也是平平无奇的一天'],
-    hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿晕了饿晕了'],
+    angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','别惹我，我超凶','气得我猫毛都炸了'],,
+    sad:['有点难过…','你是不是不要我了','我好孤单啊','委屈巴巴.jpg','我需要抱抱充电'],,
+    happy:['嘿嘿今天心情好','开心！想转圈圈','今天适合打滚三百圈','心情好到想哼歌','嘿嘿，我是全屏最靓的猫'],,
+    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','心动了心动了','你是我的小太阳'],,
+    sleepy:['好困…要睡着了','zzz…别吵我','再睡五分钟…不，五十分钟','困到喵生无望'],,
+    idle:['喵…我在发呆','思考猫生…','今天也在等一个摸摸','我是谁，我在哪，我在等什么'],,
+    hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿到能吃下一头牛','胃在咕咕叫…'],,
     dizzy:['转圈圈转晕了…','眼前好多星星','我是谁我在哪'],
     rich:['有钱的感觉真好','今晚的消费我买单','金链子晃不晃眼？'],
     cool:['墨镜一戴，谁也不爱','帅不帅？就问你帅不帅'],
@@ -233,7 +271,9 @@ body{background:transparent!important;overflow:hidden}
   function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2800);}
   function setMood(m){
     mood=m;cat.setAttribute('data-mood',m);
-    if(m==='happy'||m==='excited'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
+    if(m==='happy'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
+else if(m==='excited')mouth.setAttribute('d','M38,48 Q44,58 50,48 Z');
+else if(m==='smirk')mouth.setAttribute('d','M39,53 Q44,50 50,52');
     else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
     else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
     else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');
@@ -253,8 +293,9 @@ body{background:transparent!important;overflow:hidden}
   function act(m){
     if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
     else if(m==='sad'){cry();particles(44,15,6,['💧','💧','😢','💧']);say(rp(moodSay.sad));}
-    else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
-    else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));}
+    else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));if(Math.random()<0.3)heartEyes();}
+    else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));if(Math.random()<0.7)heartEyes();}
+else if(m==='smirk'){particles(44,20,3,['😏','💫']);say(rp(['呵…笑得这么坏干嘛','过来，让姐姐好好看看你','今晚…你跑不掉了','这笑容你招架得住？','哼，小东西还挺会撩']));}
     else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
     else if(m==='hungry'){particles(44,30,4,['🍙','🍜','💧']);say(rp(moodSay.hungry));}
     else if(m==='dizzy'){body.classList.add('sway');particles(44,15,5,['💫','⭐']);say(rp(moodSay.dizzy));setTimeout(()=>body.classList.remove('sway'),800);}
@@ -287,7 +328,7 @@ body{background:transparent!important;overflow:hidden}
     clearTimeout(clickTimer);
     clickTimer=setTimeout(()=>{clickCount=0;},800);
     if(clickCount>=5){setMood('angry');act('angry');clickCount=0;return;}
-    if(clickCount>=3){setMood('happy');act('happy');clickCount=0;return;}
+    if(clickCount>=3){feed();clickCount=0;return;}
     blink();say(rp(getRx(currentApp).say));bounce();
   }
   cat.addEventListener('click',function(e){e.preventDefault();onTap();});
@@ -304,7 +345,7 @@ body{background:transparent!important;overflow:hidden}
   function autoAct(){
     const r=Math.random();
     if(r<0.18){
-      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy'][Math.floor(Math.random()*7)];
+      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy','smirk'][Math.floor(Math.random()*8)];
       setMood(emo);act(emo);
     }else if(r<0.35){blink();}
     else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
@@ -312,8 +353,14 @@ body{background:transparent!important;overflow:hidden}
     else if(r<0.75){shake();say('嗯？我好像听到什么声音');}
     else if(r<0.80){sneeze();}
     else if(r<0.85){stretch();}
-    else if(r<0.90){tailChase();}
-    else if(r<0.95){tilt();}
+    else if(r<0.86){tailChase();}
+    else if(r<0.90){tilt();}
+else if(r<0.93){roll();}
+else if(r<0.95){mlem();}
+else if(r<0.97){catPunch();}
+else if(r<0.98){yawn();}
+else if(r<0.99){startle();}
+else{smirk();}
     autoTimer=setTimeout(autoAct,mood==='sleepy'?20000+Math.random()*15000:12000+Math.random()*13000);
   }
   setMood('idle');
@@ -393,7 +440,26 @@ body{background:transparent!important;overflow:hidden}
   function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
   function jumpAround(){body.classList.add('jumparound');particles(44,20,8,['💢','🔥','💢']);say(rp(['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove('jumparound');},3800);}
   var fatLevel=0;
-  function feed(){fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3)say(rp(['好吃！再喂我一口','喵呜～真香','还要还要！']));}
+  var feedBusy=false;
+function feed(){lonelyLevel=0;if(feedBusy)return;feedBusy=true;
+body.classList.add('sway');say('嗯？什么味儿…是吃的！！');particles(44,30,3,['🍙','🍜','🍰']);
+setTimeout(function(){body.classList.remove('sway');body.classList.add('mlem');say('啊——呜！');particles(44,25,3,['🍙','🍜','🍰']);
+setTimeout(function(){body.classList.remove('mlem');fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';
+if(fatLevel>=3){setMood('hungry');say(rp(['嗝…真的吃不下了','都喂成球了，你负责','胖到走不动…都是你惯的']));particles(44,20,3,['💨','😋','💤']);}
+else{setMood('happy');if(Math.random()<0.5)heartEyes();say(rp(['喵呜～满足了！','好吃好吃，再来一口！','被你喂饱的感觉真好']));particles(44,20,3,['❤️','😋','✨']);}
+feedBusy=false;
+},1000);
+},900);
+}
+
+// === 新抽象动作 ===
+function roll(){body.classList.add('roll');say(rp(['骨碌骨碌…','打个滚舒服多了','喵~地板好凉快']));particles(44,30,3,['🌀','✨']);setTimeout(function(){body.classList.remove('roll');},800);}
+function spin(){body.classList.add('spin');say(rp(['转圈圈转圈圈~','晕了晕了…但停不下来','转！']));setTimeout(function(){body.classList.remove('spin');},700);}
+function mlem(){body.classList.add('mlem');say(rp(['mlem mlem…','略略略~','这空气有点甜']));setTimeout(function(){body.classList.remove('mlem');},800);}
+function startle(){body.classList.add('startle');say(rp(['哇啊！！','吓我一跳！','什么东西！！']));particles(44,20,4,['😱','⚡']);setTimeout(function(){body.classList.remove('startle');},600);}
+function yawn(){body.classList.add('yawn');say(rp(['啊~~困了','哈欠…昨晚没睡好','想睡了…zzz']));particles(44,15,2,['💤','😪']);setTimeout(function(){body.classList.remove('yawn');},1200);}
+function catPunch(){body.classList.add('catpunch');say(rp(['喵喵拳！','看我无影爪！','打你！哼！']));particles(44,20,4,['💢','💥']);setTimeout(function(){body.classList.remove('catpunch');},500);}
+function heartEyes(){body.classList.add('heart-eyes');setTimeout(function(){body.classList.remove('heart-eyes');},3000);}
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
