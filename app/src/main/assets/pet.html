@@ -76,6 +76,10 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="rich"] .mood-blush,.cat-wrap[data-mood="music"] .mood-blush{opacity:0.6}
 .sway{animation:swayAnim 0.7s ease-in-out}
 @keyframes swayAnim{0%{transform:rotate(0)}25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+
+/* 拖拽挣扎：不高兴被拖着走时会挣扎 */
+.drag-struggle{animation:dragstruggle 0.16s infinite}
+@keyframes dragstruggle{0%{transform:rotate(-7deg) translateX(-4px)}50%{transform:rotate(7deg) translateX(4px)}100%{transform:rotate(-7deg) translateX(-4px)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -289,7 +293,54 @@ body{background:transparent!important;overflow:hidden}
   lonelyTimer=setTimeout(lonelyTick,25000);
   setInterval(()=>{if(Math.random()<0.25)blink();},12000+Math.random()*8000);
   setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
-    // === 欧尼酱绑定：外部命令 ===
+  
+  // === 拖拽反应：心情决定乖不乖 ===
+  var dragMood='idle',dragStruggle=false,dragStruggleTimer=null,dragLastMove=0;
+  var BAD_DRAG=['angry','sad','dizzy','hungry'],GOOD_DRAG=['happy','love','excited','rich','cool','music'];
+  function onDragStart(){
+    dragMood=mood;lonelyLevel=0;
+    if(BAD_DRAG.indexOf(dragMood)>=0){
+      dragStruggle=true;body.classList.add('drag-struggle');
+      particles(44,20,3,dragMood==='sad'?['💧','😢']:['💢','🔥']);
+      say(dragMood==='sad'?'别碰我…让我静静':'放我下来！我生气呢！');
+      if(!dragStruggleTimer)dragStruggleTimer=setInterval(function(){if(window.AndroidBridge)AndroidBridge.moveWindow(-10,Math.random()*12-6);},160);
+    }else if(GOOD_DRAG.indexOf(dragMood)>=0){
+      say(rp(['嘿嘿，被你抱着好舒服','再拖会儿嘛～','嘿嘿嘿']));particles(44,25,3,['❤️','😊']);
+    }else{
+      say(rp(['要去哪儿呀？','哎哎哎…轻点嘛']));
+    }
+  }
+  function onDragMove(){
+    var now=Date.now();
+    if(now-dragLastMove<300)return;dragLastMove=now;
+    if(dragStruggle){particles(44,20,1,dragMood==='sad'?'💧':'💢');}
+    else if(GOOD_DRAG.indexOf(dragMood)>=0){if(Math.random()<0.6)particles(44,25,1,['❤️','✨']);}
+  }
+  function onDragEnd(){
+    if(dragStruggleTimer){clearInterval(dragStruggleTimer);dragStruggleTimer=null;}
+    dragStruggle=false;body.classList.remove('drag-struggle');
+    if(BAD_DRAG.indexOf(dragMood)>=0){say(rp(['哼！终于放我下来了','下次轻点！哼']));}
+    else if(GOOD_DRAG.indexOf(dragMood)>=0){say(rp(['被你抱着走真开心','再玩一会儿嘛']));bounce();}
+    else{blink();}
+  }
+  // === 自主溜达：心情好会自己在屏幕上乱跑 ===
+  function wander(){
+    if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
+    if(Math.random()<0.5){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
+    var steps=4+Math.floor(Math.random()*6);
+    var dx=Math.random()<0.5?-1:1;
+    var dy=(Math.random()<0.4?-1:1)*(Math.random()<0.7?0:1);
+    var i=0;
+    (function step(){
+      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,15000+Math.random()*25000);return;}
+      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(14+Math.random()*12),dy*(10+Math.random()*10));
+      if(GOOD_DRAG.indexOf(mood)>=0&&Math.random()<0.4)particles(44,20,1,['✨','❤️']);
+      body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},200);
+      setTimeout(step,220+Math.random()*160);
+    })();
+  }
+  var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
+  // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
     cmd=(cmd||'').trim();
     if(!cmd)return;
@@ -307,6 +358,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd};
 })();
 </script></body></html>
