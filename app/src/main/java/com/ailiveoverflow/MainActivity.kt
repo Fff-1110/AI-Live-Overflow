@@ -9,6 +9,8 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import java.io.File
 
 class MainActivity : Activity() {
 
@@ -17,6 +19,7 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (handleFeedIntent(intent)) return
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -64,6 +67,28 @@ class MainActivity : Activity() {
 
         setContentView(root)
         refresh()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (handleFeedIntent(intent)) return
+        setIntent(intent)
+    }
+
+    private fun handleFeedIntent(i: Intent?): Boolean {
+        if (i == null) return false
+        val data = i.data ?: return false
+        if ("ailive" == data.scheme && "feed" == data.host) {
+            val food = (data.path ?: "/default").trim('/').ifEmpty { "default" }
+            try {
+                File(filesDir, "cmd.txt").writeText("food:" + food)
+                Toast.makeText(this, "刁刁吃到 " + food + " 啦 🐟", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+            }
+            finish()
+            return true
+        }
+        return false
     }
 
     private fun refresh() {
