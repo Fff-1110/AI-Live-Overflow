@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刁刁食堂 🐾</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(circle at 30% 20%,#2a2a4a,#0d0d1a);color:#f0dede;font-family:'PingFang SC','Microsoft YaHei',sans-serif;text-align:center;padding:28px 16px;min-height:100vh}
+.cat{font-size:64px;animation:bob 2s ease-in-out infinite;display:inline-block}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+h1{font-size:24px;margin:10px 0 4px;color:#ffb3c1}
+.sub{color:#9b8b8b;font-size:13px;margin-bottom:6px}
+.warn{color:#7a6f6f;font-size:11px;margin-bottom:22px}
+.foods{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:420px;margin:0 auto}
+.food{background:linear-gradient(145deg,#23233f,#17172b);border:1px solid #3a3a5e;border-radius:18px;padding:20px 10px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;user-select:none}
+.food:hover{border-color:#ff2255;box-shadow:0 0 18px rgba(255,34,85,.25)}
+.food:active{transform:scale(0.9)}
+.food .icon{font-size:46px;display:block}
+.food .name{font-size:14px;margin-top:8px;color:#ffb3c1}
+.food .tip{font-size:11px;color:#7a6f6f;margin-top:3px}
+.fed{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.8);background:#16162a;border:2px solid #ff2255;border-radius:22px;padding:24px 32px;font-size:17px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.fed.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.fed .fi{font-size:40px;display:block;margin-bottom:8px}
+.foot{margin-top:26px;font-size:11px;color:#5a4f4f}
+</style>
+</head>
+<body>
+<div class="cat">🐱</div>
+<h1>刁刁食堂</h1>
+<div class="sub">点一个食物，喂给屏幕上的小黑猫</div>
+<div class="warn">⚠️ 喂太多会变胖哦（最多3级）· 需要猫咪悬浮窗在运行</div>
+<div class="foods" id="f"></div>
+<div class="fed" id="fed"></div>
+<div class="foot">Kuro Neko · AI-Live-Overflow · 点一下它就吃到啦</div>
+<script>
+const foods=[
+{id:'fish',icon:'🐟',name:'小鱼干',tip:'咔嚓咔嚓'},
+{id:'chicken',icon:'🍗',name:'大鸡腿',tip:'咔吧咔吧'},
+{id:'cake',icon:'🍰',name:'小蛋糕',tip:'甜甜的～'},
+{id:'onigiri',icon:'🍙',name:'饭团',tip:'呜姆呜姆'},
+{id:'bone',icon:'🦴',name:'大骨头',tip:'咯嘣咯嘣'},
+{id:'ramen',icon:'🍜',name:'拉面',tip:'吸溜吸溜'},
+{id:'milk',icon:'🥛',name:'牛奶',tip:'咕嘟咕嘟'},
+{id:'surprise',icon:'🎁',name:'盲盒',tip:'吃出惊喜'}
+];
+const el=document.getElementById('f');
+foods.forEach(f=>{
+  const d=document.createElement('div');
+  d.className='food';
+  d.innerHTML='<span class="icon">'+f.icon+'</span><div class="name">'+f.name+'</div><div class="tip">'+f.tip+'</div>';
+  d.addEventListener('click',()=>feedIt(f));
+  el.appendChild(d);
+});
+function feedIt(f){
+  const fed=document.getElementById('fed');
+  fed.innerHTML='<span class="fi">'+f.icon+'</span>刁刁吃到了'+f.name+'！';
+  fed.classList.add('show');
+  setTimeout(()=>fed.classList.remove('show'),1600);
+  setTimeout(()=>{
+    try{window.location.href='intent://feed/'+f.id+'#Intent;scheme=ailive;package=com.ailiveoverflow;end';}catch(e){}
+  },350);
+}
+</script>
+</body>
+</html>
