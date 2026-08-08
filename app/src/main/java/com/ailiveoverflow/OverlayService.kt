@@ -25,6 +25,9 @@ class OverlayService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private var murmurRunnable: Runnable? = null
     private var cmdPollRunnable: Runnable? = null
+    private var pendingDx = 0
+    private var pendingDy = 0
+    private var moveScheduled = false
 
     companion object {
         const val NOTIFICATION_ID = 1001
@@ -32,7 +35,6 @@ class OverlayService : Service() {
         const val CHANNEL_ID = "overflow_pet"
         private var instance: OverlayService? = null
         private var lastApp = "unknown"
-        private var lastMoveAt = 0L
 
         fun onForegroundAppChanged(pkg: String) {
             Log.d("KuroNeko", "onForegroundAppChanged: $pkg")
@@ -104,6 +106,7 @@ class OverlayService : Service() {
         var initialTouchY = 0f
         var dragging = false
         var lastDragNotify = 0L
+        var downTime = 0L
 
         view.setOnTouchListener { _, event ->
             when (event.action) {
@@ -114,6 +117,7 @@ class OverlayService : Service() {
                     }
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
+                    downTime = event.eventTime
                     dragging = false
                     view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragStart()", null)
                     handler.postDelayed({
@@ -142,7 +146,13 @@ class OverlayService : Service() {
                     dragging
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (dragging) view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragEnd()", null)
+                    if (dragging) {
+                        val dt = (event.eventTime - downTime).coerceAtLeast(50)
+                        val vx = ((event.rawX - initialTouchX) * 1000f / dt)
+                        val vy = ((event.rawY - initialTouchY) * 1000f / dt)
+                        view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onFling($vx,$vy)", null)
+                        view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragEnd()", null)
+                    }
                     dragging
                 }
                 else -> false
@@ -225,17 +235,26 @@ class OverlayService : Service() {
     inner class AndroidBridge {
         @JavascriptInterface
         fun moveWindow(dx: Int, dy: Int) {
-            val now = System.currentTimeMillis()
-            if (now - lastMoveAt < 200) return
-            lastMoveAt = now
             handler.post {
-                layoutParams?.let { lp ->
-                    val dm = resources.displayMetrics
-                    val maxX = dm.widthPixels - (overlayView?.width ?: 0)
-                    val maxY = dm.heightPixels - (overlayView?.height ?: 0)
-                    lp.x = (lp.x + dx).coerceIn(0, maxX.coerceAtLeast(0))
-                    lp.y = (lp.y + dy).coerceIn(0, maxY.coerceAtLeast(0))
-                    windowManager?.updateViewLayout(overlayView, lp)
+                pendingDx += dx
+                pendingDy += dy
+                if (!moveScheduled) {
+                    moveScheduled = true
+                    handler.postDelayed({
+                        moveScheduled = false
+                        val mx = pendingDx
+                        val my = pendingDy
+                        pendingDx = 0
+                        pendingDy = 0
+                        layoutParams?.let { lp ->
+                            val dm = resources.displayMetrics
+                            val maxX = dm.widthPixels - (overlayView?.width ?: 0)
+                            val maxY = dm.heightPixels - (overlayView?.height ?: 0)
+                            lp.x = (lp.x + mx).coerceIn(0, maxX.coerceAtLeast(0))
+                            lp.y = (lp.y + my).coerceIn(0, maxY.coerceAtLeast(0))
+                            windowManager?.updateViewLayout(overlayView, lp)
+                        }
+                    }, 120)
                 }
             }
         }
