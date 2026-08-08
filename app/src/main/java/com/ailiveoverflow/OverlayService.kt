@@ -81,7 +81,6 @@ class OverlayService : Service() {
             .setContentText("にゃん 見てるよ ~")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setOngoing(true)
-            .setSilent(true)
             .build()
     }
 }
