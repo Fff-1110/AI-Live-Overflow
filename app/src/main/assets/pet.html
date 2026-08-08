@@ -112,6 +112,12 @@ body{background:transparent!important;overflow:hidden}
 @keyframes stretch{0%{transform:scaleY(1) scaleX(1)}35%{transform:scaleY(1.6) scaleX(0.7) translateY(-10px)}70%{transform:scaleY(1.55) scaleX(0.72) translateY(-9px)}100%{transform:scaleY(1) scaleX(1)}}
 .tailchase{animation:tailchase 0.8s}
 @keyframes tailchase{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+/* 音乐模式：尾巴摇飞+身体摇摆 */
+@keyframes tailSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes musicDance{0%{transform:translateY(0) rotate(-2deg)}25%{transform:translateY(-4px) rotate(2deg)}50%{transform:translateY(0) rotate(-2deg)}75%{transform:translateY(-4px) rotate(2deg)}100%{transform:translateY(0)}}
+#cat.music-on #tail-group{animation:tailSpin 0.4s linear infinite}
+#cat.music-hot #tail-group{animation:tailSpin 0.13s linear infinite}
+#cat.music-on #catsvg{animation:musicDance 0.5s ease-in-out infinite}
 
 /* 躺平/上蹿下跳/喘气 */
 .lying{transform:rotate(90deg) translateY(6px)}
@@ -469,6 +475,30 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
     if(Math.random()<0.75){say(rp(douyinCompanionSay));blink();}
     douyinTimer=setTimeout(douyinCompanion,40000+Math.random()*40000);
   }
+  // === 音乐模式：放歌跟着摇 ===
+  var musicOn=false,musicHot=false,musicPulseTimer=null;
+  var musicSay=['这歌带感！摇起来','好听好听！尾巴都飞了','跟着节奏摇～','music！music！','这旋律上头，停不下来','喵～这歌是我本命','蹦迪蹦迪！'];
+  function musicPulse(){
+    if(!musicOn)return;
+    var hot=musicHot||Math.random()<0.35;
+    particles(44,10,hot?4:2,hot?['🎵','🎶','✨','💃']:['🎵','🎶']);
+    if(Math.random()<0.45)say(rp(musicSay));
+    if(hot&&Math.random()<0.3){bounce();}
+    musicPulseTimer=setTimeout(musicPulse,hot?1800:2600);
+  }
+  function onMusicChange(playing,hot){
+    musicOn=!!playing;musicHot=!!hot;
+    cat.classList.toggle('music-on',musicOn);
+    cat.classList.toggle('music-hot',musicHot);
+    if(musicPulseTimer){clearTimeout(musicPulseTimer);musicPulseTimer=null;}
+    if(musicOn){
+      if(musicHot){setMood('excited');say(rp(['芜湖！起飞！','尾巴要甩飞啦！','嗨起来嗨起来！','转圈圈转圈圈！']));bounce();}
+      else{setMood('music');say(rp(musicSay));}
+      musicPulseTimer=setTimeout(musicPulse,1800);
+    }else{
+      if(mood==='music')setMood('idle');
+    }
+  }
   // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
     cmd=(cmd||'').trim();
@@ -479,6 +509,7 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
       else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
     }else if(cmd.indexOf('food')===0){var ff=cmd.indexOf(':')>=0?cmd.split(':')[1]:'';feed(ff);}
+    else if(cmd.indexOf('music')===0){var mp=cmd.indexOf(':')>=0?cmd.split(':')[1]:'on';onMusicChange(mp!=='off',mp==='hot');}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
@@ -487,6 +518,6 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling,onMusicChange};
 })();
 </script></body></html>
