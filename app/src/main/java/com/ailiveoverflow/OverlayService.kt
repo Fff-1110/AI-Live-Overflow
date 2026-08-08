@@ -6,6 +6,12 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import java.io.File
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.net.ServerSocket
+import java.net.InetAddress
+import java.net.URLDecoder
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.IBinder
@@ -69,6 +75,7 @@ class OverlayService : Service() {
         setupOverlay()
         startMurmurs()
         startCmdPolling()
+        startLocalHttpServer()
     }
 
     private fun setupOverlay() {
@@ -182,6 +189,60 @@ class OverlayService : Service() {
         handler.postDelayed(cmdPollRunnable!!, 3000)
     }
 
+    // === 本地HTTP小饭馆：127.0.0.1:28990，供Operit插件投喂/说话（广播受限的替代通道） ===
+    private var httpServer: ServerSocket? = null
+    private fun startLocalHttpServer() {
+        Thread {
+            try {
+                val server = ServerSocket(28990, 50, InetAddress.getByName("127.0.0.1"))
+                httpServer = server
+                while (!server.isClosed) {
+                    val socket = server.accept()
+                    Thread {
+                        try {
+                            val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+                            val requestLine = reader.readLine() ?: return@Thread
+                            val parts = requestLine.split(" ")
+                            if (parts.size >= 2) {
+                                val path = parts[1]
+                                if (path.startsWith("/cmd?c=")) {
+                                    val encoded = path.substring("/cmd?c=".length)
+                                    val cmd = URLDecoder.decode(encoded, "UTF-8")
+                                    if (cmd.isNotEmpty()) {
+                                        File(filesDir, "cmd.txt").writeText(cmd)
+                                    }
+                                    respond(socket, "{\"ok\":true,\"cmd\":\"$cmd\"}")
+                                } else if (path.startsWith("/feed?food=")) {
+                                    val encoded = path.substring("/feed?food=".length)
+                                    val food = URLDecoder.decode(encoded, "UTF-8")
+                                    File(filesDir, "cmd.txt").writeText("food:" + food)
+                                    respond(socket, "{\"ok\":true,\"food\":\"$food\"}")
+                                } else if (path.startsWith("/ping")) {
+                                    respond(socket, "{\"ok\":true,\"name\":\"diao\"}")
+                                } else {
+                                    respond(socket, "{\"ok\":false,\"error\":\"unknown\"}")
+                                }
+                            }
+                        } catch (e: Exception) {
+                        } finally {
+                            try { socket.close() } catch (e: Exception) {}
+                        }
+                    }.start()
+                }
+            } catch (e: Exception) {
+            }
+        }.start()
+    }
+    private fun respond(socket: java.net.Socket, body: String) {
+        try {
+            val out: OutputStream = socket.getOutputStream()
+            val resp = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: " + body.toByteArray().size + "\r\nConnection: close\r\n\r\n" + body
+            out.write(resp.toByteArray())
+            out.flush()
+        } catch (e: Exception) {
+        }
+    }
+
     // === 通知栏碎碎念（中文·欧尼酱性格） ===
     private val murmurPhrases = arrayOf(
         "菲菲，你在干嘛呢，让我看看",
@@ -293,6 +354,7 @@ class OverlayService : Service() {
     override fun onDestroy() {
         murmurRunnable?.let { handler.removeCallbacks(it) }
         cmdPollRunnable?.let { handler.removeCallbacks(it) }
+        try { httpServer?.close() } catch (e: Exception) {}
         overlayView?.let {
             windowManager?.removeView(it)
             it.destroy()
