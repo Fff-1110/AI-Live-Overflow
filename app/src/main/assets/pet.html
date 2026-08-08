@@ -41,11 +41,9 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="happy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="happy"] #eyes-happy{display:none}
 .cat-wrap[data-mood="happy"] #eyes-love{display:block}
-.cat-wrap[data-mood="happy"] #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
 .cat-wrap[data-mood="excited"] #eyes-normal{display:none}
 .cat-wrap[data-mood="excited"] #eyes-happy{display:none}
 .cat-wrap[data-mood="excited"] #eyes-love{display:block}
-.cat-wrap[data-mood="excited"] #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
 .cat-wrap[data-mood="love"] #eyes-normal{display:none}
 .cat-wrap[data-mood="love"] #eyes-happy{display:none}
 .cat-wrap[data-mood="love"] #eyes-love{display:block}
@@ -71,14 +69,28 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="music"] #headphones{display:block}
 .cat-wrap[data-mood="hungry"] #drool{display:block}
 #eyes-dizzy,#eyes-hungry{display:none}
+#eyes-evil,#eyes-shock,#eyes-derp,#eyes-smug,#eyes-chaos,#eyes-dull,#tongue{display:none}
+.cat-wrap[data-mood="evil"] #eyes-normal{display:none}
+.cat-wrap[data-mood="evil"] #eyes-evil{display:block}
+.cat-wrap[data-mood="shock"] #eyes-normal{display:none}
+.cat-wrap[data-mood="shock"] #eyes-shock{display:block}
+.cat-wrap[data-mood="derp"] #eyes-normal{display:none}
+.cat-wrap[data-mood="derp"] #eyes-derp{display:block}
+.cat-wrap[data-mood="derp"] #tongue{display:block}
+.cat-wrap[data-mood="smug"] #eyes-normal{display:none}
+.cat-wrap[data-mood="smug"] #eyes-smug{display:block}
+.cat-wrap[data-mood="chaos"] #eyes-normal{display:none}
+.cat-wrap[data-mood="chaos"] #eyes-chaos{display:block}
+.cat-wrap[data-mood="dull"] #eyes-normal{display:none}
+.cat-wrap[data-mood="dull"] #eyes-dull{display:block}
 .cat-wrap[data-mood="dizzy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="dizzy"] #eyes-dizzy{display:block}
 .cat-wrap[data-mood="hungry"] #eyes-normal{display:none}
 .cat-wrap[data-mood="hungry"] #eyes-hungry{display:block}
 .cat-wrap[data-mood="rich"] #eyes-normal{display:none}
-.cat-wrap[data-mood="rich"] #eyes-happy{display:block}
+.cat-wrap[data-mood="rich"] #eyes-love{display:block}
 .cat-wrap[data-mood="music"] #eyes-normal{display:none}
-.cat-wrap[data-mood="music"] #eyes-happy{display:block}
+.cat-wrap[data-mood="music"] #eyes-love{display:block}
 .cat-wrap[data-mood="cool"] #eyes-normal{display:block}
 .cat-wrap[data-mood="rich"] .mood-blush,.cat-wrap[data-mood="music"] .mood-blush{opacity:0.6}
 .sway{animation:swayAnim 0.7s ease-in-out}
@@ -102,38 +114,16 @@ body{background:transparent!important;overflow:hidden}
 @keyframes jumparound{0%{transform:translateY(0) rotate(0)}15%{transform:translateY(-58px) rotate(-7deg)}35%{transform:translateY(0) rotate(5deg) translateX(7px)}50%{transform:translateY(-58px) rotate(-5deg) translateX(-4px)}70%{transform:translateY(0) rotate(6deg) translateX(3px)}85%{transform:translateY(-58px) rotate(-7deg) translateX(-6px)}100%{transform:translateY(0) rotate(0)}}
 .pant{animation:pant 0.55s infinite}
 @keyframes pant{0%{transform:scale(1,1)}50%{transform:scale(1.05,0.95)}100%{transform:scale(1,1)}}
-/* 抽象表情组 */
-#eyes-evil,#eyes-silly,#eyes-shock,#eyes-cry,#eyes-drunk,#eyes-think,#tongue,#fang,#tears{display:none}
-.cat-wrap[data-mood="evil"] #eyes-normal{display:none}
-.cat-wrap[data-mood="evil"] #eyes-evil{display:block}
-.cat-wrap[data-mood="evil"] #fang{display:block}
-.cat-wrap[data-mood="evil"] .mood-blush{opacity:0.35}
-.cat-wrap[data-mood="silly"] #eyes-normal{display:none}
-.cat-wrap[data-mood="silly"] #eyes-silly{display:block}
-.cat-wrap[data-mood="silly"] #tongue{display:block;animation:tongueOut 0.6s ease-in-out infinite}
-.cat-wrap[data-mood="shock"] #eyes-normal{display:none}
-.cat-wrap[data-mood="shock"] #eyes-shock{display:block}
-.cat-wrap[data-mood="cry"] #eyes-normal{display:none}
-.cat-wrap[data-mood="cry"] #eyes-cry{display:block}
-.cat-wrap[data-mood="cry"] #tears{display:block;animation:tearDrop 0.7s linear infinite}
-.cat-wrap[data-mood="drunk"] #eyes-normal{display:none}
-.cat-wrap[data-mood="drunk"] #eyes-drunk{display:block}
-.cat-wrap[data-mood="drunk"] .mood-blush{opacity:0.9}
-.cat-wrap[data-mood="think"] #eyes-normal{display:none}
-.cat-wrap[data-mood="think"] #eyes-think{display:block}
-@keyframes tongueOut{0%{transform:translateY(0)}50%{transform:translateY(3px)}100%{transform:translateY(0)}}
-@keyframes tearDrop{0%{transform:translateY(0);opacity:0.95}80%{transform:translateY(6px);opacity:0.7}100%{transform:translateY(9px);opacity:0}}
-/* 新动作 */
-.rollover{animation:rollover 0.8s}
-@keyframes rollover{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-.flip{animation:flip 0.9s}
-@keyframes flip{0%{transform:translateY(0) rotate(0)}40%{transform:translateY(-46px) rotate(180deg)}100%{transform:translateY(0) rotate(360deg)}}
-.punch{animation:punch 0.5s}
-@keyframes punch{0%{transform:translateX(0)}25%{transform:translateX(12px) rotate(8deg)}50%{transform:translateX(0)}75%{transform:translateX(10px) rotate(-6deg)}100%{transform:translateX(0)}}
-.furball{animation:furball 0.5s}
-@keyframes furball{0%{transform:scale(1)}30%{transform:scale(1.35,1.15)}60%{transform:scale(0.95)}100%{transform:scale(1)}}
-.drunkmove{animation:drunkmove 0.6s infinite}
-@keyframes drunkmove{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(4px) rotate(4deg)}75%{transform:translateX(-4px) rotate(-4deg)}100%{transform:translateX(0) rotate(0)}}
+.evilwiggle{animation:evilwiggle 0.9s}
+@keyframes evilwiggle{0%{transform:rotate(0)}15%{transform:rotate(-7deg) translateY(-2px)}30%{transform:rotate(5deg)}45%{transform:rotate(-6deg) translateY(-2px)}60%{transform:rotate(4deg)}75%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+.shockjump{animation:shockjump 0.55s}
+@keyframes shockjump{0%{transform:scale(1)}30%{transform:scale(1.18) translateY(-14px)}60%{transform:scale(0.94)}100%{transform:scale(1)}}
+.derptilt{animation:derptilt 1.3s}
+@keyframes derptilt{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(-15deg) translateY(-3px)}100%{transform:rotate(0)}}
+.twitch{animation:twitch 0.3s infinite}
+@keyframes twitch{0%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-3deg)}50%{transform:translateX(3px) rotate(3deg)}75%{transform:translateX(-3px)}100%{transform:translateX(0)}}
+.smugwiggle{animation:smugwiggle 0.9s}
+@keyframes smugwiggle{0%{transform:translateX(0)}25%{transform:translateX(6px) rotate(4deg)}50%{transform:translateX(-6px) rotate(-4deg)}75%{transform:translateX(3px)}100%{transform:translateX(0)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -174,7 +164,42 @@ body{background:transparent!important;overflow:hidden}
       <path d="M28,36 Q33,32 38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
       <path d="M50,36 Q55,32 60,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
-    <g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
+    <g id="eyes-evil">
+<path d="M26,33 L40,37 M26,37 L40,33" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M48,33 L62,37 M48,37 L62,33" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M30,27 L36,30 M52,27 L58,30" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+<g id="eyes-shock">
+<circle cx="33" cy="36" r="8.5" fill="#fff" stroke="#111" stroke-width="0.8"/>
+<circle cx="33" cy="36" r="3" fill="#111"/>
+<circle cx="35.5" cy="33.5" r="1.2" fill="#fff"/>
+<circle cx="55" cy="36" r="8.5" fill="#fff" stroke="#111" stroke-width="0.8"/>
+<circle cx="55" cy="36" r="3" fill="#111"/>
+<circle cx="57.5" cy="33.5" r="1.2" fill="#fff"/>
+</g>
+<g id="eyes-derp">
+<circle cx="37" cy="38" r="3.2" fill="#ee1144" stroke="#111" stroke-width="0.5"/>
+<circle cx="51" cy="38" r="3.2" fill="#ee1144" stroke="#111" stroke-width="0.5"/>
+<circle cx="35.2" cy="39.8" r="1.2" fill="#fff"/>
+<circle cx="49.2" cy="39.8" r="1.2" fill="#fff"/>
+</g>
+<g id="eyes-smug">
+<path d="M26,37 Q33,32 40,37" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+<path d="M48,37 Q55,32 62,37" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+<path d="M28,28 L34,31 M52,28 L58,31" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+<g id="eyes-chaos">
+<path d="M26,36 A7,7 0 1,1 33,29 M33,36 A7,7 0 1,1 26,29" fill="none" stroke="#ee1144" stroke-width="1.5"/>
+<path d="M40,36 A7,7 0 1,1 47,29 M47,36 A7,7 0 1,1 40,29" fill="none" stroke="#ee1144" stroke-width="1.5"/>
+<path d="M27,27 L31,31 M40,27 L44,31 M47,27 L51,31 M60,27 L56,31" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+<g id="eyes-dull">
+<path d="M27,40 Q33,36 39,40" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+<path d="M49,40 Q55,36 61,40" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+<path d="M29,42.5 L37,42.5 M51,42.5 L59,42.5" stroke="#ee1144" stroke-width="1" stroke-linecap="round"/>
+</g>
+<g id="tongue"><path d="M41,54 Q44,61 47,54" fill="#ff8899" stroke="#cc4455" stroke-width="0.5"/></g>
+<g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
 <path d="M33,31 C30,28.6 26.6,29.8 26.6,32.9 C26.6,36 33,40 33,40 C33,40 39.4,36 39.4,32.9 C39.4,29.8 36,28.6 33,31Z"/>
 <path d="M55,31 C52,28.6 48.6,29.8 48.6,32.9 C48.6,36 55,40 55,40 C55,40 61.4,36 61.4,32.9 C61.4,29.8 58,28.6 55,31Z"/>
 </g>
@@ -194,39 +219,7 @@ body{background:transparent!important;overflow:hidden}
       <circle cx="33" cy="38" r="2" fill="#111"/>
       <circle cx="55" cy="38" r="2" fill="#111"/>
     </g>
-    <g id="eyes-evil" fill="none" stroke="#ee1144" stroke-width="1.9" stroke-linecap="round">
-<path d="M27,34 L38,37"/><path d="M50,37 L61,34"/>
-<circle cx="33" cy="37" r="1.6" fill="#ee1144" stroke="none"/><circle cx="55" cy="37" r="1.6" fill="#ee1144" stroke="none"/>
-</g>
-<g id="eyes-silly">
-<ellipse cx="37" cy="36" rx="6" ry="6.5" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-<ellipse cx="51" cy="36" rx="6" ry="6.5" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-<circle cx="37" cy="38" r="2.2" fill="#111"/><circle cx="51" cy="38" r="2.2" fill="#111"/>
-</g>
-<g id="eyes-shock">
-<circle cx="33" cy="36" r="6" fill="#ee1144" stroke="#111" stroke-width="1"/><circle cx="33" cy="36" r="2.2" fill="#111"/>
-<circle cx="55" cy="36" r="6" fill="#ee1144" stroke="#111" stroke-width="1"/><circle cx="55" cy="36" r="2.2" fill="#111"/>
-</g>
-<g id="eyes-cry">
-<ellipse cx="33" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-<ellipse cx="55" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
-<circle cx="33" cy="38" r="1.8" fill="#111"/><circle cx="55" cy="38" r="1.8" fill="#111"/>
-</g>
-<g id="eyes-drunk" fill="none" stroke="#ee1144" stroke-width="1.3">
-<circle cx="33" cy="36" r="5.5"/><circle cx="33" cy="36" r="2.4" fill="#ee1144"/>
-<circle cx="55" cy="36" r="5.5"/><circle cx="55" cy="36" r="2.4" fill="#ee1144"/>
-</g>
-<g id="eyes-think" fill="none" stroke="#ee1144" stroke-width="1.8" stroke-linecap="round">
-<path d="M28,36 L38,31"/><path d="M50,31 L60,36"/>
-</g>
-<path id="tongue" d="M41,52 Q44,61 48,52 Z" fill="#ff6688" stroke="#dd4466" stroke-width="0.6"/>
-<path id="fang" d="M44,52 L48,52 L46.5,57 Z" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
-<g id="tears">
-<path d="M33,42 Q32,54 33,61" stroke="#9be8ff" stroke-width="3" fill="none" stroke-linecap="round"/>
-<path d="M55,42 Q56,54 55,61" stroke="#9be8ff" stroke-width="3" fill="none" stroke-linecap="round"/>
-<circle cx="33" cy="64" r="1.6" fill="#9be8ff"/><circle cx="55" cy="64" r="1.6" fill="#9be8ff"/>
-</g>
-<ellipse class="eye-shut" id="shutL" cx="33" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
+    <ellipse class="eye-shut" id="shutL" cx="33" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <ellipse class="eye-shut" id="shutR" cx="55" cy="36" rx="5.5" ry="6" fill="#1a1a1a"/>
     <ellipse cx="44" cy="47" rx="3" ry="2" fill="#ff8899" stroke="#333" stroke-width="0.5"/>
     <path id="mouth" d="M40,51 Q44,55 48,51" fill="none" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
@@ -283,18 +276,18 @@ body{background:transparent!important;overflow:hidden}
   };
   // === 情绪台词 ===
   const moodSay={
-    angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','气死我了气死我了','气到变形！','你完了你完了'],
-    sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…','心碎了一地…','哄不好的那种'],
-    happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴','今天超级好心情！','开心得想打滚'],
-    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','哈…宝贝好可耐，口水都下来了','你一笑我就迷糊了'],
+    angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','气死我了气死我了'],
+    sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…'],
+    happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
+    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','哈…宝贝好可耐，口水都下来了'],
     sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
-    evil:['嘿嘿嘿…今晚你可逃不掉了','邪魅一笑：叫姐姐就饶了你','想不想跟姐姐玩点刺激的','这眼神…专治你这种小可爱'],
-    silly:['略略略～','丑丑的才可爱嘛','做个鬼脸吓吓你'],
-    shock:['哇哦？！','你刚才说什么？！再说一遍！','震惊！猫咪.jpg'],
-    cry:['呜哇——','眼泪止不住了…','哭给你看，哼'],
-    drunk:['我…我是不是喝多了','摇摇晃晃…别扶我，我没醉','再来一杯！嗝'],
-    think:['嗯…在想今天怎么逗你','思考猫生…','有阴谋，但我不说'],
     idle:['喵…我在发呆','今天也是平平无奇的一天'],
+  evil:['嘿嘿嘿…这个笑容你怕不怕','过来，姐姐有话跟你说','嘴角压不住了…','今晚有你好受的喵','计划通.jpg'],
+  shock:['啥？！瞳孔地震！！','你说啥？！你再说一遍？！','不是吧！！震撼我全家','我直接一个大震惊','什么玩意儿？？'],
+  derp:['我是谁我在哪','喵…？（脑子放空）','刚刚说到哪了…','大脑宕机中…','咕…？'],
+  smug:['就这？就这？','哼，拿捏了','这不轻轻松松','得意写在脸上了','菲菲夸我，准没错','还有谁？！'],
+  chaos:['精神错乱中…','喵呜喵呜喵呜！！！','脑子：嗡嗡嗡嗡','这个世界…是假的','啊啊啊啊！我裂开了！','猫理崩坏！！'],
+  dull:['…','好无聊，世界与我无关','眼神死了，心也死了','喵…（无感情）','就这么静静地看着你'],
     hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿晕了饿晕了'],
     dizzy:['转圈圈转晕了…','眼前好多星星','我是谁我在哪'],
     rich:['有钱的感觉真好','今晚的消费我买单','金链子晃不晃眼？'],
@@ -310,14 +303,14 @@ body{background:transparent!important;overflow:hidden}
     if(m==='happy'||m==='excited'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
     else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
     else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
+    else if(m==='evil')mouth.setAttribute('d','M39,52 Q46,56 51,48');
+    else if(m==='shock')mouth.setAttribute('d','M39,52 Q44,61 49,52 Q44,43 39,52');
+    else if(m==='chaos')mouth.setAttribute('d','M38,52 L41,55 L44,52 L47,55 L50,52');
+    else if(m==='dull')mouth.setAttribute('d','M40,54 L48,54');
+    else if(m==='smug')mouth.setAttribute('d','M39,51 Q45,55 49,53');
+    else if(m==='derp')mouth.setAttribute('d','M40,53 Q44,49 48,53');
     else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');
     else if(m==='hungry')mouth.setAttribute('d','M40,51 Q44,58 48,51');
-    else if(m==='evil')mouth.setAttribute('d','M37,53 Q45,55 51,48');
-    else if(m==='silly')mouth.setAttribute('d','M40,52 Q44,58 48,52');
-    else if(m==='shock')mouth.setAttribute('d','M41,49 Q44,52 47,49');
-    else if(m==='cry')mouth.setAttribute('d','M41,53 Q44,49 47,53');
-    else if(m==='drunk')mouth.setAttribute('d','M39,51 Q44,56 49,51');
-    else if(m==='think')mouth.setAttribute('d','M39,50 Q44,53 49,50');
     else mouth.setAttribute('d','M40,50 Q44,54 48,50');
   }
   function blink(){shutL.classList.add('blinking');shutR.classList.add('blinking');setTimeout(()=>{shutL.classList.remove('blinking');shutR.classList.remove('blinking');},200);}
@@ -329,11 +322,6 @@ body{background:transparent!important;overflow:hidden}
   function shake(){body.classList.add('shake');setTimeout(()=>body.classList.remove('shake'),500);}
   function cry(){body.classList.add('cry');setTimeout(()=>body.classList.remove('cry'),800);}
   function sulk(){body.classList.add('sulk');setTimeout(()=>body.classList.remove('sulk'),600);}
-  function rollover(){body.classList.add('rollover');setTimeout(()=>body.classList.remove('rollover'),900);}
-  function flip(){body.classList.add('flip');setTimeout(()=>body.classList.remove('flip'),1000);}
-  function punch(){body.classList.add('punch');say(rp(['哼！哈！','看拳！','打空气也好解气']));particles(44,15,3,['💥','👊']);setTimeout(()=>body.classList.remove('punch'),600);}
-  function playdead(){body.classList.add('lying');shutL.classList.add('blinking');shutR.classList.add('blinking');say('我死了…没有小鱼干活不过来了');setTimeout(()=>{body.classList.remove('lying');shutL.classList.remove('blinking');shutR.classList.remove('blinking');},2500);}
-  function furball(){body.classList.add('furball');particles(44,15,6,['💢','✨','❗']);say(rp(['吓我一跳！','喵嗷！！']));setTimeout(()=>body.classList.remove('furball'),600);}
   // === 情绪演出 ===
   function act(m){
     if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
@@ -341,17 +329,17 @@ body{background:transparent!important;overflow:hidden}
     else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
     else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));}
     else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
+    else if(m==='evil'){evilWiggle();particles(44,20,3,['😏','🖤','🎭']);say(rp(moodSay.evil));}
+    else if(m==='shock'){shockJump();particles(44,20,4,['❗','😱','❕']);say(rp(moodSay.shock));}
+    else if(m==='derp'){derpTilt();particles(44,15,3,['❓','💭','🌀']);say(rp(moodSay.derp));}
+    else if(m==='smug'){smugWiggle();particles(44,20,3,['😎','✨','💅']);say(rp(moodSay.smug));}
+    else if(m==='chaos'){body.classList.add('twitch');particles(44,25,8,['⚡','🌀','💥','❓']);say(rp(moodSay.chaos));setTimeout(function(){body.classList.remove('twitch');},1200);}
+    else if(m==='dull'){particles(44,10,1,['🌫️']);say(rp(moodSay.dull));}
     else if(m==='hungry'){particles(44,30,4,['🍙','🍜','💧']);say(rp(moodSay.hungry));}
     else if(m==='dizzy'){body.classList.add('sway');particles(44,15,5,['💫','⭐']);say(rp(moodSay.dizzy));setTimeout(()=>body.classList.remove('sway'),800);}
     else if(m==='rich'){bounce();particles(44,30,5,['💰','🤑','✨']);say(rp(moodSay.rich));}
     else if(m==='cool'){tilt();particles(44,15,3,['😎','✨']);say(rp(moodSay.cool));}
     else if(m==='music'){bounce();particles(44,20,3,['🎧','🎵']);say(rp(moodSay.music));}
-    else if(m==='evil'){body.classList.add('sway');particles(44,20,4,['😏','🌹','💋']);say(rp(moodSay.evil));setTimeout(()=>body.classList.remove('sway'),600);}
-    else if(m==='silly'){tilt();particles(44,20,3,['🤪','⭐']);say(rp(moodSay.silly));}
-    else if(m==='shock'){bounce();particles(44,15,4,['❗','😱','💦']);say(rp(moodSay.shock));}
-    else if(m==='cry'){cry();particles(44,20,8,['💧','😭','💧']);say(rp(moodSay.cry));}
-    else if(m==='drunk'){body.classList.add('drunkmove');particles(44,20,4,['🍺','💫']);say(rp(moodSay.drunk));setTimeout(()=>body.classList.remove('drunkmove'),1500);}
-    else if(m==='think'){tilt();say(rp(moodSay.think));}
     else{say(rp(moodSay.idle));}
   }  // === App切换 ===
   function onAppChanged(pkg){
@@ -375,10 +363,10 @@ body{background:transparent!important;overflow:hidden}
   function onTap(){
     lonelyLevel=0;
     clickCount++;
-    if(hunger<50){hunger=Math.min(100,hunger+25);setMood('happy');say(rp(['啊呜！你喂我？！','好吃！再来一口','你喂的小鱼干最香','嗝…谢谢宝呗']));particles(44,20,2,['🐟','😋']);bounce();lonelyLevel=0;return;}
     clearTimeout(clickTimer);
     clickTimer=setTimeout(()=>{clickCount=0;},800);
     if(clickCount>=5){setMood('angry');act('angry');clickCount=0;return;}
+  if(mood==='hungry'){clickCount=0;feed();return;}
     if(clickCount>=3){setMood('happy');act('happy');clickCount=0;return;}
     blink();say(rp(getRx(currentApp).say));bounce();
   }
@@ -395,23 +383,17 @@ body{background:transparent!important;overflow:hidden}
   // === 自主行为：随机情绪+小动作 ===
   function autoAct(){
     const r=Math.random();
-    if(r<0.16){
-      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy','evil','silly','shock','cry','drunk','think'][Math.floor(Math.random()*13)];
+    if(r<0.18){
+      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy','evil','shock','derp','smug','chaos','dull'][Math.floor(Math.random()*13)];
       setMood(emo);act(emo);
-    }else if(r<0.30){blink();}
-    else if(r<0.42){earWig();say(rp(getRx(currentApp).say));}
-    else if(r<0.52){bounce();}
-    else if(r<0.60){shake();say('嗯？我好像听到什么声音');}
-    else if(r<0.65){sneeze();}
-    else if(r<0.70){stretch();}
-    else if(r<0.75){tailChase();}
-    else if(r<0.80){tilt();}
-    else if(r<0.84){rollover();}
-    else if(r<0.88){flip();}
-    else if(r<0.92){punch();}
-    else if(r<0.95){furball();}
-    else if(r<0.97){playdead();}
-    else{setMood('evil');act('evil');}
+    }else if(r<0.35){blink();}
+    else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
+    else if(r<0.65){bounce();}
+    else if(r<0.75){shake();say('嗯？我好像听到什么声音');}
+    else if(r<0.80){sneeze();}
+    else if(r<0.85){stretch();}
+    else if(r<0.90){tailChase();}
+    else if(r<0.95){tilt();}
     autoTimer=setTimeout(autoAct,mood==='sleepy'?20000+Math.random()*15000:12000+Math.random()*13000);
   }
   setMood('idle');
@@ -473,6 +455,11 @@ body{background:transparent!important;overflow:hidden}
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
 
+  // === 喂食系统：自动饥饿 ===
+  var hungerTimer=null;
+  function hungerStart(){clearTimeout(hungerTimer);hungerTimer=setTimeout(function(){setMood('hungry');act('hungry');particles(44,30,4,['🍙','💧','🕐']);say(rp(['好饿…什么时候开饭','肚子咕咕叫了…','饿饿，饭饭！','再不喂我我要啃屏幕了']));},900000+Math.random()*600000);}
+  hungerStart();
+
 
   // === 新互动：打喷嚏/伸懒腰/追尾巴/甩动 ===
   function sneeze(){body.classList.add('sneeze');say(rp(['啊啾！','哈…哈啾！']));particles(44,15,3,['💨','🤧']);setTimeout(function(){body.classList.remove('sneeze');},500);}
@@ -489,9 +476,14 @@ body{background:transparent!important;overflow:hidden}
   // === 躺平/喘气/上蹿下跳 ===
   function lieDown(){body.classList.add('lying');say(rp(['躺会儿…舒服','好累，躺平了','让我躺躺…']));setTimeout(function(){body.classList.remove('lying');},4000);}
   function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
+  function evilWiggle(){body.classList.add('evilwiggle');setTimeout(function(){body.classList.remove('evilwiggle');},900);}
+  function shockJump(){body.classList.add('shockjump');setTimeout(function(){body.classList.remove('shockjump');},550);}
+  function derpTilt(){body.classList.add('derptilt');setTimeout(function(){body.classList.remove('derptilt');},1300);}
+  function smugWiggle(){body.classList.add('smugwiggle');setTimeout(function(){body.classList.remove('smugwiggle');},900);}
   function jumpAround(){body.classList.add('jumparound');particles(44,20,8,['💢','🔥','💢']);say(rp(['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove('jumparound');},3800);}
-  var fatLevel=0,hunger=80,dead=false;
-  function feed(){hunger=100;fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3)say(rp(['好吃！活过来了！','喵呜～真香，谢啦','还要还要！']));}
+  var fatLevel=0;
+  var fed=false;
+  function feed(){if(fatLevel>=3){setMood('dull');say(rp(['嗝…真的吃不下了，再喂要吐了','我胖得走不动了…放过我吧','你是想把我喂成球吗']));particles(44,15,3,['💦','🤢','🫠']);return;}fatLevel=Math.min(3,fatLevel+1);fed=true;hungerStart();document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('smug');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('happy');say(rp(['好吃！再喂我一口','喵呜～真香！吃饱了超开心','干饭猫！干饭魂！','嗝～满足']));particles(44,25,4,['🍙','❤️','✨','😋']);bounce();}}
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
@@ -504,7 +496,7 @@ body{background:transparent!important;overflow:hidden}
       douyinCompanionSay=['这个小姐姐跳舞不错…但没你好看','哈哈哈哈笑死我了','这啥玩意儿？','好无聊，换一个','这个好吃！馋了','剧情狗血但我爱看','诶这个猫好可爱，但没我可爱','刷了这么久，眼睛不要了？'];
   function onDouyinAction(a){
     lonelyLevel=0;
-    if(douyinSay[a]){setMood('angry');shake();particles(44,20,4,['💢','🔥']);say(rp(douyinSay[a]));}
+    if(douyinSay[a]){if(a==='like'&&Math.random()<0.35){setMood('evil');evilWiggle();particles(44,20,4,['😏','💢']);say(rp(['你给别人点赞？我记住了…','点吧点吧，回头找你算账']));}else if(Math.random()<0.15){setMood('shock');shockJump();particles(44,20,3,['😱','💢']);say('什么？你居然点赞？！');}else{setMood('angry');shake();particles(44,20,4,['💢','🔥']);say(rp(douyinSay[a]));}}
   }
   function onVideoSwitch(){
     lonelyLevel=0;
@@ -534,12 +526,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  setInterval(function(){
-    hunger=Math.max(0,hunger-2);
-    if(hunger<=0&&!dead){dead=true;setMood('sleepy');playdead();}
-    else if(hunger<=20&&hunger>0&&mood!=='sleepy'){if(Math.random()<0.5){setMood('hungry');say(rp(['饿…饿得走不动了','小鱼干…我要小鱼干…']));body.classList.add('lying');setTimeout(()=>body.classList.remove('lying'),3000);}}
-    else if(hunger<=40&&hunger>20&&Math.random()<0.3){setMood('hungry');act('hungry');}
-  },60000);
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling,feed};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
 })();
 </script></body></html>
