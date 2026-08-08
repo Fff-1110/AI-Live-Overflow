@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Overflow</string>
+    <string name="accessibility_desc">用于检测前台应用切换，为桌宠提供App感知能力</string>
     <style name="Theme.Overflow" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
