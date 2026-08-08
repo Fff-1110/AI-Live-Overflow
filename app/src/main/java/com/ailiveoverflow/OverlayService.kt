@@ -147,10 +147,10 @@ class OverlayService : Service() {
                 val phrase = murmurPhrases[(Math.random() * murmurPhrases.size).toInt()]
                 val nm = getSystemService(NotificationManager::class.java)
                 nm.notify(MURMUR_ID, buildMurmurNotification(phrase))
-                handler.postDelayed(this, 240000 + (Math.random() * 180000).toLong())
+                handler.postDelayed(this, 600000 + (Math.random() * 300000).toLong())
             }
         }
-        handler.postDelayed(murmurRunnable!!, 120000)
+        handler.postDelayed(murmurRunnable!!, 180000)
     }
 
     private fun buildForegroundNotification(): Notification {

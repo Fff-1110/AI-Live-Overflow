@@ -213,7 +213,7 @@ body{background:transparent!important;overflow:hidden}
   // === 自主行为：随机情绪+小动作 ===
   function autoAct(){
     const r=Math.random();
-    if(r<0.15){
+    if(r<0.18){
       const emo=['happy','love','sleepy','angry','sad'][Math.floor(Math.random()*5)];
       setMood(emo);act(emo);
     }else if(r<0.35){blink();}
@@ -221,7 +221,7 @@ body{background:transparent!important;overflow:hidden}
     else if(r<0.65){bounce();}
     else if(r<0.75){shake();say('嗯？我好像听到什么声音');}
     else if(r<0.85){tilt();}
-    autoTimer=setTimeout(autoAct,mood==='sleepy'?9000+Math.random()*9000:5000+Math.random()*6000);
+    autoTimer=setTimeout(autoAct,mood==='sleepy'?20000+Math.random()*15000:12000+Math.random()*13000);
   }
   setMood('idle');
   autoTimer=setTimeout(autoAct,3000);
