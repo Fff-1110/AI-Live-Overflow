@@ -305,7 +305,6 @@ body{background:transparent!important;overflow:hidden}
       dragStruggle=true;body.classList.add('drag-struggle');
       particles(44,20,3,dragMood==='sad'?['💧','😢']:['💢','🔥']);
       say(dragMood==='sad'?'别碰我…让我静静':'放我下来！我生气呢！');
-      if(!dragStruggleTimer)dragStruggleTimer=setInterval(function(){if(window.AndroidBridge)AndroidBridge.moveWindow(-10,Math.random()*12-6);},160);
     }else if(GOOD_DRAG.indexOf(dragMood)>=0){
       say(rp(['嘿嘿，被你抱着好舒服','再拖会儿嘛～','嘿嘿嘿']));particles(44,25,3,['❤️','😊']);
     }else{
@@ -319,7 +318,6 @@ body{background:transparent!important;overflow:hidden}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){if(Math.random()<0.6)particles(44,25,1,['❤️','✨']);}
   }
   function onDragEnd(){
-    if(dragStruggleTimer){clearInterval(dragStruggleTimer);dragStruggleTimer=null;}
     dragStruggle=false;body.classList.remove('drag-struggle');
     if(BAD_DRAG.indexOf(dragMood)>=0){say(rp(['哼！终于放我下来了','下次轻点！哼']));}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){say(rp(['被你抱着走真开心','再玩一会儿嘛']));bounce();}
@@ -329,19 +327,19 @@ body{background:transparent!important;overflow:hidden}
   function wander(){
     if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
     if(Math.random()<0.5){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
-    var steps=4+Math.floor(Math.random()*6);
+    var steps=3+Math.floor(Math.random()*3);
     var dx=Math.random()<0.5?-1:1;
     var dy=(Math.random()<0.4?-1:1)*(Math.random()<0.7?0:1);
     var i=0;
     (function step(){
-      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,15000+Math.random()*25000);return;}
-      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(14+Math.random()*12),dy*(10+Math.random()*10));
+      if(i++>=steps){if(Math.random()<0.3)say(rp(['跑累了，歇会儿','溜达一圈真舒服']));wanderTimer=setTimeout(wander,40000+Math.random()*30000);return;}
+      if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(8+Math.random()*8),dy*(6+Math.random()*6));
       if(GOOD_DRAG.indexOf(mood)>=0&&Math.random()<0.4)particles(44,20,1,['✨','❤️']);
-      body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},200);
-      setTimeout(step,220+Math.random()*160);
+      body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},250);
+      setTimeout(step,800+Math.random()*500);
     })();
   }
-  var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
+  var wanderTimer=setTimeout(wander,30000+Math.random()*20000);
 
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
