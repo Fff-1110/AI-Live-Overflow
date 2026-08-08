@@ -1,14 +1,13 @@
-<![CDATA[
 <!DOCTYPE html>
 <html lang="zh">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:transparent!important;overflow:hidden}
-.cat-wrap{width:88px;height:115px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+body{background:transparent!important;overflow:hidden;width:220px;height:170px}
+.cat-wrap{width:88px;height:115px;position:absolute;left:50%;bottom:4px;transform:translateX(-50%);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cat-wrap svg{width:88px;height:115px;display:block}
-.bubble-box{position:absolute;top:-22px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:2}
-.bubble-txt{display:inline-block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;white-space:nowrap;opacity:0;transition:opacity 0.2s;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.bubble-box{position:absolute;top:-24px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:2;white-space:nowrap}
+.bubble-txt{display:inline-block;background:rgba(18,18,18,0.92);color:#f0dede;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:200px;overflow:hidden;text-overflow:ellipsis}
 .bubble-txt.on{opacity:1}
 .particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1s ease-out forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
@@ -70,7 +69,6 @@ body{background:transparent!important;overflow:hidden}
   const earL=document.getElementById('ear-L'),earR=document.getElementById('ear-R');
   const body=document.getElementById('catsvg'),mouth=document.getElementById('mouth');
   let mood='idle',currentApp='unknown',bubbleTimer,autoTimer;
-
   // === App → 反应（全中文，欧尼酱性格） ===
   const appRx={
     'com.ss.android.ugc.aweme':{mood:'curious',icon:'🎵',
@@ -84,13 +82,12 @@ body{background:transparent!important;overflow:hidden}
     'com.tencent.tmgp.sgame':{mood:'excited',icon:'⚔️',
       say:['加油加油！打死他们！','赢了今晚奖励你','输了也没关系…但我会嘲笑你','冲啊我的英雄！','小心草丛！']},
     'com.android.browser':{mood:'curious',icon:'🔍',
-      say:['搜什么呢？不会是那种网站吧','别看奇怪的東西哦','有什么不懂的问我呀','在看啥好东西，给我也看看']},
+      say:['搜什么呢？不会是那种网站吧','别看奇怪的东西哦','有什么不懂的问我呀','在看啥好东西，给我也看看']},
     'com.android.settings':{mood:'sleepy',icon:'⚙️',
       say:['又在调设置…无聊','快回来陪我','手机有什么好调的，调戏我才对','我要睡着了…']},
     'default':{mood:'idle',icon:'🐱',
       say:['菲菲今天真可耐','我好无聊…陪陪我','一直看着你呢','你是我的，知道吗','菲菲世界第一可爱']}
   };
-
   function getRx(pkg){return appRx[pkg]||appRx['default'];}
   function rp(arr){return arr[Math.floor(Math.random()*arr.length)];}
   function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2500);}
@@ -101,7 +98,6 @@ body{background:transparent!important;overflow:hidden}
   function bounce(){body.classList.add('bounce');setTimeout(()=>body.classList.remove('bounce'),350);}
   function tilt(){body.classList.add('tilt');setTimeout(()=>body.classList.remove('tilt'),300);}
   function dance(){body.classList.add('dance');setTimeout(()=>body.classList.remove('dance'),600);}
-
   // === App切换 ===
   function onAppChanged(pkg){
     if(pkg===currentApp||!pkg||pkg==='unknown')return;
@@ -117,13 +113,11 @@ body{background:transparent!important;overflow:hidden}
   }
 
   // === 长按 ===
-  function onLongPress(){setMood('happy');say('ゴロゴロ…菲菲的手好温柔');hearts(44,50,5);bounce();setTimeout(()=>setMood(mood),4000);}
-
+  function onLongPress(){setMood('happy');say('摸我可是要负责的哦');hearts(44,50,5);bounce();setTimeout(()=>setMood(mood),4000);}
   // 单击 - 简单反应
   cat.addEventListener('click',function(){blink();say(rp(getRx(currentApp).say));bounce();});
   // 双击睡觉
   cat.addEventListener('dblclick',function(e){if(mood==='sleepy'){setMood('idle');say('睡醒了…菲菲还在吗');bounce();}else{setMood('sleepy');say('好困…菲菲陪我睡');}e.preventDefault();});
-
   // 自主行为
   function autoAct(){
     const r=Math.random();
@@ -132,13 +126,10 @@ body{background:transparent!important;overflow:hidden}
     else if(r<0.55)bounce();
     autoTimer=setTimeout(autoAct,mood==='sleepy'?8000+Math.random()*8000:4000+Math.random()*5000);
   }
-
   setMood('idle');
   autoTimer=setTimeout(autoAct,3000);
   setInterval(()=>{if(Math.random()<0.35)blink();},7000+Math.random()*6000);
-  setTimeout(()=>{say('菲菲、見てるよ');bounce();},600);
-
+  setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
   window.KuroNeko={onAppChanged,onLongPress,setMood,say,blink,bounce};
 })();
 </script></body></html>
-]]>
