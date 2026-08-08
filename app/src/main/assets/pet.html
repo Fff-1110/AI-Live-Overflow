@@ -375,7 +375,7 @@ body{background:transparent!important;overflow:hidden}
   function onTap(){
     lonelyLevel=0;
     clickCount++;
-    if(hunger<40){setMood('hungry');say(rp(['饿…有吃的吗？','别摸我，先喂我！','肚子咕咕叫了…喂我嘛']));lonelyLevel=0;return;}
+    if(hunger<50){hunger=Math.min(100,hunger+25);setMood('happy');say(rp(['啊呜！你喂我？！','好吃！再来一口','你喂的小鱼干最香','嗝…谢谢宝呗']));particles(44,20,2,['🐟','😋']);bounce();lonelyLevel=0;return;}
     clearTimeout(clickTimer);
     clickTimer=setTimeout(()=>{clickCount=0;},800);
     if(clickCount>=5){setMood('angry');act('angry');clickCount=0;return;}
