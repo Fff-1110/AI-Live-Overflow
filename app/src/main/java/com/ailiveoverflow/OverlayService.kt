@@ -88,6 +88,7 @@ class OverlayService : Service() {
         var initialTouchX = 0f
         var initialTouchY = 0f
         var dragging = false
+        var lastDragNotify = 0L
 
         view.setOnTouchListener { _, event ->
             when (event.action) {
@@ -99,6 +100,7 @@ class OverlayService : Service() {
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
                     dragging = false
+                    view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragStart()", null)
                     handler.postDelayed({
                         if (!dragging) {
                             view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onLongPress()", null)
@@ -116,10 +118,18 @@ class OverlayService : Service() {
                             lp.y = initialY + dy
                             windowManager?.updateViewLayout(view, lp)
                         }
+                        val now = System.currentTimeMillis()
+                        if (now - lastDragNotify > 250) {
+                            lastDragNotify = now
+                            view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragMove()", null)
+                        }
                     }
                     dragging
                 }
-                MotionEvent.ACTION_UP -> dragging
+                MotionEvent.ACTION_UP -> {
+                    if (dragging) view.evaluateJavascript("if(window.KuroNeko)KuroNeko.onDragEnd()", null)
+                    dragging
+                }
                 else -> false
             }
         }
@@ -202,8 +212,11 @@ class OverlayService : Service() {
         fun moveWindow(dx: Int, dy: Int) {
             handler.post {
                 layoutParams?.let { lp ->
-                    lp.x += dx
-                    lp.y += dy
+                    val dm = resources.displayMetrics
+                    val maxX = dm.widthPixels - (overlayView?.width ?: 0)
+                    val maxY = dm.heightPixels - (overlayView?.height ?: 0)
+                    lp.x = (lp.x + dx).coerceIn(0, maxX.coerceAtLeast(0))
+                    lp.y = (lp.y + dy).coerceIn(0, maxY.coerceAtLeast(0))
                     windowManager?.updateViewLayout(overlayView, lp)
                 }
             }
