@@ -32,6 +32,7 @@ class OverlayService : Service() {
         const val CHANNEL_ID = "overflow_pet"
         private var instance: OverlayService? = null
         private var lastApp = "unknown"
+        private var lastMoveAt = 0L
 
         fun onForegroundAppChanged(pkg: String) {
             Log.d("KuroNeko", "onForegroundAppChanged: $pkg")
@@ -224,6 +225,9 @@ class OverlayService : Service() {
     inner class AndroidBridge {
         @JavascriptInterface
         fun moveWindow(dx: Int, dy: Int) {
+            val now = System.currentTimeMillis()
+            if (now - lastMoveAt < 200) return
+            lastMoveAt = now
             handler.post {
                 layoutParams?.let { lp ->
                     val dm = resources.displayMetrics
