@@ -79,6 +79,14 @@ body{background:transparent!important;overflow:hidden}
 /* 尾巴：伤心垂下 */
 #tail-group{animation:tailWag 6s ease-in-out infinite alternate;transform-origin:68px 80px}
 .cat-wrap[data-mood="sad"] #tail-group{animation:tailDrop 0.8s ease-out forwards}
+/* 兴奋快摇尾巴：开心/恋爱/星星眼/暴富时尾巴摇成螺旋桨 */
+@keyframes tailWagFast{0%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-8deg)}}
+@keyframes tailWagCrazy{0%{transform:rotate(-24deg)}50%{transform:rotate(28deg)}100%{transform:rotate(-24deg)}}
+.cat-wrap[data-mood="happy"] #tail-group,.cat-wrap[data-mood="love"] #tail-group,.cat-wrap[data-mood="excited"] #tail-group,.cat-wrap[data-mood="star"] #tail-group{animation:tailWagFast 0.22s ease-in-out infinite}
+.cat-wrap[data-mood="rich"] #tail-group{animation:tailWagCrazy 0.13s ease-in-out infinite}
+/* 暴怒上蹿下跳：比普通生气跳得更高更疯 */
+@keyframes furyJump{0%{transform:translateY(0) rotate(0) scale(1)}12%{transform:translateY(-82px) rotate(-10deg) scale(1.06)}28%{transform:translateY(0) rotate(9deg) scale(0.94)}44%{transform:translateY(-94px) rotate(-12deg) scale(1.09)}60%{transform:translateY(0) rotate(11deg)}76%{transform:translateY(-74px) rotate(-9deg)}90%{transform:translateY(0) rotate(7deg)}100%{transform:translateY(0) rotate(0)}}
+.furyjump{animation:furyJump 0.28s infinite}
 /* 嘴巴底色 */
 #mouth{transition:d 0.2s}
 /* 装饰：金链/墨镜/耳机/口水 */
@@ -112,12 +120,6 @@ body{background:transparent!important;overflow:hidden}
 @keyframes stretch{0%{transform:scaleY(1) scaleX(1)}35%{transform:scaleY(1.6) scaleX(0.7) translateY(-10px)}70%{transform:scaleY(1.55) scaleX(0.72) translateY(-9px)}100%{transform:scaleY(1) scaleX(1)}}
 .tailchase{animation:tailchase 0.8s}
 @keyframes tailchase{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
-/* 音乐模式：尾巴摇飞+身体摇摆 */
-@keyframes tailSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-@keyframes musicDance{0%{transform:translateY(0) rotate(-2deg)}25%{transform:translateY(-4px) rotate(2deg)}50%{transform:translateY(0) rotate(-2deg)}75%{transform:translateY(-4px) rotate(2deg)}100%{transform:translateY(0)}}
-#cat.music-on #tail-group{animation:tailSpin 0.4s linear infinite}
-#cat.music-hot #tail-group{animation:tailSpin 0.13s linear infinite}
-#cat.music-on #catsvg{animation:musicDance 0.5s ease-in-out infinite}
 
 /* 躺平/上蹿下跳/喘气 */
 .lying{transform:rotate(90deg) translateY(6px)}
@@ -301,12 +303,12 @@ body{background:transparent!important;overflow:hidden}
   function sulk(){body.classList.add('sulk');setTimeout(()=>body.classList.remove('sulk'),600);}
   // === 情绪演出 ===
   function act(m){
-    if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
+    if(m==='angry'){jumpAround(false);particles(44,20,6,['💢','💢','🔥']);say(rp(moodSay.angry));}
     else if(m==='sad'){cry();particles(44,15,6,['💧','💧','😢','💧']);say(rp(moodSay.sad));}
     else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
     else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);loveFlash();say(rp(moodSay.love));}
     else if(m==='star'){particles(44,25,6,['✨','⭐','🌟']);say(rp(moodSay.star));}
-    else if(m==='fury'){body.classList.add('fury-shake');particles(44,20,8,['🔥','💢','🔥']);say(rp(moodSay.fury));setTimeout(function(){body.classList.remove('fury-shake');},1500);}
+    else if(m==='fury'){jumpAround(true);particles(44,20,10,['🔥','💢','🔥','💥']);say(rp(moodSay.fury));}
     else if(m==='wicked'){particles(44,25,3,['😏','🖤','💋']);say(rp(moodSay.wicked));}
     else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
     else if(m==='hungry'){particles(44,30,4,['🍙','🍜','💧']);say(rp(moodSay.hungry));}
@@ -349,7 +351,7 @@ body{background:transparent!important;overflow:hidden}
     lonelyLevel++;
     if(lonelyLevel===2){setMood('sleepy');if(Math.random()<0.5)lieDown();else act('sleepy');}
     else if(lonelyLevel===4){setMood('sad');act('sad');}
-    else if(lonelyLevel===6){setMood('angry');jumpAround();}
+    else if(lonelyLevel===6){setMood('angry');jumpAround(true);}
     else if(lonelyLevel>=8){setMood('sad');cry();particles(44,15,6,['💧','😢']);say('菲菲…理理我好不好');}
     lonelyTimer=setTimeout(lonelyTick,20000);
   }
@@ -373,13 +375,16 @@ body{background:transparent!important;overflow:hidden}
   setMood('idle');
   autoTimer=setTimeout(autoAct,3000);
   lonelyTimer=setTimeout(lonelyTick,25000);
+  startMoodDrift();
   setInterval(()=>{if(Math.random()<0.25)blink();},12000+Math.random()*8000);
   setTimeout(()=>{say('菲菲，我看着你呢');bounce();},600);
   
   // === 拖拽反应：心情决定乖不乖 ===
   var dragMood='idle',dragStruggle=false,dragStruggleTimer=null,dragLastMove=0;
+  var isDragging=false;
   var BAD_DRAG=['angry','sad','dizzy','hungry'],GOOD_DRAG=['happy','love','excited','rich','cool','music'];
   function onDragStart(){
+    isDragging=true;
     dragMood=mood;lonelyLevel=0;
     if(BAD_DRAG.indexOf(dragMood)>=0){
       dragStruggle=true;body.classList.add('drag-struggle');
@@ -399,12 +404,46 @@ body{background:transparent!important;overflow:hidden}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){if(Math.random()<0.6)particles(44,25,1,['❤️','✨']);}
   }
   function onDragEnd(){
+    isDragging=false;
     if(Date.now()-lastFling<600){body.classList.remove('drag-struggle');return;}
     if(dragStruggleTimer){clearInterval(dragStruggleTimer);dragStruggleTimer=null;}
     dragStruggle=false;body.classList.remove('drag-struggle');
+    // 被扔到角落：生气，然后自己跑回屏幕中间
+    try{
+      if(window.AndroidBridge&&window.AndroidBridge.getWindowPos){
+        var p=JSON.parse(AndroidBridge.getWindowPos());
+        var edge=28;
+        if(p&&p.sw>0&&(p.x<edge||p.y<edge||p.x>p.sw-p.w-edge||p.y>p.sh-p.h-edge)){
+          setMood('angry');
+          say(rp(['谁把我扔角落！！','角落好黑！我自己回去！','哼！我自己走回中间！','别想把我关角落！']));
+          particles(44,20,6,['💢','🔥','💢']);
+          setTimeout(function(){
+            if(window.AndroidBridge)AndroidBridge.moveToCenter();
+            setTimeout(function(){setMood('idle');},2600);
+          },350);
+          return;
+        }
+      }
+    }catch(e){}
     if(BAD_DRAG.indexOf(dragMood)>=0){say(rp(['哼！终于放我下来了','下次轻点！哼']));}
     else if(GOOD_DRAG.indexOf(dragMood)>=0){say(rp(['被你抱着走真开心','再玩一会儿嘛']));bounce();}
     else{blink();}
+  }
+  // === 情绪不稳定：小脾气随机漂移（不受控制的小情绪） ===
+  var DRIFT_MOODS=[['happy',function(){bounce();particles(44,25,2,['✨','😊']);}],['angry',function(){shake();particles(44,20,2,['💢']);}],['sad',function(){cry();particles(44,15,2,['💧']);}],['sleepy',function(){particles(44,10,1,['💤']);}],['love',function(){loveFlash();particles(44,25,3,['❤️']);}],['star',function(){particles(44,25,3,['✨','⭐']);}],['dizzy',function(){body.classList.add('sway');setTimeout(function(){body.classList.remove('sway');},700);}],['hungry',function(){particles(44,30,2,['🍙','💧']);}],['wicked',function(){particles(44,25,2,['😏','🖤']);}]];
+  var driftTimer=null,driftReturnTimer=null;
+  function startMoodDrift(){
+    if(driftTimer)return;
+    driftTimer=setTimeout(function drift(){
+      driftTimer=setTimeout(drift,11000+Math.random()*9000);
+      if(isDragging||dragStruggle||mood==='sleepy'||mood==='angry'||mood==='fury')return;
+      if(Math.random()<0.32&&mood==='idle'){
+        var e=DRIFT_MOODS[Math.floor(Math.random()*DRIFT_MOODS.length)];
+        setMood(e[0]);e[1]();
+        clearTimeout(driftReturnTimer);
+        driftReturnTimer=setTimeout(function(){if(!isDragging)setMood('idle');},5000+Math.random()*4000);
+      }
+    },13000);
   }
   // === 自主溜达：心情好会自己在屏幕上乱跑 ===
   function wander(){
@@ -447,7 +486,7 @@ body{background:transparent!important;overflow:hidden}
   function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
   function loveFlash(){cat.classList.add('love-flash');setTimeout(function(){cat.classList.remove('love-flash');},1600);}
   function faceFling(){setMood('idle');body.classList.add('facefling');say(rp(['咦？！我的眼睛飞了！','五官：起飞！','啊啊啊救命我的脸！']));setTimeout(function(){body.classList.remove('facefling');},850);}
-  function jumpAround(){body.classList.add('jumparound');particles(44,20,8,['💢','🔥','💢']);say(rp(['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove('jumparound');},3800);}
+  function jumpAround(hot){var cls=hot?'furyjump':'jumparound';body.classList.add(cls);particles(44,20,hot?12:8,['💢','🔥','💢']);say(rp(hot?['气疯了我跳给你看！！','啊啊啊气到起飞！！','炸了炸了全炸了！！','跳到你哄我为止！！']:['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove(cls);},hot?4600:3800);}
   var fatLevel=0;
 var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],chicken:['🍗鸡腿！嗷呜一口','咔吧咔吧…鸡腿真脆'],cake:['🍰蛋糕！甜甜的～','奶油糊一脸也开心'],onigiri:['🍙饭团！呜姆呜姆','团子真香…好满足'],bone:['🦴骨头！嚼嚼嚼','咯嘣咯嘣…真硬'],ramen:['🍜拉面！吸溜吸溜','嘶——好烫好好吃'],milk:['🥛牛奶！咕嘟咕嘟','舔舔嘴…胡子上都是奶']};
   function feed(){fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3){var arr=(FOOD_SAY[f]||['好吃！再喂我一口','喵呜～真香','还要还要！']);say(rp(arr));}}
@@ -475,30 +514,6 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
     if(Math.random()<0.75){say(rp(douyinCompanionSay));blink();}
     douyinTimer=setTimeout(douyinCompanion,40000+Math.random()*40000);
   }
-  // === 音乐模式：放歌跟着摇 ===
-  var musicOn=false,musicHot=false,musicPulseTimer=null;
-  var musicSay=['这歌带感！摇起来','好听好听！尾巴都飞了','跟着节奏摇～','music！music！','这旋律上头，停不下来','喵～这歌是我本命','蹦迪蹦迪！'];
-  function musicPulse(){
-    if(!musicOn)return;
-    var hot=musicHot||Math.random()<0.35;
-    particles(44,10,hot?4:2,hot?['🎵','🎶','✨','💃']:['🎵','🎶']);
-    if(Math.random()<0.45)say(rp(musicSay));
-    if(hot&&Math.random()<0.3){bounce();}
-    musicPulseTimer=setTimeout(musicPulse,hot?1800:2600);
-  }
-  function onMusicChange(playing,hot){
-    musicOn=!!playing;musicHot=!!hot;
-    cat.classList.toggle('music-on',musicOn);
-    cat.classList.toggle('music-hot',musicHot);
-    if(musicPulseTimer){clearTimeout(musicPulseTimer);musicPulseTimer=null;}
-    if(musicOn){
-      if(musicHot){setMood('excited');say(rp(['芜湖！起飞！','尾巴要甩飞啦！','嗨起来嗨起来！','转圈圈转圈圈！']));bounce();}
-      else{setMood('music');say(rp(musicSay));}
-      musicPulseTimer=setTimeout(musicPulse,1800);
-    }else{
-      if(mood==='music')setMood('idle');
-    }
-  }
   // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
     cmd=(cmd||'').trim();
@@ -509,7 +524,6 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
       else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
     }else if(cmd.indexOf('food')===0){var ff=cmd.indexOf(':')>=0?cmd.split(':')[1]:'';feed(ff);}
-    else if(cmd.indexOf('music')===0){var mp=cmd.indexOf(':')>=0?cmd.split(':')[1]:'on';onMusicChange(mp!=='off',mp==='hot');}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
@@ -518,6 +532,6 @@ var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],c
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling,onMusicChange};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
 })();
 </script></body></html>
