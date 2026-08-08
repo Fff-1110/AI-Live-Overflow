@@ -340,6 +340,43 @@ body{background:transparent!important;overflow:hidden}
     })();
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
+
+  // === 看屏幕：读到屏幕文字后的关键词反应 ===
+  var lastScreenReact = 0;
+  function onScreenText(b64){
+    var txt = '';
+    try{
+      txt = new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64), function(c){return c.charCodeAt(0);}));
+    }catch(e){ return; }
+    var now = Date.now();
+    if(now - lastScreenReact < 15000) return;
+    lastScreenReact = now;
+    var rules = [
+      {k:['帅哥','男人','老公','男神','小哥哥','欧巴','哥哥'],m:'angry',say:['又在看别的男人？！我生气了！','屏幕里那谁有我好看？嗯？','再看一眼试试！']},
+      {k:['宝贝','想你','爱你','亲亲','么么','最喜欢'],m:'love',say:['哼，说爱我，我可看着呢','算你乖，我也爱你']},
+      {k:['睡觉','晚安','困了'],m:'sleepy',say:['困了就去睡呀，我等你','晚安，做个有我的梦']},
+      {k:['哈哈','笑死','笑不活','好好笑'],m:'happy',say:['笑这么开心？我也想听','嘿嘿，我也跟着乐']},
+      {k:['红包','转账','金币','钱'],m:'rich',say:['有钱了？记得给我买小鱼干','财神猫驾到']},
+      {k:['吃饭','饿了','好吃','干饭','外卖'],m:'hungry',say:['看饿了…我也想吃','喵呜，分我一口']},
+      {k:['哭','难过','伤心','委屈','分手'],m:'sad',say:['谁欺负你了？我咬他！','别难过，还有我呢']}
+    ];
+    for(var i=0;i<rules.length;i++){
+      for(var j=0;j<rules[i].k.length;j++){
+        if(txt.indexOf(rules[i].k[j])>=0){
+          setMood(rules[i].m);
+          if(rules[i].m==='angry'){shake();particles(44,20,4,['💢','🔥']);}
+          else if(rules[i].m==='love'){earWig();particles(44,25,4,['❤️','💕']);}
+          else if(rules[i].m==='happy'){bounce();particles(44,25,3,['😊','✨']);}
+          else if(rules[i].m==='sad'){cry();particles(44,15,5,['💧','😢']);}
+          else if(rules[i].m==='hungry'){particles(44,30,4,['🍙','💧']);}
+          else if(rules[i].m==='sleepy'){particles(44,10,2,['💤']);}
+          else if(rules[i].m==='rich'){bounce();particles(44,30,4,['💰','✨']);}
+          say(rules[i].say[Math.floor(Math.random()*rules[i].say.length)]);
+          return;
+        }
+      }
+    }
+  }
   // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
     cmd=(cmd||'').trim();
@@ -358,6 +395,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onScreenText};
 })();
 </script></body></html>
