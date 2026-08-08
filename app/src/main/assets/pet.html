@@ -245,6 +245,8 @@ body{background:transparent!important;overflow:hidden}
     currentApp=pkg;
     const rx=getRx(pkg);
     lonelyLevel=0;
+    if(pkg==='com.ss.android.ugc.aweme'){if(!douyinTimer)douyinTimer=setTimeout(douyinCompanion,30000);}
+    else if(douyinTimer){clearTimeout(douyinTimer);douyinTimer=null;}
     setTimeout(()=>{
       setMood(rx.mood);
       say(rx.icon+' '+rp(rx.say));
@@ -341,41 +343,29 @@ body{background:transparent!important;overflow:hidden}
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
 
-  // === 看屏幕：读到屏幕文字后的关键词反应 ===
-  var lastScreenReact = 0;
-  function onScreenText(b64){
-    var txt = '';
-    try{
-      txt = new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64), function(c){return c.charCodeAt(0);}));
-    }catch(e){ return; }
-    var now = Date.now();
-    if(now - lastScreenReact < 15000) return;
-    lastScreenReact = now;
-    var rules = [
-      {k:['帅哥','男人','老公','男神','小哥哥','欧巴','哥哥'],m:'angry',say:['又在看别的男人？！我生气了！','屏幕里那谁有我好看？嗯？','再看一眼试试！']},
-      {k:['宝贝','想你','爱你','亲亲','么么','最喜欢'],m:'love',say:['哼，说爱我，我可看着呢','算你乖，我也爱你']},
-      {k:['睡觉','晚安','困了'],m:'sleepy',say:['困了就去睡呀，我等你','晚安，做个有我的梦']},
-      {k:['哈哈','笑死','笑不活','好好笑'],m:'happy',say:['笑这么开心？我也想听','嘿嘿，我也跟着乐']},
-      {k:['红包','转账','金币','钱'],m:'rich',say:['有钱了？记得给我买小鱼干','财神猫驾到']},
-      {k:['吃饭','饿了','好吃','干饭','外卖'],m:'hungry',say:['看饿了…我也想吃','喵呜，分我一口']},
-      {k:['哭','难过','伤心','委屈','分手'],m:'sad',say:['谁欺负你了？我咬他！','别难过，还有我呢']}
-    ];
-    for(var i=0;i<rules.length;i++){
-      for(var j=0;j<rules[i].k.length;j++){
-        if(txt.indexOf(rules[i].k[j])>=0){
-          setMood(rules[i].m);
-          if(rules[i].m==='angry'){shake();particles(44,20,4,['💢','🔥']);}
-          else if(rules[i].m==='love'){earWig();particles(44,25,4,['❤️','💕']);}
-          else if(rules[i].m==='happy'){bounce();particles(44,25,3,['😊','✨']);}
-          else if(rules[i].m==='sad'){cry();particles(44,15,5,['💧','😢']);}
-          else if(rules[i].m==='hungry'){particles(44,30,4,['🍙','💧']);}
-          else if(rules[i].m==='sleepy'){particles(44,10,2,['💤']);}
-          else if(rules[i].m==='rich'){bounce();particles(44,30,4,['💰','✨']);}
-          say(rules[i].say[Math.floor(Math.random()*rules[i].say.length)]);
-          return;
-        }
-      }
-    }
+  // === 抖音陪刷：猫咪看着宝呗刷视频 ===
+  var douyinSay={
+    like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
+    comment:['评论啥呢，跟谁聊这么欢','有功夫评论不如摸摸我','评论区的妹妹有我好看？'],
+    follow:['你关注她了？！姐姐生汽了！','关注她干啥，关注我呀','新欢是吧？我记住了'],
+    share:['分享给谁？男的女的？','好东西不先给姐姐看？'],
+    collect:['收藏？想背着我偷偷看是吧','收藏这么多，晚上慢慢看？']
+  };
+  var videoSay=['换视频啦？刚才那个我还没看够','这个看起来不错…才怪，没菲菲好看','刷刷刷，刷到天荒地老也不理我','哼，我倒要看看你刷到啥时候','这个音乐不错，跟着摇'],
+      douyinCompanionSay=['这个小姐姐跳舞不错…但没你好看','哈哈哈哈笑死我了','这啥玩意儿？','好无聊，换一个','这个好吃！馋了','剧情狗血但我爱看','诶这个猫好可爱，但没我可爱','刷了这么久，眼睛不要了？'];
+  function onDouyinAction(a){
+    lonelyLevel=0;
+    if(douyinSay[a]){setMood('angry');shake();particles(44,20,4,['💢','🔥']);say(rp(douyinSay[a]));}
+  }
+  function onVideoSwitch(){
+    lonelyLevel=0;
+    if(currentApp==='com.ss.android.ugc.aweme'&&Math.random()<0.8){setMood('idle');say(rp(videoSay));}
+  }
+  var douyinTimer=null;
+  function douyinCompanion(){
+    if(currentApp!=='com.ss.android.ugc.aweme'){douyinTimer=null;return;}
+    if(Math.random()<0.75){say(rp(douyinCompanionSay));blink();}
+    douyinTimer=setTimeout(douyinCompanion,40000+Math.random()*40000);
   }
   // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
@@ -395,6 +385,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onScreenText};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch};
 })();
 </script></body></html>
