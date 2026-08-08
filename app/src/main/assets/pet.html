@@ -531,15 +531,15 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd==='sad'){setMood('sad');act('sad');}
     else if(cmd==='happy'){setMood('happy');act('happy');}
     else if(cmd==='dizzy'){setMood('dizzy');act('dizzy');}
+    else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
+    else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
+  }
   setInterval(function(){
     hunger=Math.max(0,hunger-2);
     if(hunger<=0&&!dead){dead=true;setMood('sleepy');playdead();}
     else if(hunger<=20&&hunger>0&&mood!=='sleepy'){if(Math.random()<0.5){setMood('hungry');say(rp(['饿…饿得走不动了','小鱼干…我要小鱼干…']));body.classList.add('lying');setTimeout(()=>body.classList.remove('lying'),3000);}}
     else if(hunger<=40&&hunger>20&&Math.random()<0.3){setMood('hungry');act('hungry');}
   },60000);
-    else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
-    else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
-  }
   window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling,feed};
 })();
 </script></body></html>
