@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS pet_state (
 
 -- Row Level Security - allow anon access for personal project
 ALTER TABLE gesture_log ENABLE ROW LEVEL SECURITY;
-ALTER TABLE app_usage ENABLE ROW LEVEL PECRITY SECURITY;
-ALTER TABLE pet_state ENABLE ROW LEVEL PECRITY SECURITY;
+ALTER TABLE app_usage ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pet_state ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow all access to anon"
 ON gesture_log FOR ANON
