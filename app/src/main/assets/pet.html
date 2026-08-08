@@ -3,11 +3,11 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:transparent!important;overflow:hidden;width:220px;height:170px}
-.cat-wrap{width:88px;height:115px;position:absolute;left:50%;bottom:4px;transform:translateX(-50%);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cat-wrap svg{width:88px;height:115px;display:block}
-.bubble-box{position:absolute;top:-24px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:2;white-space:nowrap}
-.bubble-txt{display:inline-block;background:rgba(18,18,18,0.92);color:#f0dede;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+body{background:transparent!important;overflow:hidden}
+.cat-wrap{width:88px;height:141px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cat-wrap svg{width:88px;height:115px;display:block;margin-top:26px}
+.bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
+.bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
 .bubble-txt.on{opacity:1}
 .particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1s ease-out forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
