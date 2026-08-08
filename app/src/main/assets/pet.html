@@ -317,7 +317,7 @@ body{background:transparent!important;overflow:hidden}
       dragStruggle=true;body.classList.add('drag-struggle');
       particles(44,20,3,dragMood==='sad'?['💧','😢']:['💢','🔥']);
       say(dragMood==='sad'?'别碰我…让我静静':'放我下来！我生气呢！');
-      if(!dragStruggleTimer)dragStruggleTimer=setInterval(function(){if(window.AndroidBridge)AndroidBridge.moveWindow(-10,Math.random()*12-6);},160);
+      if(!dragStruggleTimer)dragStruggleTimer=setInterval(function(){if(window.AndroidBridge)AndroidBridge.moveWindow(-10,Math.random()*12-6);},280);
     }else if(GOOD_DRAG.indexOf(dragMood)>=0){
       say(rp(['嘿嘿，被你抱着好舒服','再拖会儿嘛～','嘿嘿嘿']));particles(44,25,3,['❤️','😊']);
     }else{
@@ -340,9 +340,9 @@ body{background:transparent!important;overflow:hidden}
   }
   // === 自主溜达：心情好会自己在屏幕上乱跑 ===
   function wander(){
-    if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
-    if(Math.random()<0.5){wanderTimer=setTimeout(wander,15000+Math.random()*20000);return;}
-    var steps=4+Math.floor(Math.random()*6);
+    if(mood==='sleepy'||mood==='angry'||dragStruggle){wanderTimer=setTimeout(wander,30000+Math.random()*30000);return;}
+    if(Math.random()<0.5){wanderTimer=setTimeout(wander,30000+Math.random()*30000);return;}
+    var steps=3+Math.floor(Math.random()*4);
     var dx=Math.random()<0.5?-1:1;
     var dy=(Math.random()<0.4?-1:1)*(Math.random()<0.7?0:1);
     var i=0;
@@ -351,7 +351,7 @@ body{background:transparent!important;overflow:hidden}
       if(window.AndroidBridge)AndroidBridge.moveWindow(dx*(14+Math.random()*12),dy*(10+Math.random()*10));
       if(GOOD_DRAG.indexOf(mood)>=0&&Math.random()<0.4)particles(44,20,1,['✨','❤️']);
       body.classList.add('bounce');setTimeout(function(){body.classList.remove('bounce');},200);
-      setTimeout(step,320+Math.random()*180);
+      setTimeout(step,450+Math.random()*200);
     })();
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
