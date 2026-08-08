@@ -2,20 +2,20 @@ package com.ailiveoverflow
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.util.Base64
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 
 class AppObserverService : AccessibilityService() {
 
-    private var lastScreenScan = 0L
-    private var lastScreenText = ""
+    private var lastPkg = ""
+    private var lastVideoSwitch = 0L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         val info = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or
-                    AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+                    AccessibilityEvent.TYPE_VIEW_CLICKED or
+                    AccessibilityEvent.TYPE_VIEW_SCROLLED
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
             notificationTimeout = 100
         }
@@ -25,47 +25,55 @@ class AppObserverService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
         val pkg = event.packageName?.toString() ?: return
-        if (pkg.isEmpty() || pkg == "com.ailiveoverflow") return
-
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            OverlayService.onForegroundAppChanged(pkg)
-        }
-
-        // 屏幕文字感知：3秒节流，避免频繁遍历节点树
-        val now = System.currentTimeMillis()
-        if (now - lastScreenScan < 3000) return
-        lastScreenScan = now
-        try {
-            val root = rootInActiveWindow ?: return
-            val sb = StringBuilder()
-            collectText(root, sb, 0)
-            val text = sb.toString().trim()
-            if (text.isNotEmpty() && text != lastScreenText) {
-                lastScreenText = text
-                val b64 = Base64.encodeToString(text.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
-                OverlayService.onScreenText(b64)
+        if (pkg == "com.ailiveoverflow") return
+        when (event.eventType) {
+            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
+                if (pkg != lastPkg) {
+                    lastPkg = pkg
+                    if (pkg.isNotEmpty()) OverlayService.onForegroundAppChanged(pkg)
+                }
             }
-        } catch (e: Exception) {
+            AccessibilityEvent.TYPE_VIEW_CLICKED -> {
+                if (pkg == "com.ss.android.ugc.aweme") {
+                    val action = detectDouyinAction(event)
+                    if (action != null) OverlayService.onDouyinAction(action)
+                }
+            }
+            AccessibilityEvent.TYPE_VIEW_SCROLLED -> {
+                if (pkg == "com.ss.android.ugc.aweme") {
+                    val now = System.currentTimeMillis()
+                    if (now - lastVideoSwitch > 8000) {
+                        lastVideoSwitch = now
+                        OverlayService.onVideoSwitch()
+                    }
+                }
+            }
         }
     }
 
-    private fun collectText(node: AccessibilityNodeInfo?, sb: StringBuilder, depth: Int) {
-        if (node == null || sb.length > 400 || depth > 12) return
-        try {
-            val t = node.text?.toString()
-            if (!t.isNullOrBlank() && t.length > 1) {
-                sb.append(t).append(' ')
-            }
-        } catch (e: Exception) {
+    // 识别抖音按钮：点赞/评论/关注/分享/收藏
+    private fun detectDouyinAction(event: AccessibilityEvent): String? {
+        val node = event.source ?: return null
+        val sb = StringBuilder()
+        var n: AccessibilityNodeInfo? = node
+        repeat(4) {
+            if (n == null) return@repeat
+            val t = n.text?.toString() ?: ""
+            val d = n.contentDescription?.toString() ?: ""
+            val r = n.viewIdResourceName ?: ""
+            if (t.isNotEmpty()) sb.append(t).append(' ')
+            if (d.isNotEmpty()) sb.append(d).append(' ')
+            if (r.isNotEmpty()) sb.append(r).append(' ')
+            n = n.parent
         }
-        if (sb.length > 400) return
-        try {
-            val count = node.childCount
-            for (i in 0 until count) {
-                collectText(node.getChild(i), sb, depth + 1)
-                if (sb.length > 400) return
-            }
-        } catch (e: Exception) {
+        val s = sb.toString().lowercase()
+        return when {
+            s.contains("follow") || s.contains("关注") -> "follow"
+            s.contains("comment") || s.contains("评论") || s.contains("留言") -> "comment"
+            s.contains("share") || s.contains("分享") -> "share"
+            s.contains("collect") || s.contains("favorite") || s.contains("star") || s.contains("收藏") -> "collect"
+            s.contains("like") || s.contains("digg") || s.contains("点赞") || s.contains("喜欢") -> "like"
+            else -> null
         }
     }
 
