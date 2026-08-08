@@ -48,6 +48,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.ailiveoverflow.FEED" />
+                <action android:name="com.ailiveoverflow.CMD" />
             </intent-filter>
         </receiver>
     </application>
