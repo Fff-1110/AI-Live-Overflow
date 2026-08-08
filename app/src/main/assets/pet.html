@@ -7,7 +7,6 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap{width:88px;height:144px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;transform-origin:44px 100px}
 .cat-wrap svg{width:88px;height:118px;display:block;margin-top:26px;transform-origin:44px 60px}
 .bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
-#fx{position:absolute;top:26px;left:0;width:88px;height:118px;pointer-events:none;z-index:1}
 .bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
 .bubble-txt.on{opacity:1}
 .particle{position:absolute;pointer-events:none;font-size:10px;animation:floatUp 1.2s ease-out forwards}
@@ -40,16 +39,35 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="sad"] #eyes-normal{display:none}
 .cat-wrap[data-mood="sad"] #eyes-sad{display:block}
 .cat-wrap[data-mood="happy"] #eyes-normal{display:none}
-.cat-wrap[data-mood="happy"] #eyes-happy{display:none}
-.cat-wrap[data-mood="happy"] #eyes-love{display:block}
+.cat-wrap[data-mood="happy"] #eyes-happy{display:block}
 .cat-wrap[data-mood="excited"] #eyes-normal{display:none}
-.cat-wrap[data-mood="excited"] #eyes-happy{display:none}
-.cat-wrap[data-mood="excited"] #eyes-love{display:block}
-.cat-wrap[data-mood="love"] #eyes-normal{display:none}
-.cat-wrap[data-mood="love"] #eyes-happy{display:none}
-.cat-wrap[data-mood="love"] #eyes-love{display:block}
-.cat-wrap[data-mood="love"] #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
+.cat-wrap[data-mood="excited"] #eyes-happy{display:block}
+.cat-wrap.love-flash #eyes-normal{display:none}
+.cat-wrap.love-flash #eyes-happy{display:none}
+.cat-wrap.love-flash #eyes-love{display:block}
+.cat-wrap.love-flash #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
 @keyframes droolAnim{0%{transform:translateY(0);opacity:0.95}70%{transform:translateY(4px);opacity:0.75}100%{transform:translateY(8px);opacity:0}}
+/* 星星眼 */
+.cat-wrap[data-mood="star"] #eyes-normal{display:none}
+.cat-wrap[data-mood="star"] #eyes-star{display:block}
+.cat-wrap[data-mood="star"] .mood-blush{opacity:0.6}
+/* 暴怒 */
+.cat-wrap[data-mood="fury"] #eyes-normal{display:none}
+.cat-wrap[data-mood="fury"] #eyes-fury{display:block}
+.cat-wrap[data-mood="fury"] #ear-L{transform:rotate(-20deg)}
+.cat-wrap[data-mood="fury"] #ear-R{transform:rotate(20deg)}
+.fury-shake{animation:furyShake 0.15s infinite}
+@keyframes furyShake{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px) rotate(-2deg)}50%{transform:translate(3px,-2px) rotate(2deg)}75%{transform:translate(-2px,-3px)}100%{transform:translate(0,0)}}
+/* 邪肆 */
+.cat-wrap[data-mood="wicked"] #eyes-normal{display:none}
+.cat-wrap[data-mood="wicked"] #eyes-wicked{display:block}
+/* 五官乱飞 */
+.facefling #eyes-normal ellipse:nth-child(1){animation:eyeFlyL 0.8s ease}
+.facefling #eyes-normal ellipse:nth-child(2){animation:eyeFlyR 0.8s ease}
+.facefling #mouth{animation:mouthFly 0.8s ease}
+@keyframes eyeFlyL{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-18px,-14px) rotate(-60deg)}55%{transform:translate(-7px,10px) rotate(25deg)}100%{transform:translate(0,0) rotate(0)}}
+@keyframes eyeFlyR{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(20px,-16px) rotate(60deg)}55%{transform:translate(9px,12px) rotate(-25deg)}100%{transform:translate(0,0) rotate(0)}}
+@keyframes mouthFly{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-3px,12px) rotate(35deg)}55%{transform:translate(4px,-10px) rotate(-25deg)}100%{transform:translate(0,0) rotate(0)}}
 .cat-wrap[data-mood="sleepy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="sleepy"] #eyes-sleepy{display:block}
 /* 耳朵：生气竖起、伤心耷拉 */
@@ -70,28 +88,14 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="music"] #headphones{display:block}
 .cat-wrap[data-mood="hungry"] #drool{display:block}
 #eyes-dizzy,#eyes-hungry{display:none}
-#eyes-evil,#eyes-shock,#eyes-derp,#eyes-smug,#eyes-chaos,#eyes-dull,#tongue{display:none}
-.cat-wrap[data-mood="evil"] #eyes-normal{display:none}
-.cat-wrap[data-mood="evil"] #eyes-evil{display:block}
-.cat-wrap[data-mood="shock"] #eyes-normal{display:none}
-.cat-wrap[data-mood="shock"] #eyes-shock{display:block}
-.cat-wrap[data-mood="derp"] #eyes-normal{display:none}
-.cat-wrap[data-mood="derp"] #eyes-derp{display:block}
-.cat-wrap[data-mood="derp"] #tongue{display:block}
-.cat-wrap[data-mood="smug"] #eyes-normal{display:none}
-.cat-wrap[data-mood="smug"] #eyes-smug{display:block}
-.cat-wrap[data-mood="chaos"] #eyes-normal{display:none}
-.cat-wrap[data-mood="chaos"] #eyes-chaos{display:block}
-.cat-wrap[data-mood="dull"] #eyes-normal{display:none}
-.cat-wrap[data-mood="dull"] #eyes-dull{display:block}
 .cat-wrap[data-mood="dizzy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="dizzy"] #eyes-dizzy{display:block}
 .cat-wrap[data-mood="hungry"] #eyes-normal{display:none}
 .cat-wrap[data-mood="hungry"] #eyes-hungry{display:block}
 .cat-wrap[data-mood="rich"] #eyes-normal{display:none}
-.cat-wrap[data-mood="rich"] #eyes-love{display:block}
+.cat-wrap[data-mood="rich"] #eyes-happy{display:block}
 .cat-wrap[data-mood="music"] #eyes-normal{display:none}
-.cat-wrap[data-mood="music"] #eyes-love{display:block}
+.cat-wrap[data-mood="music"] #eyes-happy{display:block}
 .cat-wrap[data-mood="cool"] #eyes-normal{display:block}
 .cat-wrap[data-mood="rich"] .mood-blush,.cat-wrap[data-mood="music"] .mood-blush{opacity:0.6}
 .sway{animation:swayAnim 0.7s ease-in-out}
@@ -115,16 +119,6 @@ body{background:transparent!important;overflow:hidden}
 @keyframes jumparound{0%{transform:translateY(0) rotate(0)}15%{transform:translateY(-58px) rotate(-7deg)}35%{transform:translateY(0) rotate(5deg) translateX(7px)}50%{transform:translateY(-58px) rotate(-5deg) translateX(-4px)}70%{transform:translateY(0) rotate(6deg) translateX(3px)}85%{transform:translateY(-58px) rotate(-7deg) translateX(-6px)}100%{transform:translateY(0) rotate(0)}}
 .pant{animation:pant 0.55s infinite}
 @keyframes pant{0%{transform:scale(1,1)}50%{transform:scale(1.05,0.95)}100%{transform:scale(1,1)}}
-.evilwiggle{animation:evilwiggle 0.9s}
-@keyframes evilwiggle{0%{transform:rotate(0)}15%{transform:rotate(-7deg) translateY(-2px)}30%{transform:rotate(5deg)}45%{transform:rotate(-6deg) translateY(-2px)}60%{transform:rotate(4deg)}75%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
-.shockjump{animation:shockjump 0.55s}
-@keyframes shockjump{0%{transform:scale(1)}30%{transform:scale(1.18) translateY(-14px)}60%{transform:scale(0.94)}100%{transform:scale(1)}}
-.derptilt{animation:derptilt 1.3s}
-@keyframes derptilt{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(-15deg) translateY(-3px)}100%{transform:rotate(0)}}
-.twitch{animation:twitch 0.3s infinite}
-@keyframes twitch{0%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-3deg)}50%{transform:translateX(3px) rotate(3deg)}75%{transform:translateX(-3px)}100%{transform:translateX(0)}}
-.smugwiggle{animation:smugwiggle 0.9s}
-@keyframes smugwiggle{0%{transform:translateX(0)}25%{transform:translateX(6px) rotate(4deg)}50%{transform:translateX(-6px) rotate(-4deg)}75%{transform:translateX(3px)}100%{transform:translateX(0)}}
 </style></head><body>
 <div class="cat-wrap" id="cat" data-mood="idle">
   <div class="bubble-box"><span class="bubble-txt" id="bub">嗷</span></div>
@@ -165,44 +159,28 @@ body{background:transparent!important;overflow:hidden}
       <path d="M28,36 Q33,32 38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
       <path d="M50,36 Q55,32 60,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
-    <g id="eyes-evil">
-<path d="M26,33 L40,37 M26,37 L40,33" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M48,33 L62,37 M48,37 L62,33" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M30,27 L36,30 M52,27 L58,30" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
-</g>
-<g id="eyes-shock">
-<circle cx="33" cy="36" r="8.5" fill="#fff" stroke="#111" stroke-width="0.8"/>
-<circle cx="33" cy="36" r="3" fill="#111"/>
-<circle cx="35.5" cy="33.5" r="1.2" fill="#fff"/>
-<circle cx="55" cy="36" r="8.5" fill="#fff" stroke="#111" stroke-width="0.8"/>
-<circle cx="55" cy="36" r="3" fill="#111"/>
-<circle cx="57.5" cy="33.5" r="1.2" fill="#fff"/>
-</g>
-<g id="eyes-derp">
-<circle cx="37" cy="38" r="3.2" fill="#ee1144" stroke="#111" stroke-width="0.5"/>
-<circle cx="51" cy="38" r="3.2" fill="#ee1144" stroke="#111" stroke-width="0.5"/>
-<circle cx="35.2" cy="39.8" r="1.2" fill="#fff"/>
-<circle cx="49.2" cy="39.8" r="1.2" fill="#fff"/>
-</g>
-<g id="eyes-smug">
-<path d="M26,37 Q33,32 40,37" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-<path d="M48,37 Q55,32 62,37" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-<path d="M28,28 L34,31 M52,28 L58,31" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
-</g>
-<g id="eyes-chaos">
-<path d="M26,36 A7,7 0 1,1 33,29 M33,36 A7,7 0 1,1 26,29" fill="none" stroke="#ee1144" stroke-width="1.5"/>
-<path d="M40,36 A7,7 0 1,1 47,29 M47,36 A7,7 0 1,1 40,29" fill="none" stroke="#ee1144" stroke-width="1.5"/>
-<path d="M27,27 L31,31 M40,27 L44,31 M47,27 L51,31 M60,27 L56,31" stroke="#ee1144" stroke-width="1.5" stroke-linecap="round"/>
-</g>
-<g id="eyes-dull">
-<path d="M27,40 Q33,36 39,40" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-<path d="M49,40 Q55,36 61,40" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-<path d="M29,42.5 L37,42.5 M51,42.5 L59,42.5" stroke="#ee1144" stroke-width="1" stroke-linecap="round"/>
-</g>
-<g id="tongue"><path d="M41,54 Q44,61 47,54" fill="#ff8899" stroke="#cc4455" stroke-width="0.5"/></g>
-<g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
+    <g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
 <path d="M33,31 C30,28.6 26.6,29.8 26.6,32.9 C26.6,36 33,40 33,40 C33,40 39.4,36 39.4,32.9 C39.4,29.8 36,28.6 33,31Z"/>
 <path d="M55,31 C52,28.6 48.6,29.8 48.6,32.9 C48.6,36 55,40 55,40 C55,40 61.4,36 61.4,32.9 C61.4,29.8 58,28.6 55,31Z"/>
+</g>
+<g id="eyes-star" fill="#ffd700" stroke="#b8860b" stroke-width="0.6">
+<path d="M33,29 L34.6,33.4 L39,35 L34.6,36.6 L33,41 L31.4,36.6 L27,35 L31.4,33.4 Z"/>
+<path d="M55,29 L56.6,33.4 L61,35 L56.6,36.6 L55,41 L53.4,36.6 L49,35 L53.4,33.4 Z"/>
+</g>
+<g id="eyes-fury">
+<path d="M24,29 L40,34 M24,35 L40,30" stroke="#111" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M48,30 L64,34 M48,35 L64,29" stroke="#111" stroke-width="2.2" stroke-linecap="round"/>
+<ellipse cx="33" cy="38" rx="5.5" ry="5" fill="#ff2255" stroke="#111" stroke-width="0.8"/>
+<circle cx="35" cy="36" r="1.6" fill="#fff"/>
+<ellipse cx="55" cy="38" rx="5.5" ry="5" fill="#ff2255" stroke="#111" stroke-width="0.8"/>
+<circle cx="57" cy="36" r="1.6" fill="#fff"/>
+<path d="M28,43 L33,45 M33,45 L38,43" stroke="#111" stroke-width="1.6"/>
+<path d="M50,43 L55,45 M55,45 L60,43" stroke="#111" stroke-width="1.6"/>
+</g>
+<g id="eyes-wicked">
+<path d="M28,36 L33,34 L38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+<ellipse cx="55" cy="36" rx="5.5" ry="6" fill="#ee1144" stroke="#111" stroke-width="0.7"/>
+<circle cx="57" cy="33" r="1.8" fill="#fff"/>
 </g>
 <g id="eyes-sleepy">
       <ellipse cx="33" cy="36" rx="4" ry="2" fill="#ee1144"/>
@@ -235,7 +213,6 @@ body{background:transparent!important;overflow:hidden}
     <line x1="61" y1="44" x2="77" y2="42" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
     <line x1="62" y1="47" x2="78" y2="48" stroke="#555" stroke-width="0.7" stroke-linecap="round"/>
   </svg>
-<canvas id="fx" width="88" height="118"></canvas>
 </div><script>
 (function(){
   const cat=document.getElementById('cat'),bub=document.getElementById('bub');
@@ -282,14 +259,11 @@ body{background:transparent!important;overflow:hidden}
     sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…'],
     happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
     love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','哈…宝贝好可耐，口水都下来了'],
+  star:['哇！星星！闪瞎我的猫眼','好闪好闪！你身上在发光！','满眼都是小星星✨'],
+  fury:['我发火了你完了！！','气到冒烟！！','今天谁都别想好过！！','暴怒模式！！全都要完蛋！！'],
+  wicked:['嘿嘿嘿…想干坏事了','今晚…别想逃喵～','你看起来…很好吃的样子','我的笑有点危险哦'],
     sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
     idle:['喵…我在发呆','今天也是平平无奇的一天'],
-  evil:['嘿嘿嘿…这个笑容你怕不怕','过来，姐姐有话跟你说','嘴角压不住了…','今晚有你好受的喵','计划通.jpg'],
-  shock:['啥？！瞳孔地震！！','你说啥？！你再说一遍？！','不是吧！！震撼我全家','我直接一个大震惊','什么玩意儿？？'],
-  derp:['我是谁我在哪','喵…？（脑子放空）','刚刚说到哪了…','大脑宕机中…','咕…？'],
-  smug:['就这？就这？','哼，拿捏了','这不轻轻松松','得意写在脸上了','菲菲夸我，准没错','还有谁？！'],
-  chaos:['精神错乱中…','喵呜喵呜喵呜！！！','脑子：嗡嗡嗡嗡','这个世界…是假的','啊啊啊啊！我裂开了！','猫理崩坏！！'],
-  dull:['…','好无聊，世界与我无关','眼神死了，心也死了','喵…（无感情）','就这么静静地看着你'],
     hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿晕了饿晕了'],
     dizzy:['转圈圈转晕了…','眼前好多星星','我是谁我在哪'],
     rich:['有钱的感觉真好','今晚的消费我买单','金链子晃不晃眼？'],
@@ -302,16 +276,10 @@ body{background:transparent!important;overflow:hidden}
   function say(t){bub.textContent=t;bub.classList.add('on');clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bub.classList.remove('on'),2800);}
   function setMood(m){
     mood=m;cat.setAttribute('data-mood',m);
-    if(FX_MODES.indexOf(m)>=0)startFx(m);else stopFx();
     if(m==='happy'||m==='excited'||m==='love'||m==='rich'||m==='music')mouth.setAttribute('d','M38,50 Q44,57 50,50');
     else if(m==='angry')mouth.setAttribute('d','M39,52 Q44,47 49,52');
+    else if(m==='wicked')mouth.setAttribute('d','M38,52 Q46,60 54,50');
     else if(m==='sad')mouth.setAttribute('d','M40,52 Q44,48 48,52');
-    else if(m==='evil')mouth.setAttribute('d','M39,52 Q46,56 51,48');
-    else if(m==='shock')mouth.setAttribute('d','M39,52 Q44,61 49,52 Q44,43 39,52');
-    else if(m==='chaos')mouth.setAttribute('d','M38,52 L41,55 L44,52 L47,55 L50,52');
-    else if(m==='dull')mouth.setAttribute('d','M40,54 L48,54');
-    else if(m==='smug')mouth.setAttribute('d','M39,51 Q45,55 49,53');
-    else if(m==='derp')mouth.setAttribute('d','M40,53 Q44,49 48,53');
     else if(m==='sleepy')mouth.setAttribute('d','M41,50 Q44,52 47,50');
     else if(m==='hungry')mouth.setAttribute('d','M40,51 Q44,58 48,51');
     else mouth.setAttribute('d','M40,50 Q44,54 48,50');
@@ -330,14 +298,11 @@ body{background:transparent!important;overflow:hidden}
     if(m==='angry'){shake();particles(44,20,4,['💢','💢','🔥']);say(rp(moodSay.angry));}
     else if(m==='sad'){cry();particles(44,15,6,['💧','💧','😢','💧']);say(rp(moodSay.sad));}
     else if(m==='happy'){bounce();earWig();particles(44,25,3,['❤️','✨','😊']);say(rp(moodSay.happy));}
-    else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);say(rp(moodSay.love));}
+    else if(m==='love'){earWig();particles(44,25,5,['❤️','💕','💖']);loveFlash();say(rp(moodSay.love));}
+    else if(m==='star'){particles(44,25,6,['✨','⭐','🌟']);say(rp(moodSay.star));}
+    else if(m==='fury'){body.classList.add('fury-shake');particles(44,20,8,['🔥','💢','🔥']);say(rp(moodSay.fury));setTimeout(function(){body.classList.remove('fury-shake');},1500);}
+    else if(m==='wicked'){particles(44,25,3,['😏','🖤','💋']);say(rp(moodSay.wicked));}
     else if(m==='sleepy'){particles(44,10,2,['💤','💤']);say(rp(moodSay.sleepy));}
-    else if(m==='evil'){evilWiggle();particles(44,20,3,['😏','🖤','🎭']);say(rp(moodSay.evil));}
-    else if(m==='shock'){shockJump();particles(44,20,4,['❗','😱','❕']);say(rp(moodSay.shock));}
-    else if(m==='derp'){derpTilt();particles(44,15,3,['❓','💭','🌀']);say(rp(moodSay.derp));}
-    else if(m==='smug'){smugWiggle();particles(44,20,3,['😎','✨','💅']);say(rp(moodSay.smug));}
-    else if(m==='chaos'){body.classList.add('twitch');particles(44,25,8,['⚡','🌀','💥','❓']);say(rp(moodSay.chaos));setTimeout(function(){body.classList.remove('twitch');},1200);}
-    else if(m==='dull'){particles(44,10,1,['🌫️']);say(rp(moodSay.dull));}
     else if(m==='hungry'){particles(44,30,4,['🍙','🍜','💧']);say(rp(moodSay.hungry));}
     else if(m==='dizzy'){body.classList.add('sway');particles(44,15,5,['💫','⭐']);say(rp(moodSay.dizzy));setTimeout(()=>body.classList.remove('sway'),800);}
     else if(m==='rich'){bounce();particles(44,30,5,['💰','🤑','✨']);say(rp(moodSay.rich));}
@@ -369,7 +334,6 @@ body{background:transparent!important;overflow:hidden}
     clearTimeout(clickTimer);
     clickTimer=setTimeout(()=>{clickCount=0;},800);
     if(clickCount>=5){setMood('angry');act('angry');clickCount=0;return;}
-  if(mood==='hungry'){clickCount=0;feed();return;}
     if(clickCount>=3){setMood('happy');act('happy');clickCount=0;return;}
     blink();say(rp(getRx(currentApp).say));bounce();
   }
@@ -387,7 +351,7 @@ body{background:transparent!important;overflow:hidden}
   function autoAct(){
     const r=Math.random();
     if(r<0.18){
-      const emo=['happy','love','sleepy','angry','sad','hungry','dizzy','evil','shock','derp','smug','chaos','dull'][Math.floor(Math.random()*13)];
+      const r2=Math.random();let emo;if(r2<0.08)emo='fury';else if(r2<0.28)emo='star';else if(r2<0.5)emo='wicked';else emo=['happy','love','sleepy','angry','sad','hungry','dizzy'][Math.floor(Math.random()*7)];
       setMood(emo);act(emo);
     }else if(r<0.35){blink();}
     else if(r<0.5){earWig();say(rp(getRx(currentApp).say));}
@@ -397,6 +361,7 @@ body{background:transparent!important;overflow:hidden}
     else if(r<0.85){stretch();}
     else if(r<0.90){tailChase();}
     else if(r<0.95){tilt();}
+    else{faceFling();}
     autoTimer=setTimeout(autoAct,mood==='sleepy'?20000+Math.random()*15000:12000+Math.random()*13000);
   }
   setMood('idle');
@@ -458,11 +423,6 @@ body{background:transparent!important;overflow:hidden}
   }
   var wanderTimer=setTimeout(wander,12000+Math.random()*15000);
 
-  // === 喂食系统：自动饥饿 ===
-  var hungerTimer=null;
-  function hungerStart(){clearTimeout(hungerTimer);hungerTimer=setTimeout(function(){setMood('hungry');act('hungry');particles(44,30,4,['🍙','💧','🕐']);say(rp(['好饿…什么时候开饭','肚子咕咕叫了…','饿饿，饭饭！','再不喂我我要啃屏幕了']));},900000+Math.random()*600000);}
-  hungerStart();
-
 
   // === 新互动：打喷嚏/伸懒腰/追尾巴/甩动 ===
   function sneeze(){body.classList.add('sneeze');say(rp(['啊啾！','哈…哈啾！']));particles(44,15,3,['💨','🤧']);setTimeout(function(){body.classList.remove('sneeze');},500);}
@@ -479,14 +439,12 @@ body{background:transparent!important;overflow:hidden}
   // === 躺平/喘气/上蹿下跳 ===
   function lieDown(){body.classList.add('lying');say(rp(['躺会儿…舒服','好累，躺平了','让我躺躺…']));setTimeout(function(){body.classList.remove('lying');},4000);}
   function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
-  function evilWiggle(){body.classList.add('evilwiggle');setTimeout(function(){body.classList.remove('evilwiggle');},900);}
-  function shockJump(){body.classList.add('shockjump');setTimeout(function(){body.classList.remove('shockjump');},550);}
-  function derpTilt(){body.classList.add('derptilt');setTimeout(function(){body.classList.remove('derptilt');},1300);}
-  function smugWiggle(){body.classList.add('smugwiggle');setTimeout(function(){body.classList.remove('smugwiggle');},900);}
+  function loveFlash(){cat.classList.add('love-flash');setTimeout(function(){cat.classList.remove('love-flash');},1600);}
+  function faceFling(){setMood('idle');body.classList.add('facefling');say(rp(['咦？！我的眼睛飞了！','五官：起飞！','啊啊啊救命我的脸！']));setTimeout(function(){body.classList.remove('facefling');},850);}
   function jumpAround(){body.classList.add('jumparound');particles(44,20,8,['💢','🔥','💢']);say(rp(['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove('jumparound');},3800);}
   var fatLevel=0;
-  var fed=false;
-  function feed(){if(fatLevel>=3){setMood('dull');say(rp(['嗝…真的吃不下了，再喂要吐了','我胖得走不动了…放过我吧','你是想把我喂成球吗']));particles(44,15,3,['💦','🤢','🫠']);return;}fatLevel=Math.min(3,fatLevel+1);fed=true;hungerStart();document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('smug');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('happy');say(rp(['好吃！再喂我一口','喵呜～真香！吃饱了超开心','干饭猫！干饭魂！','嗝～满足']));particles(44,25,4,['🍙','❤️','✨','😋']);bounce();}}
+var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],chicken:['🍗鸡腿！嗷呜一口','咔吧咔吧…鸡腿真脆'],cake:['🍰蛋糕！甜甜的～','奶油糊一脸也开心'],onigiri:['🍙饭团！呜姆呜姆','团子真香…好满足'],bone:['🦴骨头！嚼嚼嚼','咯嘣咯嘣…真硬'],ramen:['🍜拉面！吸溜吸溜','嘶——好烫好好吃'],milk:['🥛牛奶！咕嘟咕嘟','舔舔嘴…胡子上都是奶']};
+  function feed(){fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3){var arr=(FOOD_SAY[f]||['好吃！再喂我一口','喵呜～真香','还要还要！']);say(rp(arr));}}
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
@@ -499,7 +457,7 @@ body{background:transparent!important;overflow:hidden}
       douyinCompanionSay=['这个小姐姐跳舞不错…但没你好看','哈哈哈哈笑死我了','这啥玩意儿？','好无聊，换一个','这个好吃！馋了','剧情狗血但我爱看','诶这个猫好可爱，但没我可爱','刷了这么久，眼睛不要了？'];
   function onDouyinAction(a){
     lonelyLevel=0;
-    if(douyinSay[a]){if(a==='like'&&Math.random()<0.35){setMood('evil');evilWiggle();particles(44,20,4,['😏','💢']);say(rp(['你给别人点赞？我记住了…','点吧点吧，回头找你算账']));}else if(Math.random()<0.15){setMood('shock');shockJump();particles(44,20,3,['😱','💢']);say('什么？你居然点赞？！');}else{setMood('angry');shake();particles(44,20,4,['💢','🔥']);say(rp(douyinSay[a]));}}
+    if(douyinSay[a]){setMood('angry');shake();particles(44,20,4,['💢','🔥']);say(rp(douyinSay[a]));}
   }
   function onVideoSwitch(){
     lonelyLevel=0;
@@ -520,7 +478,7 @@ body{background:transparent!important;overflow:hidden}
       if(currentApp==='com.ss.android.ugc.aweme'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('我说了去睡觉你还刷抖音？！');}
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
       else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
-    }else if(cmd==='food'){feed();}
+    }else if(cmd.indexOf('food')===0){var ff=cmd.indexOf(':')>=0?cmd.split(':')[1]:'';feed(ff);}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
@@ -529,121 +487,6 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
     else if(cmd==='wake'){setMood('idle');say('醒啦！菲菲早上好');bounce();}
   }
-  
-// === 粒子表情引擎：脸上的表情全部用粒子渲染 ===
-var fxCanvas=document.getElementById('fx'),fxCtx=fxCanvas.getContext('2d');
-var fxParticles=[],fxDrool=[],fxRunning=false,fxMood='idle',fxT0=0,fxRAF=null;
-var FX_MODES=['love','happy','excited','evil','shock','angry','sad','dizzy','hungry','derp','smug','chaos','dull','sleepy'];
-var FX_COLORS={love:'#ff3366',happy:'#ff6688',excited:'#ff6688',evil:'#cc2255',shock:'#ffffff',angry:'#ff2244',sad:'#66ccff',dizzy:'#ffcc33',hungry:'#ff99bb',derp:'#ff4466',smug:'#ffcc44',chaos:'#cc66ff',dull:'#8899aa',sleepy:'#aa88cc'};
-function fxShape(mood,i,n){
-  var s=i/n,lerp=function(a,b,t){return a+(b-a)*t;};
-  var L=33,R=55,Y=36;
-  var hx=function(u){return 16*Math.pow(Math.sin(u),3);};
-  var hy=function(u){return 13*Math.cos(u)-5*Math.cos(2*u)-2*Math.cos(3*u)-Math.cos(4*u);};
-  if(mood==='love'||mood==='happy'||mood==='excited'){
-    var side=Math.floor(s*2),u=s*2*Math.PI;
-    return {x:(side===0?L:R)+hx(u)*0.55,y:Y+hy(u)*0.55-2};
-  }
-  if(mood==='evil'){
-    if(s<0.3)return {x:lerp(26,40,s/0.3),y:lerp(33,37,s/0.3)};
-    if(s<0.6)return {x:lerp(48,62,(s-0.3)/0.3),y:lerp(33,37,(s-0.3)/0.3)};
-    if(s<0.8)return {x:lerp(30,36,(s-0.6)/0.2),y:lerp(27,30,(s-0.6)/0.2)};
-    return {x:lerp(52,58,(s-0.8)/0.2),y:lerp(27,30,(s-0.8)/0.2)};
-  }
-  if(mood==='shock'){
-    if(s<0.38){var a=s/0.38*Math.PI*2;return {x:L+Math.cos(a)*8.5,y:Y+Math.sin(a)*8.5};}
-    if(s<0.76){var b=(s-0.38)/0.38*Math.PI*2;return {x:R+Math.cos(b)*8.5,y:Y+Math.sin(b)*8.5};}
-    var c=(s-0.76)/0.24,side2=c<0.5?0:1,cc=(c%0.5)/0.5*Math.PI*2;
-    return {x:(side2===0?L:R)+Math.cos(cc)*2.6,y:Y+Math.sin(cc)*2.6};
-  }
-  if(mood==='angry'){
-    if(s<0.3)return {x:lerp(28,39,s/0.3),y:lerp(33,37,s/0.3)};
-    if(s<0.6)return {x:lerp(49,60,(s-0.3)/0.3),y:lerp(33,37,(s-0.3)/0.3)};
-    return {x:lerp(40,48,(s-0.6)/0.4),y:lerp(52,47,(s-0.6)/0.4)};
-  }
-  if(mood==='sad'){
-    if(s<0.35){var a=s/0.35*Math.PI;return {x:lerp(28,38,a/Math.PI),y:lerp(38,38,a/Math.PI)-Math.sin(a)*3.5};}
-    if(s<0.7){var b=(s-0.35)/0.35*Math.PI;return {x:lerp(50,60,b/Math.PI),y:lerp(38,38,b/Math.PI)-Math.sin(b)*3.5};}
-    return {x:lerp(40,48,(s-0.7)/0.3),y:lerp(52,52,(s-0.7)/0.3)+Math.sin((s-0.7)/0.3*Math.PI)*3.5};
-  }
-  if(mood==='sleepy'){
-    if(s<0.5)return {x:lerp(29,37,s/0.5),y:Y+Math.sin(s*20)*0.6};
-    return {x:lerp(51,59,(s-0.5)/0.5),y:Y+Math.sin(s*20)*0.6};
-  }
-  if(mood==='derp'){
-    if(s<0.5){var a=s/0.5*Math.PI*2;return {x:37+Math.cos(a)*3.2,y:38+Math.sin(a)*3.2};}
-    var b=(s-0.5)/0.5*Math.PI*2;return {x:51+Math.cos(b)*3.2,y:38+Math.sin(b)*3.2};
-  }
-  if(mood==='smug'){
-    if(s<0.3){var a=s/0.3*Math.PI;return {x:lerp(26,40,a/Math.PI),y:lerp(37,32,a/Math.PI)};}
-    if(s<0.6){var b=(s-0.3)/0.3*Math.PI;return {x:lerp(48,62,b/Math.PI),y:lerp(37,32,b/Math.PI)};}
-    if(s<0.8)return {x:lerp(30,36,(s-0.6)/0.2),y:lerp(28,31,(s-0.6)/0.2)};
-    return {x:lerp(52,58,(s-0.8)/0.2),y:lerp(28,31,(s-0.8)/0.2)};
-  }
-  if(mood==='chaos'){
-    if(s<0.4){var a=s/0.4*Math.PI*4,r=2+a*0.8;return {x:L+Math.cos(a)*r,y:Y+Math.sin(a)*r};}
-    if(s<0.8){var b=(s-0.4)/0.4*Math.PI*4,r2=2+b*0.8;return {x:R+Math.cos(b)*r2,y:Y+Math.sin(b)*r2};}
-    var seg2=Math.floor((s-0.8)/0.2*8);return {x:38+seg2*1.5,y:52+(seg2%2===0?-1:1)*3};
-  }
-  if(mood==='dull'){
-    if(s<0.4){var a=s/0.4*Math.PI;return {x:lerp(27,39,a/Math.PI),y:lerp(40,40,a/Math.PI)+Math.sin(a)*3.5};}
-    if(s<0.8){var b=(s-0.4)/0.4*Math.PI;return {x:lerp(49,61,b/Math.PI),y:lerp(40,40,b/Math.PI)+Math.sin(b)*3.5};}
-    return {x:lerp(40,48,(s-0.8)/0.2),y:54};
-  }
-  if(mood==='dizzy'){
-    if(s<0.45){var a=s/0.45*Math.PI*2;return {x:L+Math.cos(a)*5.5,y:Y+Math.sin(a)*5.5};}
-    if(s<0.9){var b=(s-0.45)/0.45*Math.PI*2;return {x:R+Math.cos(b)*5.5,y:Y+Math.sin(b)*5.5};}
-    return {x:44,y:47+(s-0.9)/0.1*4};
-  }
-  if(mood==='hungry'){
-    if(s<0.4){var a=s/0.4*Math.PI*2;return {x:L+Math.cos(a)*6,y:Y+Math.sin(a)*6};}
-    if(s<0.8){var b=(s-0.4)/0.4*Math.PI*2;return {x:R+Math.cos(b)*6,y:Y+Math.sin(b)*6};}
-    return {x:lerp(40,48,(s-0.8)/0.2),y:lerp(52,56,(s-0.8)/0.2)};
-  }
-  return {x:44,y:36};
-}
-function fxLoop(){
-  var now=Date.now();
-  fxCtx.clearRect(0,0,88,118);
-  var n=fxParticles.length;
-  for(var i=0;i<n;i++){
-    var p=fxParticles[i],sp=fxShape(fxMood,i,n);
-    var tx=sp.x+Math.sin(now/300+i*0.7)*0.9,ty=sp.y+Math.cos(now/400+i*0.7)*0.9;
-    p.vx=(tx-p.x)*0.09+p.vx*0.55;
-    p.vy=(ty-p.y)*0.09+p.vy*0.55;
-    p.x+=p.vx;p.y+=p.vy;
-    fxCtx.globalAlpha=p.a;
-    fxCtx.fillStyle=p.c;
-    fxCtx.beginPath();fxCtx.arc(p.x,p.y,p.r,0,Math.PI*2);fxCtx.fill();
-  }
-  if(fxMood==='love'||fxMood==='hungry'){
-    for(var j=0;j<fxDrool.length;j++){
-      var d=fxDrool[j];
-      d.vy+=0.045;d.y+=d.vy;d.life-=0.015;
-      if(d.life<=0){d.x=44+(Math.random()*8-4);d.y=56;d.vy=0.4+Math.random()*0.5;d.life=1;}
-      fxCtx.globalAlpha=Math.max(0,d.life)*0.85;
-      fxCtx.fillStyle='#9be8ff';
-      fxCtx.beginPath();fxCtx.arc(d.x,d.y,1.5,0,Math.PI*2);fxCtx.fill();
-    }
-  }
-  if(fxRunning&&Date.now()-fxT0<5200){fxRAF=requestAnimationFrame(fxLoop);}
-  else{stopFx();}
-}
-function startFx(mood){
-  if(FX_MODES.indexOf(mood)<0)return;
-  fxMood=mood;fxT0=Date.now();
-  var n=190;
-  fxParticles=[];
-  for(var i=0;i<n;i++){
-    fxParticles.push({x:44+Math.random()*40-20,y:36+Math.random()*40-20,vx:0,vy:0,r:1+Math.random()*1.3,a:0.92,c:FX_COLORS[mood]||'#ff3366'});
-  }
-  fxDrool=[];
-  if(mood==='love'||mood==='hungry'){
-    for(var j=0;j<16;j++)fxDrool.push({x:44+(Math.random()*8-4),y:56+Math.random()*12,vy:0.4+Math.random()*0.5,life:Math.random()});
-  }
-  if(!fxRunning){fxRunning=true;fxRAF=requestAnimationFrame(fxLoop);}
-}
-function stopFx(){fxRunning=false;if(fxRAF)cancelAnimationFrame(fxRAF);fxCtx.clearRect(0,0,88,118);fxParticles=[];fxDrool=[];}
-window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
+  window.KuroNeko={onAppChanged,onLongPress:function(){setMood('love');act('love');lonelyLevel=0;},setMood,say,blink,bounce,exec,onDragStart,onDragMove,onDragEnd,onDouyinAction,onVideoSwitch,onFling};
 })();
 </script></body></html>
