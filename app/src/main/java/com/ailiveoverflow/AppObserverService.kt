@@ -57,14 +57,14 @@ class AppObserverService : AccessibilityService() {
         val sb = StringBuilder()
         var n: AccessibilityNodeInfo? = node
         repeat(4) {
-            if (n == null) return@repeat
-            val t = n.text?.toString() ?: ""
-            val d = n.contentDescription?.toString() ?: ""
-            val r = n.viewIdResourceName ?: ""
+            val cur = n ?: return@repeat
+            val t = cur.text?.toString() ?: ""
+            val d = cur.contentDescription?.toString() ?: ""
+            val r = cur.viewIdResourceName ?: ""
             if (t.isNotEmpty()) sb.append(t).append(' ')
             if (d.isNotEmpty()) sb.append(d).append(' ')
             if (r.isNotEmpty()) sb.append(r).append(' ')
-            n = n.parent
+            n = cur.parent
         }
         val s = sb.toString().lowercase()
         return when {
