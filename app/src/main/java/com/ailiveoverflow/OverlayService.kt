@@ -29,12 +29,24 @@ class OverlayService : Service() {
     companion object {
         const val NOTIFICATION_ID = 1001
         const val CHANNEL_ID = "overflow_pet"
+        private var instance: OverlayService? = null
+        private var lastApp: String = "unknown"
+
+        fun onForegroundAppChanged(pkg: String) {
+            if (pkg != lastApp) {
+                lastApp = pkg
+                instance?.overlayView?.evaluateJavascript(
+                    "if(window.KuroNeko)KuroNeko.onAppChanged('$pkg')", null
+                )
+            }
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, buildNotification("にゃ〜 見てるよ"))
+        instance = this
         setupOverlay()
         startAppPolling()
         startMurmurs()
@@ -118,40 +130,10 @@ class OverlayService : Service() {
         }
     }
 
-    // === 前台App检测 ===
+    // === 前台App检测 (通过AccessibilityService) ===
     private fun startAppPolling() {
-        appPollRunnable = object : Runnable {
-            override fun run() {
-                val app = detectForegroundApp()
-                if (app != currentApp) {
-                    currentApp = app
-                    overlayView?.evaluateJavascript(
-                        "if(window.KuroNeko)KuroNeko.onAppChanged('$app')", null
-                    )
-                }
-                handler.postDelayed(this, 3000)
-            }
-        }
-        handler.postDelayed(appPollRunnable!!, 1000)
-    }
-
-    private fun detectForegroundApp(): String {
-        return try {
-            val usm = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-            val now = System.currentTimeMillis()
-            val events = usm.queryEvents(now - 5000, now)
-            var pkg = "unknown"
-            val event = android.app.usage.UsageEvents.Event()
-            while (events.hasNextEvent()) {
-                events.getNextEvent(event)
-                if (event.eventType == android.app.usage.UsageEvents.Event.ACTIVITY_RESUMED) {
-                    pkg = event.packageName
-                }
-            }
-            pkg
-        } catch (e: Exception) {
-            "unknown"
-        }
+        // AccessibilityService handles detection now
+        // This method kept for compatibility
     }
 
     // === 通知栏碎碎念 ===
@@ -226,7 +208,7 @@ class OverlayService : Service() {
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            CHANNEL_ID, "Overflow", NotificationManager.IMPORTANCE_LOW
+            CHANNEL_ID, "Overflow", NotificationManager.IMPORTANCE_DEFAULT
         )
         val nm = getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(channel)
