@@ -487,9 +487,55 @@ body{background:transparent!important;overflow:hidden}
   function loveFlash(){cat.classList.add('love-flash');setTimeout(function(){cat.classList.remove('love-flash');},1600);}
   function faceFling(){setMood('idle');body.classList.add('facefling');say(rp(['咦？！我的眼睛飞了！','五官：起飞！','啊啊啊救命我的脸！']));setTimeout(function(){body.classList.remove('facefling');},850);}
   function jumpAround(hot){var cls=hot?'furyjump':'jumparound';body.classList.add(cls);particles(44,20,hot?12:8,['💢','🔥','💢']);say(rp(hot?['气疯了我跳给你看！！','啊啊啊气到起飞！！','炸了炸了全炸了！！','跳到你哄我为止！！']:['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove(cls);},hot?4600:3800);}
-  var fatLevel=0;
-var FOOD_SAY={fish:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香'],chicken:['🍗鸡腿！嗷呜一口','咔吧咔吧…鸡腿真脆'],cake:['🍰蛋糕！甜甜的～','奶油糊一脸也开心'],onigiri:['🍙饭团！呜姆呜姆','团子真香…好满足'],bone:['🦴骨头！嚼嚼嚼','咯嘣咯嘣…真硬'],ramen:['🍜拉面！吸溜吸溜','嘶——好烫好好吃'],milk:['🥛牛奶！咕嘟咕嘟','舔舔嘴…胡子上都是奶']};
-  function feed(){fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3){var arr=(FOOD_SAY[f]||['好吃！再喂我一口','喵呜～真香','还要还要！']);say(rp(arr));}}
+  // === 饥饿系统v2：持久化胖瘦 + 饥饿值 + 丰富菜单 ===
+  var FOOD={
+    fish:{e:'🐟',heat:1,say:['🐟鱼鱼！我的最爱！','咔嚓咔嚓…鱼好香','小鱼干一根哪够！']},
+    chicken:{e:'🍗',heat:2,say:['🍗鸡腿！嗷呜一口','咔吧咔吧…鸡腿真脆','腿腿！肉肉！']},
+    cake:{e:'🍰',heat:3,say:['🍰蛋糕！甜甜的～','奶油糊一脸也开心','蛋糕下肚，心情起飞']},
+    onigiri:{e:'🍙',heat:1,say:['🍙饭团！呜姆呜姆','团子真香…好满足']},
+    bone:{e:'🦴',heat:1,say:['🦴骨头！嚼嚼嚼','咯嘣咯嘣…真硬']},
+    ramen:{e:'🍜',heat:2,say:['🍜拉面！吸溜吸溜','嘶——好烫好好吃']},
+    milk:{e:'🥛',heat:1,say:['🥛牛奶！咕嘟咕嘟','舔舔嘴…胡子上都是奶']},
+    surprise:{e:'🎁',heat:2,say:['🎁盲盒！让我看看是啥！','哇！是好吃的东西！']},
+    sushi:{e:'🍣',heat:2,say:['🍣寿司！一口一个！','呜姆…鱼生好鲜']},
+    hamburger:{e:'🍔',heat:4,say:['🍔汉堡！大满足！','嗷呜一口，双层肉饼！']},
+    pizza:{e:'🍕',heat:4,say:['🍕披萨！芝士拉丝！','切一块…不，整块都是我的！']},
+    icecream:{e:'🍦',heat:3,say:['🍦冰淇淋！凉凉的！','舔一口…啊，脑壳冰！']},
+    donut:{e:'🍩',heat:3,say:['🍩甜甜圈！甜甜的圈！','一圈不够，两圈！']},
+    popcorn:{e:'🍿',heat:2,say:['🍿爆米花！蹦蹦跳跳！','咔嚓咔嚓，看电影标配']},
+    dumpling:{e:'🥟',heat:2,say:['🥟饺子！热乎乎！','蘸醋！啊呜！']},
+    baozi:{e:'🍥',heat:2,say:['🍥包子！白白胖胖！','咬开…啊烫烫烫！']},
+    hotpot:{e:'🍲',heat:5,say:['🍲火锅！咕嘟咕嘟！','毛肚！鸭肠！都是我的！']},
+    bbq:{e:'🍖',heat:4,say:['🍖烤肉！滋滋冒油！','再烤一串！']},
+    pudding:{e:'🍮',heat:2,say:['🍮布丁！duangduang～','勺子挖下去…好软！']},
+    apple:{e:'🍎',heat:1,say:['🍎苹果！咔嚓脆！','健康又好吃～']},
+    watermelon:{e:'🍉',heat:1,say:['🍉西瓜！夏天的味道！','甜到心里去！']},
+    boba:{e:'🧋',heat:2,say:['🧋奶茶！吸溜吸溜！','珍珠QQ弹弹！']},
+    fries:{e:'🍟',heat:3,say:['🍟薯条！蘸番茄酱！','咔嚓咔嚓！']},
+    cookie:{e:'🍪',heat:2,say:['🍪曲奇！配牛奶最棒！','酥酥的，掉渣渣']}
+  };
+  function loadFat(){try{return {f:parseInt(localStorage.getItem('kf')||'0')||0,h:parseInt(localStorage.getItem('kh')||'30')||30};}catch(e){return {f:0,h:30};}}
+  function saveFat(){try{localStorage.setItem('kf',fatLevel);localStorage.setItem('kh',hunger);}catch(e){}}
+  var fatLevel=loadFat().f,hunger=loadFat().h;
+  function applyFat(){body.style.transform='scaleX('+(1+fatLevel*0.10)+') scaleY('+Math.max(0.85,1-fatLevel*0.02)+')';}
+  function feed(f){
+    var fo=FOOD[f]||FOOD.fish;
+    fatLevel=Math.min(5,fatLevel+1);
+    hunger=Math.max(0,hunger-fo.heat*12-20);
+    saveFat();applyFat();
+    setMood('happy');
+    say(rp(fo.say));particles(44,20,3,[fo.e,'😋','💖']);
+    if(fatLevel>=5){setMood('hungry');say(rp(['嗝…真的吃不下啦！肚子圆成球了！','都怪你喂太好…我走不动了','胖到肚子拖地了！']));}
+    else if(fatLevel>=3){setMood('happy');say(rp(['肚肚开始圆了…','嘿嘿，要变成胖猫了','腰呢？我腰呢？']));}
+  }
+  // 饥饿滴答：每30秒饿一点，饿了喊你，饿狠了掉肉
+  setInterval(function(){
+    hunger=Math.min(100,hunger+1);
+    if(hunger>=60&&hunger%12===0){say(rp(['肚子咕咕叫了…','好饿…想吃东西','菲菲…我饿了喵']));particles(44,20,1,['🍙']);}
+    if(hunger>=95){if(fatLevel>0){fatLevel--;say(rp(['饿瘦了…呜呜','肚子空了，胖胖没了','饿成纸片猫了…']));particles(44,20,3,['💧','😿']);}hunger=60;}
+    saveFat();
+  },30000);
+  applyFat();
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
