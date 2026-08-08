@@ -4,7 +4,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:transparent!important;overflow:hidden}
-.cat-wrap{width:88px;height:144px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cat-wrap{width:88px;height:144px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;transform-origin:44px 100px}
 .cat-wrap svg{width:88px;height:118px;display:block;margin-top:26px;transform-origin:44px 60px}
 .bubble-box{position:absolute;top:0;left:0;width:88px;pointer-events:none;z-index:2;display:flex;justify-content:center}
 .bubble-txt{display:block;background:rgba(18,18,18,0.92);color:#f0dede;padding:3px 6px;border-radius:8px;font-size:10px;font-weight:bold;opacity:0;transition:opacity 0.2s;max-width:84px;white-space:normal;word-break:break-all;line-height:1.35;text-align:center}
@@ -43,7 +43,10 @@ body{background:transparent!important;overflow:hidden}
 .cat-wrap[data-mood="excited"] #eyes-normal{display:none}
 .cat-wrap[data-mood="excited"] #eyes-happy{display:block}
 .cat-wrap[data-mood="love"] #eyes-normal{display:none}
-.cat-wrap[data-mood="love"] #eyes-happy{display:block}
+.cat-wrap[data-mood="love"] #eyes-happy{display:none}
+.cat-wrap[data-mood="love"] #eyes-love{display:block}
+.cat-wrap[data-mood="love"] #drool{display:block;animation:droolAnim 0.9s ease-in infinite}
+@keyframes droolAnim{0%{transform:translateY(0);opacity:0.95}70%{transform:translateY(4px);opacity:0.75}100%{transform:translateY(8px);opacity:0}}
 .cat-wrap[data-mood="sleepy"] #eyes-normal{display:none}
 .cat-wrap[data-mood="sleepy"] #eyes-sleepy{display:block}
 /* 耳朵：生气竖起、伤心耷拉 */
@@ -84,15 +87,15 @@ body{background:transparent!important;overflow:hidden}
 /* 新小动作 */
 .sneeze{animation:sneeze 0.5s}
 @keyframes sneeze{0%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-8deg)}50%{transform:translateY(-2px) rotate(6deg)}70%{transform:translateY(-5px) rotate(-6deg)}100%{transform:translateY(0)}}
-.stretch{animation:stretch 0.7s}
-@keyframes stretch{0%{transform:scaleY(1)}50%{transform:scaleY(1.18) translateY(-4px)}100%{transform:scaleY(1)}}
+.stretch{animation:stretch 0.9s}
+@keyframes stretch{0%{transform:scaleY(1) scaleX(1)}35%{transform:scaleY(1.6) scaleX(0.7) translateY(-10px)}70%{transform:scaleY(1.55) scaleX(0.72) translateY(-9px)}100%{transform:scaleY(1) scaleX(1)}}
 .tailchase{animation:tailchase 0.8s}
 @keyframes tailchase{0%{transform:rotate(0)}25%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
 
 /* 躺平/上蹿下跳/喘气 */
 .lying{transform:rotate(90deg) translateY(6px)}
-.jumparound{animation:jumparound 0.45s infinite}
-@keyframes jumparound{0%{transform:translateY(0)}25%{transform:translateY(-34px)}50%{transform:translateY(0) translateX(5px)}75%{transform:translateY(-34px)}100%{transform:translateY(0)}}
+.jumparound{animation:jumparound 0.38s infinite}
+@keyframes jumparound{0%{transform:translateY(0) rotate(0)}15%{transform:translateY(-58px) rotate(-7deg)}35%{transform:translateY(0) rotate(5deg) translateX(7px)}50%{transform:translateY(-58px) rotate(-5deg) translateX(-4px)}70%{transform:translateY(0) rotate(6deg) translateX(3px)}85%{transform:translateY(-58px) rotate(-7deg) translateX(-6px)}100%{transform:translateY(0) rotate(0)}}
 .pant{animation:pant 0.55s infinite}
 @keyframes pant{0%{transform:scale(1,1)}50%{transform:scale(1.05,0.95)}100%{transform:scale(1,1)}}
 </style></head><body>
@@ -135,7 +138,11 @@ body{background:transparent!important;overflow:hidden}
       <path d="M28,36 Q33,32 38,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
       <path d="M50,36 Q55,32 60,36" stroke="#ee1144" stroke-width="1.7" fill="none" stroke-linecap="round"/>
     </g>
-    <g id="eyes-sleepy">
+    <g id="eyes-love" fill="#ff2255" stroke="#111" stroke-width="0.6">
+<path d="M33,31 C30,28.6 26.6,29.8 26.6,32.9 C26.6,36 33,40 33,40 C33,40 39.4,36 39.4,32.9 C39.4,29.8 36,28.6 33,31Z"/>
+<path d="M55,31 C52,28.6 48.6,29.8 48.6,32.9 C48.6,36 55,40 55,40 C55,40 61.4,36 61.4,32.9 C61.4,29.8 58,28.6 55,31Z"/>
+</g>
+<g id="eyes-sleepy">
       <ellipse cx="33" cy="36" rx="4" ry="2" fill="#ee1144"/>
       <ellipse cx="55" cy="36" rx="4" ry="2" fill="#ee1144"/>
     </g>
@@ -211,7 +218,7 @@ body{background:transparent!important;overflow:hidden}
     angry:['生气了！哼','不理你了，自己哄自己','我咬你哦！','气死我了气死我了'],
     sad:['有点难过…','你是不是不要我了','我好孤单啊','呜呜…'],
     happy:['嘿嘿今天心情好','开心！想转圈圈','菲菲陪我我就高兴'],
-    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦'],
+    love:['最喜欢菲菲了','想亲你一下','你是我的宝贝哦','哈…宝贝好可耐，口水都下来了'],
     sleepy:['好困…要睡着了','zzz…别吵我','眼皮好重…'],
     idle:['喵…我在发呆','今天也是平平无奇的一天'],
     hungry:['肚子咕咕叫了…','好饿，想吃小鱼干','饿晕了饿晕了'],
@@ -384,7 +391,9 @@ body{background:transparent!important;overflow:hidden}
   // === 躺平/喘气/上蹿下跳 ===
   function lieDown(){body.classList.add('lying');say(rp(['躺会儿…舒服','好累，躺平了','让我躺躺…']));setTimeout(function(){body.classList.remove('lying');},4000);}
   function pant(){body.classList.add('pant');say(rp(['累死了…呼哧呼哧','跑太快了…让我喘口气','哈…哈…歇会儿']));particles(44,15,2,['💦','😮‍💨']);setTimeout(function(){body.classList.remove('pant');},1500);}
-  function jumpAround(){body.classList.add('jumparound');particles(44,20,5,['💢','🔥']);say(rp(['气死我了气死我了！','不理我？！我跳！','哼！跳给你看！','我生气了！哄不好的那种！']));setTimeout(function(){body.classList.remove('jumparound');},2500);}
+  function jumpAround(){body.classList.add('jumparound');particles(44,20,8,['💢','🔥','💢']);say(rp(['气死我了气死我了！！','不理我？！我跳死你！','哼！跳给你看！跳到你理我！','我生气了！哄不好的那种！','气到爆炸！！']));setTimeout(function(){body.classList.remove('jumparound');},3800);}
+  var fatLevel=0;
+  function feed(){fatLevel=Math.min(3,fatLevel+1);document.getElementById('catsvg').style.transform='scaleX('+(1+fatLevel*0.09)+')';if(fatLevel>=3){setMood('hungry');say(rp(['嗝…吃太撑了，肚子圆滚滚','都是你喂的，胖成这样了','饱了饱了…走不动了']));particles(44,20,3,['🍙','😋','💦']);}else{setMood('hungry');act('hungry');}if(fatLevel<3)say(rp(['好吃！再喂我一口','喵呜～真香','还要还要！']));}
   // === 抖音陪刷：猫咪看着宝呗刷视频 ===
   var douyinSay={
     like:['你给别人点赞？！哼','这视频值得赞？我不服','点啥赞啊，看我不好吗','哼，赞都被你点完了'],
@@ -418,7 +427,7 @@ body{background:transparent!important;overflow:hidden}
       if(currentApp==='com.ss.android.ugc.aweme'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('我说了去睡觉你还刷抖音？！');}
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
       else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
-    }else if(cmd==='food'){setMood('hungry');act('hungry');}
+    }else if(cmd==='food'){feed();}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
