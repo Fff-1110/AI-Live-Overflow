@@ -359,10 +359,10 @@ body{background:transparent!important;overflow:hidden}
   function lonelyTick(){
     lonelyLevel++;
     if(lonelyLevel===2){setMood('sleepy');if(Math.random()<0.5)lieDown();else act('sleepy');}
-    else if(lonelyLevel===4){setMood('sad');act('sad');}
-    else if(lonelyLevel===6){setMood('angry');jumpAround(true);}
-    else if(lonelyLevel>=8){setMood('sad');cry();particles(44,15,6,['💧','😢']);say('菲菲…理理我好不好');}
-    lonelyTimer=setTimeout(lonelyTick,20000);
+    else if(lonelyLevel===3){setMood('sad');act('sad');}
+    else if(lonelyLevel===5){setMood('angry');jumpAround(true);}
+    else if(lonelyLevel>=6){setMood('sad');cry();particles(44,15,8,['💧','😢','💧']);say(rp(['菲菲…理理我好不好','呜呜…我哭了，你都不来看我','再不理我我就哭给你看…']));}
+    lonelyTimer=setTimeout(lonelyTick,15000);
   }
   // === 自主行为：随机情绪+小动作 ===
   function autoAct(){
@@ -605,6 +605,7 @@ body{background:transparent!important;overflow:hidden}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
+    else if(cmd==='cry'){setMood('sad');cry();cry();particles(44,15,10,['💧','😢','💧','🥺']);say(rp(['呜呜呜…好难过','眼泪止不住…','呜哇——你欺负我！']));}
     else if(cmd==='happy'){setMood('happy');act('happy');}
     else if(cmd==='dizzy'){setMood('dizzy');act('dizzy');}
     else if(cmd.indexOf('say:')===0){say(cmd.slice(4));bounce();}
