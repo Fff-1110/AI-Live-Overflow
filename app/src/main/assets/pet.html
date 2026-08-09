@@ -87,6 +87,15 @@ body{background:transparent!important;overflow:hidden}
 /* 暴怒上蹿下跳：比普通生气跳得更高更疯 */
 @keyframes furyJump{0%{transform:translateY(0) rotate(0) scale(1)}12%{transform:translateY(-82px) rotate(-10deg) scale(1.06)}28%{transform:translateY(0) rotate(9deg) scale(0.94)}44%{transform:translateY(-94px) rotate(-12deg) scale(1.09)}60%{transform:translateY(0) rotate(11deg)}76%{transform:translateY(-74px) rotate(-9deg)}90%{transform:translateY(0) rotate(7deg)}100%{transform:translateY(0) rotate(0)}}
 .furyjump{animation:furyJump 0.28s infinite}
+/* 洗澡系统：淋水/发抖/甩水/擦干 */
+@keyframes showerDrip{0%{transform:translateY(0)}20%{transform:translateY(-2px)}40%{transform:translateY(1px)}60%{transform:translateY(-2px)}80%{transform:translateY(1px)}100%{transform:translateY(0)}}
+.shower-drip{animation:showerDrip 0.5s ease-in-out infinite}
+@keyframes shiverAnim{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-2px) rotate(-1.5deg)}50%{transform:translateX(2px) rotate(1.5deg)}75%{transform:translateX(-1px)}100%{transform:translateX(0)}}
+.shiver{animation:shiverAnim 0.25s linear infinite}
+@keyframes shakeOffAnim{0%{transform:translateX(0) rotate(0)}15%{transform:translateX(-8px) rotate(-9deg)}30%{transform:translateX(8px) rotate(9deg)}45%{transform:translateX(-10px) rotate(-12deg)}60%{transform:translateX(9px) rotate(11deg)}75%{transform:translateX(-6px) rotate(-7deg)}90%{transform:translateX(4px) rotate(5deg)}100%{transform:translateX(0) rotate(0)}}
+.shakeoff{animation:shakeOffAnim 0.6s ease-in-out}
+@keyframes dryRoll{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(8deg) translateY(3px)}50%{transform:rotate(-8deg) translateY(5px)}75%{transform:rotate(6deg) translateY(2px)}100%{transform:rotate(0) translateY(0)}}
+.dryroll{animation:dryRoll 0.8s ease-in-out}
 /* 嘴巴底色 */
 #mouth{transition:d 0.2s}
 /* 装饰：金链/墨镜/耳机/口水 */
@@ -560,6 +569,28 @@ body{background:transparent!important;overflow:hidden}
     if(Math.random()<0.75){say(rp(douyinCompanionSay));blink();}
     douyinTimer=setTimeout(douyinCompanion,40000+Math.random()*40000);
   }
+  // === 洗澡系统：淋水→搓泡泡→冲水→甩水→擦干 ===
+  var bathStepTimer=null;
+  function takeBath(stage){
+    clearTimeout(bathStepTimer);
+    var steps=[
+      function(){body.classList.add('shower-drip');setMood('happy');particles(44,20,8,['💧','💦','💧']);say(rp(['洗澡澡！哗啦啦～','淋水啦，凉凉的好舒服！','洗白白第一步：冲水！']));},
+      function(){body.classList.remove('shower-drip');body.classList.add('bounce');particles(44,20,10,['🫧','🫧','✨']);say(rp(['搓泡泡！全身都是泡泡～','泡泡好多，我变成泡泡猫啦！','搓搓搓，洗得香喷喷！']));},
+      function(){particles(44,20,10,['💦','💧','🚿']);say(rp(['冲水！泡泡拜拜～','哗啦——冲干净啦！','水水好暖，不想出去…']));},
+      function(){body.classList.add('shakeoff');particles(44,24,12,['💦','💧']);say(rp(['甩水！呼啦——甩你一脸水！','甩甩甩，毛毛干一半！','抖一抖，水珠满天飞！']));setTimeout(function(){body.classList.remove('shakeoff');},650);},
+      function(){body.classList.add('dryroll');particles(44,20,8,['✨','🌟','💫']);say(rp(['擦干干，蓬松松～','洗香香啦！闻闻，香不香！','干净猫咪最可爱！']));setTimeout(function(){body.classList.remove('dryroll');body.classList.remove('shower-drip');},850);}
+    ];
+    var idx={water:0,soap:1,rinse:2,shake:3,dry:4}[stage];
+    if(idx===undefined){
+      (function run(i){
+        if(i>=steps.length)return;
+        steps[i]();
+        bathStepTimer=setTimeout(function(){run(i+1);},1700);
+      })(0);
+    }else{
+      steps[idx]();
+    }
+  }
   // === 欧尼酱绑定：外部命令 ===
   function exec(cmd){
     cmd=(cmd||'').trim();
@@ -570,6 +601,7 @@ body{background:transparent!important;overflow:hidden}
       else if(currentApp==='com.tencent.mm'||currentApp==='com.tencent.mobileqq'){setMood('angry');shake();particles(44,20,5,['💢','🔥']);say('大半夜还在聊天？不睡我生气了！');}
       else{setMood('sleepy');lieDown();say('该睡了菲菲，我陪你');}
     }else if(cmd.indexOf('food')===0){var ff=cmd.indexOf(':')>=0?cmd.split(':')[1]:'';feed(ff);}
+    else if(cmd==='bath'||cmd==='shower'||cmd==='wash'||cmd.indexOf('bath:')===0||cmd.indexOf('shower:')===0){takeBath(cmd.indexOf(':')>=0?cmd.split(':')[1]:'');}
     else if(cmd==='love'){setMood('love');act('love');}
     else if(cmd==='angry'){setMood('angry');act('angry');}
     else if(cmd==='sad'){setMood('sad');act('sad');}
